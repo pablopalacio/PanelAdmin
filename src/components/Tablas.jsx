@@ -1,6 +1,14 @@
 import React from "react";
+import { useApi } from "../hooks/useApi";
 
 export default function Tablas() {
+  const { data, loading, error } = useApi(
+    "https://www.hs-service.api.crealape.com/api/v1/students"
+  );
+  console.log(data);
+  console.log(loading);
+  console.log(error);
+
   const students = [
     {
       id: 1,
@@ -62,30 +70,34 @@ export default function Tablas() {
             </tr>
           </thead>
           <tbody className="text-center">
-            {students.map((student) => (
+            <tr className={` ${error ? "" : "hidden"}`}>
+              <th>{error}</th>
+            </tr>
+            {/* data(e) full_name, id, phone, schools.name, status, student.country.name  */}
+            {data?.map((e) => (
               <tr
-                key={student.id}
+                key={e.id}
                 className="bg-white border-b border-gray-200 hover:bg-gray-50"
               >
                 <th
                   scope="row"
                   className="px-4 py-4 text-start font-medium text-gray-900 whitespace-nowrap"
                 >
-                  {student.name}
+                  {e.full_name}
                 </th>
-                <td className="px-4 py-4">{student.phone}</td>
-                <td className="px-4 py-4">{student.school}</td>
-                <td className="px-4 py-4">{student.hours}</td>
-                <td className="px-4 py-4">{student.country}</td>
+                <td className="px-4 py-4">{e.phone}</td>
+                <td className="px-4 py-4">
+                  {e.schools.map((s) => s.name).join(", ")}
+                </td>
+                <td className="px-4 py-4">12/10</td>
+                <td className="px-4 py-4">{e.student.country.name}</td>
                 <td className="px-4 py-4">
                   <p
                     className={`text-white px-2 py-1.5 rounded-xl text-center text-xs ${
-                      student.status === "active"
-                        ? "bg-green-500"
-                        : "bg-red-500"
+                      e.status === "active" ? "bg-green-500" : "bg-red-500"
                     }`}
                   >
-                    {student.status === "active" ? "Activo" : "Inactivo"}
+                    {e.status === "active" ? "Activo" : "Inactivo"}
                   </p>
                 </td>
                 <td className="px-4 py-4">
@@ -145,22 +157,22 @@ export default function Tablas() {
 
       {/* Vista Mobile - Cards responsivas */}
       <div className="lg:hidden space-y-3">
-        {students.map((student) => (
+        {data?.map((e) => (
           <div
-            key={student.id}
+            key={e.id}
             className="bg-white rounded-lg shadow-md p-4 border border-gray-200"
           >
             {/* Header con nombre y estado */}
             <div className="flex justify-between items-start mb-3">
               <h3 className="font-semibold text-gray-800 text-sm line-clamp-2 flex-1 mr-2">
-                {student.name}
+                {e.full_name}
               </h3>
               <span
                 className={`px-2 py-1 rounded-xl text-white text-xs whitespace-nowrap ${
-                  student.status === "active" ? "bg-green-500" : "bg-red-500"
+                  e.status === "active" ? "bg-green-500" : "bg-red-500"
                 }`}
               >
-                {student.status === "active" ? "Activo" : "Inactivo"}
+                {e.status === "active" ? "Activo" : "Inactivo"}
               </span>
             </div>
 
@@ -168,19 +180,21 @@ export default function Tablas() {
             <div className="grid grid-cols-2 gap-3 text-xs mb-3">
               <div>
                 <span className="text-gray-600 block mb-1">Teléfono:</span>
-                <span className="font-medium">{student.phone}</span>
+                <span className="font-medium">{e.phone}</span>
               </div>
               <div>
                 <span className="text-gray-600 block mb-1">Escuela:</span>
-                <span className="font-medium">{student.school}</span>
+                <span className="font-medium">
+                  {e.schools.map((s) => s.name).join(", ")}
+                </span>
               </div>
               <div>
                 <span className="text-gray-600 block mb-1">Horas:</span>
-                <span className="font-medium">{student.hours}</span>
+                <span className="font-medium">12/10</span>
               </div>
               <div>
                 <span className="text-gray-600 block mb-1">País:</span>
-                <span className="font-medium">{student.country}</span>
+                <span className="font-medium">{e.student.country.name}</span>
               </div>
             </div>
 

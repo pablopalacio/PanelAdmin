@@ -33,7 +33,7 @@ export default function DetalleFiltro({ display }) {
             </div>
           </div>
           <div>
-            <h3 className="font-semibold py-2">Estado</h3>
+            <h3 className="font-semibold ">Escuela</h3>
             <div className="flex flex-wrap gap-4">
               <button className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer text-sm md:text-l">
                 Frontend
