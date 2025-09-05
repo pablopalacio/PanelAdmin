@@ -69,7 +69,7 @@ export default function Tablas() {
               >
                 <th
                   scope="row"
-                  className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap"
+                  className="px-4 py-4 text-start font-medium text-gray-900 whitespace-nowrap"
                 >
                   {student.name}
                 </th>
@@ -80,7 +80,9 @@ export default function Tablas() {
                 <td className="px-4 py-4">
                   <p
                     className={`text-white px-2 py-1.5 rounded-xl text-center text-xs ${
-                      student.status === "active" ? "bg-blue-600" : "bg-red-500"
+                      student.status === "active"
+                        ? "bg-green-500"
+                        : "bg-red-500"
                     }`}
                   >
                     {student.status === "active" ? "Activo" : "Inactivo"}
@@ -155,7 +157,7 @@ export default function Tablas() {
               </h3>
               <span
                 className={`px-2 py-1 rounded-xl text-white text-xs whitespace-nowrap ${
-                  student.status === "active" ? "bg-blue-600" : "bg-red-500"
+                  student.status === "active" ? "bg-green-500" : "bg-red-500"
                 }`}
               >
                 {student.status === "active" ? "Activo" : "Inactivo"}
@@ -280,9 +282,9 @@ export default function Tablas() {
                   <td className="px-3 py-3">{student.school}</td>
                   <td className="px-3 py-3">
                     <span
-                      className={`text-white px-2 py-1 rounded-xl text-xs ${
+                      className={`text-gray-600 px-2 py-1 rounded-xl text-xs ${
                         student.status === "active"
-                          ? "bg-blue-600"
+                          ? "bg-green-500"
                           : "bg-red-500"
                       }`}
                     >

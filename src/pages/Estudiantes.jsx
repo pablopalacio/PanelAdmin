@@ -65,10 +65,10 @@ function Estudiantes() {
       <div className="flex-1 p-4 lg:p-6 w-full lg:ml-0">
         {/* Header */}
         <header className="bg-white rounded-xl shadow-sm p-4 lg:p-6 mb-4 lg:mb-6 text-center">
-          <h1 className="text-xl lg:text-2xl font-bold text-gray-800">
-            👨‍🎓 Panel de Estudiantes
+          <h1 className="text-xl lg:text-3xl font-bold text-gray-800 pb-2">
+            Panel de Estudiantes
           </h1>
-          <p className="text-gray-600 text-sm lg:text-base">
+          <p className="text-gray-600 text-sm ">
             Gestiona la información de los estudiantes
           </p>
         </header>
@@ -162,13 +162,13 @@ function Estudiantes() {
               number: "7",
               label: "Estudiantes Inactivos",
               color: "orange",
-              bgColor: "bg-orange-100",
-              textColor: "text-orange-600",
+              bgColor: "bg-red-100",
+              textColor: "text-red-600",
               icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
             },
             {
               number: "92%",
-              label: "Tasa de Completación",
+              label: "Tasa Cumplimiento",
               color: "purple",
               bgColor: "bg-purple-100",
               textColor: "text-purple-600",
@@ -210,11 +210,11 @@ function Estudiantes() {
         {/* Tabla estudiantes */}
         <div className="bg-white rounded-xl shadow-sm p-4 lg:p-6 mb-4 lg:mb-6">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4 lg:mb-6">
-            <h2 className="text-base lg:text-lg font-semibold text-gray-800">
+            <h2 className="text-base lg:text-xl font-semibold text-gray-800">
               Lista de Estudiantes
             </h2>
             <div className="flex space-x-2 self-end sm:self-auto">
-              <button className="p-1 lg:p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors">
+              <button className="p-1 lg:p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer">
                 <svg
                   className="w-4 h-4 lg:w-5 lg:h-5"
                   fill="none"
@@ -229,7 +229,7 @@ function Estudiantes() {
                   />
                 </svg>
               </button>
-              <button className="p-1 lg:p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors">
+              <button className="p-1 lg:p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer">
                 <svg
                   className="w-4 h-4 lg:w-5 lg:h-5"
                   fill="none"
