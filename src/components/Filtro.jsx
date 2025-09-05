@@ -1,7 +1,13 @@
 import React, { useState } from "react";
+import DetalleFiltro from "./DetalleFiltro";
 
 export default function Filtro() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [toggle, setToggle] = useState(false);
+  function handleToggle() {
+    setToggle(!toggle);
+  }
+
   return (
     <div>
       <div className="bg-white rounded-xl shadow-sm p-4 lg:p-6 mb-4 lg:mb-6">
@@ -49,7 +55,10 @@ export default function Filtro() {
               Nuevo Estudiante
             </button>
 
-            <button className="flex-1 sm:flex-none px-3 py-2 lg:px-4 lg:py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center text-sm lg:text-base cursor-pointer">
+            <button
+              onClick={handleToggle}
+              className="flex-1 sm:flex-none px-3 py-2 lg:px-4 lg:py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center text-sm lg:text-base cursor-pointer"
+            >
               <svg
                 className="w-4 h-4 mr-2"
                 fill="none"
@@ -68,6 +77,7 @@ export default function Filtro() {
           </div>
         </div>
       </div>
+      <DetalleFiltro display={toggle} />
     </div>
   );
 }
