@@ -8,8 +8,8 @@ export default function Aside() {
 
   const menuItems = [
     { name: "Estudiantes", icon: "👨‍🎓" },
-    { name: "Controllers", icon: "🎮" },
-    { name: "Reclutador", icon: "👔" },
+    { name: "Controllers", icon: "🧑‍💻" },
+    { name: "Reclutadores", icon: "👔" },
     { name: "Horas de servicio", icon: "⏱️" },
     { name: "Escuela", icon: "🏫" },
   ];
@@ -28,7 +28,7 @@ export default function Aside() {
               <span className="text-3xl">👤</span>
             </div>
             <h3 className="font-bold text-gray-800 text-lg mt-2">
-              {user?.name?.toUpperCase() || "ALEX JOHNSON"}
+              {user?.name?.toUpperCase()}
             </h3>
             <div className="flex items-center">
               <svg

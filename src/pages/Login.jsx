@@ -65,7 +65,7 @@ function Login() {
               />
             </svg>
           </Link>
-          <h1 className="text-2xl font-bold text-gray-800">Iniciar Sesión</h1>
+          <h1 className="text-2xl font-bold text-gray-800 ">Iniciar Sesión</h1>
           <p className="text-gray-600">Ingresa a tu cuenta administrativa</p>
         </div>
 
@@ -109,7 +109,7 @@ function Login() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 px-4 rounded-lg font-semibold transition-colors duration-200 ${
+            className={`w-full py-3  cursor-pointer px-4 rounded-lg font-semibold transition-colors duration-200 ${
               loading
                 ? "bg-blue-400 cursor-not-allowed"
                 : "bg-blue-600 hover:bg-blue-700 text-white"
