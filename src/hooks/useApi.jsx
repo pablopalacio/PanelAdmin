@@ -1,67 +1,47 @@
-import { useState, useCallback } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useApiLogin } from "./useApiLogin"; // para obtener token
 
-export const useApi = () => {
-  const [loading, setLoading] = useState(false);
+const getCookie = (name) => {
+  const cookie = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith(name + "="));
+  return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
+};
+
+export const useApi = (url) => {
+  const { token } = useApiLogin(); // token desde hook
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const request = useCallback(async (url, options = {}) => {
-    setLoading(true);
-    setError(null);
+  useEffect(() => {
+    if (!url) return;
 
-    try {
-      const defaultOptions = {
-        headers: {
-          "Content-Type": "application/json",
-          ...options.headers,
-        },
-        credentials: "include", // 🔐 Esto activa el envío/recepción de cookies
-      };
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
 
-      const response = await fetch(url, { ...defaultOptions, ...options });
+      try {
+        const tokenValue = token || getCookie("token"); // usa token del hook o cookie
 
-      const contentType = response.headers.get("content-type");
-      let data;
+        const response = await axios.get(url, {
+          headers: tokenValue
+            ? { Authorization: `Bearer ${tokenValue}` }
+            : undefined,
+          withCredentials: true, // importante si backend usa cookies
+        });
 
-      if (contentType && contentType.includes("application/json")) {
-        data = await response.json();
-      } else {
-        const text = await response.text();
-        try {
-          data = JSON.parse(text);
-        } catch {
-          data = { message: text };
-        }
+        setData(response.data);
+      } catch (err) {
+        setError(err.response?.data?.message || err.message);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      if (!response.ok) {
-        throw new Error(
-          data.message || `Error ${response.status}: ${response.statusText}`
-        );
-      }
+    fetchData();
+  }, [url, token]);
 
-      setLoading(false);
-      return data;
-    } catch (err) {
-      setError(err.message);
-      setLoading(false);
-      throw err;
-    }
-  }, []);
-
-  const post = useCallback(
-    (url, body, options = {}) => {
-      return request(url, {
-        ...options,
-        method: "POST",
-        body: JSON.stringify(body),
-      });
-    },
-    [request]
-  );
-
-  return {
-    loading,
-    error,
-    post,
-  };
+  return { data, loading, error };
 };

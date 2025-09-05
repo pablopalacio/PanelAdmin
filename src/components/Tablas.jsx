@@ -1,6 +1,11 @@
 import React from "react";
+import { useApi } from "../hooks/useApi";
 
 export default function Tablas() {
+  const { data, loading, error } = useApi(
+    "https://www.hs-service.api.crealape.com/api/v1/students"
+  );
+  console.log(data);
   const students = [
     {
       id: 1,

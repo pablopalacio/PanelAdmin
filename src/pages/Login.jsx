@@ -6,7 +6,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
-  const { login, loading, error } = useApiLogin();
+  const { login, error, loading } = useApiLogin();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -28,12 +28,13 @@ function Login() {
       console.error("Error de login:", err);
 
       let errorMessage = err.message;
-      if (err.message.includes("CORS") || err.message.includes("Network")) {
+      if (
+        err.message.includes("CORS") ||
+        err.message.includes("Network") ||
+        err.message.includes("Failed to fetch")
+      ) {
         errorMessage =
           "Error de conexión. Verifique su internet o contacte al administrador.";
-      } else if (err.message.includes("Failed to fetch")) {
-        errorMessage =
-          "No se pudo conectar con el servidor. Intente nuevamente.";
       }
 
       setLoginError(errorMessage);
@@ -45,7 +46,6 @@ function Login() {
     setPassword("1234567");
     setLoginError("");
   };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
