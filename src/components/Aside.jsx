@@ -108,7 +108,7 @@ export default function Aside() {
         </div>
       </div>
 
-      <div className="border-t border-gray-200 pt-6 mb-6"></div>
+      <div className="border-t border-gray-200"></div>
 
       <button
         onClick={handleLogout}
