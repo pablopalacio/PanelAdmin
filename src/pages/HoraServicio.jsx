@@ -52,7 +52,7 @@ function HoraServicio() {
       {/* Sidebar */}
       <div
         className={`
-        fixed lg:static inset-y-0 left-0 z-40 w-80 bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl transform transition-transform duration-300 ease-in-out
+        fixed inset-y-0 left-0 z-40 w-80 bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl transform transition-transform duration-300 ease-in-out
         ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }
@@ -62,7 +62,7 @@ function HoraServicio() {
       </div>
 
       {/* Contenido Principal */}
-      <div className="flex-1 p-4 lg:p-6 w-full lg:ml-0">
+      <div className="flex flex-col p-4 ml-0 lg:p-6 w-full lg:ml-80">
         {/* Header */}
         <header className="bg-white rounded-xl shadow-sm p-4 lg:p-6 mb-4 lg:mb-6 text-center">
           <h1 className="text-xl lg:text-3xl font-bold text-gray-800 pb-2">
