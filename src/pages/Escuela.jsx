@@ -69,7 +69,7 @@ function Escuela() {
             Escuela
           </h1>
           <p className="text-gray-600 text-sm ">
-            Gestiona la información de las escuelas.
+            Gestiona la información de las escuelasss.
           </p>
         </header>
 
