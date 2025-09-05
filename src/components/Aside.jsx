@@ -1,6 +1,11 @@
 import React from "react";
+import { useApiLogin } from "../hooks/useApiLogin";
+import { useNavigate } from "react-router-dom";
 
 export default function Aside() {
+  const { user, logout } = useApiLogin();
+  const navigate = useNavigate();
+
   const menuItems = [
     { name: "Estudiantes", icon: "👨‍🎓" },
     { name: "Controllers", icon: "🎮" },
@@ -9,8 +14,13 @@ export default function Aside() {
     { name: "Escuela", icon: "🏫" },
   ];
 
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
   return (
-    <aside className="w-80 bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl p-6 font-sans rounded-xl">
+    <aside className="w-80 h-full bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl p-6 font-sans rounded-xl">
       <div className="mb-8">
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl shadow-sm mb-6">
           <div className="flex flex-col items-center mb-2 gap-2">
@@ -18,7 +28,7 @@ export default function Aside() {
               <span className="text-3xl">👤</span>
             </div>
             <h3 className="font-bold text-gray-800 text-lg mt-2">
-              ALEX JOHNSON
+              {user?.name?.toUpperCase() || "ALEX JOHNSON"}
             </h3>
             <div className="flex items-center">
               <svg
@@ -35,7 +45,9 @@ export default function Aside() {
                   d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                 />
               </svg>
-              <p className="text-sm text-gray-500">alex.johnson@gmail.com</p>
+              <p className="text-sm text-gray-500">
+                {user?.email || "alex.johnson@gmail.com"}
+              </p>
             </div>
             <div className="mt-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium">
               Administrador
@@ -79,7 +91,10 @@ export default function Aside() {
 
       <div className="border-t border-gray-200 pt-6 mb-6"></div>
 
-      <button className="w-full bg-gradient-to-r from-red-500 to-red-600 text-white py-3 rounded-xl text-sm font-medium hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer flex items-center justify-center">
+      <button
+        onClick={handleLogout}
+        className="w-full bg-gradient-to-r from-red-500 to-red-600 text-white py-3 rounded-xl text-sm font-medium hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer flex items-center justify-center"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-5 w-5 mr-2"
