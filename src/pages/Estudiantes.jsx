@@ -67,7 +67,7 @@ function Estudiantes() {
         {/* Header */}
         <header className="bg-white rounded-xl shadow-sm p-4 lg:p-6 mb-4 lg:mb-6 text-center">
           <h1 className="text-xl lg:text-3xl font-bold text-gray-800 pb-2">
-            Panel de Estudiantes
+            Estudiantes
           </h1>
           <p className="text-gray-600 text-sm ">
             Gestiona la información de los estudiantes

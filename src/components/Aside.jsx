@@ -1,22 +1,32 @@
 import React from "react";
 import { useApiLogin } from "../hooks/useApiLogin";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Aside() {
   const { user, logout } = useApiLogin();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const menuItems = [
-    { name: "Estudiantes", icon: "👨‍🎓" },
-    { name: "Controllers", icon: "🧑‍💻" },
-    { name: "Reclutadores", icon: "👔" },
-    { name: "Horas de servicio", icon: "⏱️" },
-    { name: "Escuela", icon: "🏫" },
+    { name: "Estudiantes", icon: "👨‍🎓", path: "/estudiantes" },
+    { name: "Controllers", icon: "🧑‍💻", path: "/controllers" },
+    { name: "Reclutadores", icon: "👔", path: "/reclutadores" },
+    { name: "Horas de servicio", icon: "⏱️", path: "/horas-servicio" },
+    { name: "Escuela", icon: "🏫", path: "/escuela" },
   ];
+
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
 
   const handleLogout = () => {
     logout();
     navigate("/");
+  };
+
+  // Función para verificar si la ruta está activa
+  const isActive = (path) => {
+    return location.pathname === path;
   };
 
   return (
@@ -28,7 +38,7 @@ export default function Aside() {
               <span className="text-3xl">👤</span>
             </div>
             <h3 className="font-bold text-gray-800 text-lg mt-2">
-              {user?.name?.toUpperCase()}
+              {user?.name?.toUpperCase() || "ADMINISTRADOR"}
             </h3>
             <div className="flex items-center">
               <svg
@@ -46,7 +56,7 @@ export default function Aside() {
                 />
               </svg>
               <p className="text-sm text-gray-500">
-                {user?.email || "alex.johnson@gmail.com"}
+                {user?.email || "admin@funval.test"}
               </p>
             </div>
             <div className="mt-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium">
@@ -63,7 +73,12 @@ export default function Aside() {
             {menuItems.map((item) => (
               <li
                 key={item.name}
-                className="flex items-center py-3 px-4 text-gray-700 hover:text-blue-700 hover:bg-blue-50 rounded-lg cursor-pointer transition-all duration-200 group"
+                onClick={() => handleNavigation(item.path)}
+                className={`flex items-center py-3 px-4 rounded-lg cursor-pointer transition-all duration-200 group ${
+                  isActive(item.path)
+                    ? "bg-blue-100 text-blue-700 border-l-4 border-blue-600"
+                    : "text-gray-700 hover:text-blue-700 hover:bg-blue-50"
+                }`}
               >
                 <span className="text-xl mr-3 group-hover:scale-110 transition-transform">
                   {item.icon}
@@ -71,7 +86,11 @@ export default function Aside() {
                 <span className="font-medium">{item.name}</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 ml-auto text-gray-400 group-hover:text-blue-500"
+                  className={`h-4 w-4 ml-auto transition-transform ${
+                    isActive(item.path)
+                      ? "text-blue-500"
+                      : "text-gray-400 group-hover:text-blue-500"
+                  }`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
