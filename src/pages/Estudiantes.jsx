@@ -107,7 +107,7 @@ function Estudiantes() {
             Estudiantes
           </h1>
           <p className="text-gray-600 text-sm">
-            Gestiona la información de los estudiantes
+            Gestiona la información de los estudiantes.
           </p>
         </header>
 
