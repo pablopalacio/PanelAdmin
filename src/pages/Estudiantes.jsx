@@ -1,12 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useApiLogin } from "../hooks/useApiLogin";
 import { useNavigate } from "react-router-dom";
 import Aside from "../components/Aside";
 import Tablas from "../components/tablas";
 import Filtro from "../components/Filtro";
+import { useApi } from "../hooks/useApi";
 
 function Estudiantes() {
+  const { data, loading, error } = useApi(
+    "https://www.hs-service.api.crealape.com/api/v1/students"
+  );
+  const { data: service } = useApi(
+    "https://www.hs-service.api.crealape.com/api/v1/services"
+  );
+  useEffect(() => {
+    let suma = 0;
+    service?.forEach((e) => {
+      suma += e.amount_approved;
+    });
+
+    setCumplimiento(suma / ((active?.length * 20) / 100));
+    console.log(suma);
+  }, [service]);
+  const [cumplimiento, setCumplimiento] = useState("50");
   const { user, logout } = useApiLogin();
+  const [active, setActive] = useState([]);
+  const [inactive, setInactive] = useState([]);
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -19,7 +38,24 @@ function Estudiantes() {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
+  useEffect(() => {
+    const filtradoA = data?.filter((e) => e.status === "activo");
+    setActive(filtradoA);
+    console.log(filtradoA);
+  }, [data]);
+  useEffect(() => {
+    const filtradoI = data?.filter((e) => e.status === "inactivo");
+    setInactive(filtradoI);
+  }, [data]);
+  const total = active?.length ? (active.length * 20) / 100 : 1;
+  useEffect(() => {
+    let suma = 0;
+    service?.forEach((e) => {
+      suma += e.amount_approved;
+    });
+    setCumplimiento(suma / total);
+    console.log(suma);
+  }, [service]);
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
       {/* Boton menu celular */}
@@ -76,14 +112,14 @@ function Estudiantes() {
 
         {/* Busqueda y filtros */}
         <div>
-          <Filtro />
+          <Filtro searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6 mb-4 lg:mb-6">
           {[
             {
-              number: "45",
+              number: `${data?.length}`,
               label: "Total Estudiantes",
               color: "blue",
               bgColor: "bg-blue-100",
@@ -91,7 +127,7 @@ function Estudiantes() {
               icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z",
             },
             {
-              number: "38",
+              number: `${active?.length}`,
               label: "Estudiantes Activos",
               color: "green",
               bgColor: "bg-green-100",
@@ -99,7 +135,7 @@ function Estudiantes() {
               icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z",
             },
             {
-              number: "7",
+              number: `${inactive?.length}`,
               label: "Estudiantes Inactivos",
               color: "orange",
               bgColor: "bg-red-100",
@@ -107,7 +143,7 @@ function Estudiantes() {
               icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
             },
             {
-              number: "92%",
+              number: `${cumplimiento}%`,
               label: "Tasa Cumplimiento",
               color: "purple",
               bgColor: "bg-purple-100",
@@ -173,7 +209,7 @@ function Estudiantes() {
           </div>
 
           <div className="overflow-x-auto">
-            <Tablas />
+            <Tablas searchTerm={searchTerm} />
           </div>
         </div>
       </div>

@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import DetalleFiltro from "./DetalleFiltro";
 
-export default function Filtro() {
-  const [searchTerm, setSearchTerm] = useState("");
+export default function Filtro({ searchTerm, setSearchTerm }) {
   const [toggle, setToggle] = useState(false);
   function handleToggle() {
     setToggle(!toggle);
   }
-
+  console.log(searchTerm);
   return (
     <div>
       <div className="bg-white rounded-xl shadow-sm p-4 lg:p-6 mb-4 lg:mb-6">

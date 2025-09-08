@@ -1,7 +1,7 @@
 import { useApi } from "../hooks/useApi";
 import { useNavigate } from "react-router-dom";
 
-export default function Tablas() {
+export default function Tablas({ searchTerm }) {
   const { data, loading, error } = useApi(
     "https://www.hs-service.api.crealape.com/api/v1/students"
   );
@@ -10,7 +10,9 @@ export default function Tablas() {
   const goToProfile = (id) => {
     navigate(`/control-perfil/${id}`);
   };
-
+  const filteredData = data?.filter((e) =>
+    e.full_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   const students = [
     {
       id: 1,
@@ -61,7 +63,7 @@ export default function Tablas() {
             <tr className={`${error ? "" : "hidden"}`}>
               <th>{error}</th>
             </tr>
-            {data?.map((e) => (
+            {filteredData?.map((e) => (
               <tr
                 key={e.id}
                 className="bg-white border-b border-gray-200 hover:bg-gray-50"
@@ -81,10 +83,10 @@ export default function Tablas() {
                 <td className="px-4 py-4">
                   <p
                     className={`text-white px-2 py-1.5 rounded-xl text-center text-xs ${
-                      e.status === "active" ? "bg-green-500" : "bg-red-500"
+                      e.status === "activo" ? "bg-green-500" : "bg-red-500"
                     }`}
                   >
-                    {e.status === "active" ? "Activo" : "Inactivo"}
+                    {e.status === "activo" ? "Activo" : "Inactivo"}
                   </p>
                 </td>
                 <td className="px-4 py-4">
@@ -162,10 +164,10 @@ export default function Tablas() {
               </h3>
               <span
                 className={`px-2 py-1 rounded-xl text-white text-xs ${
-                  e.status === "active" ? "bg-green-500" : "bg-red-500"
+                  e.status === "activo" ? "bg-green-500" : "bg-red-500"
                 }`}
               >
-                {e.status === "active" ? "Activo" : "Inactivo"}
+                {e.status === "activo" ? "Activo" : "Inactivo"}
               </span>
             </div>
 
