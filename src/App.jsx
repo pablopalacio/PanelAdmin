@@ -6,8 +6,10 @@ import Controllers from "./pages/Controllers";
 import Reclutadores from "./pages/Reclutador";
 import HoraServicio from "./pages/HoraServicio";
 import Escuela from "./pages/Escuela";
-import ControlPerfil from "./pages/ControlPerfil"; 
+import ControlPerfil from "./components/ControlPerfil";
 import PrivateRoute from "./components/PrivateRoute";
+import PerfilEstudiante from "./pages/PerfilEstudiante";
+
 import "./index.css";
 
 function App() {
@@ -57,6 +59,15 @@ function App() {
             element={
               <PrivateRoute>
                 <Escuela />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/Perfil-Estudiante/:id"
+            element={
+              <PrivateRoute>
+                <PerfilEstudiante />
               </PrivateRoute>
             }
           />
