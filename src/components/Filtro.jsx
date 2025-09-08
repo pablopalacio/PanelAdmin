@@ -1,12 +1,20 @@
 import React, { useState } from "react";
 import DetalleFiltro from "./DetalleFiltro";
 
-export default function Filtro({ searchTerm, setSearchTerm }) {
+export default function Filtro({
+  searchTerm,
+  setSearchTerm,
+  handleAplicarFiltros,
+  filtradoPais,
+  filtradoEscuela,
+  filtradoEstado,
+}) {
   const [toggle, setToggle] = useState(false);
+
   function handleToggle() {
     setToggle(!toggle);
   }
-  console.log(searchTerm);
+
   return (
     <div>
       <div className="bg-white rounded-xl shadow-sm p-4 lg:p-6 mb-4 lg:mb-6">
@@ -53,11 +61,11 @@ export default function Filtro({ searchTerm, setSearchTerm }) {
               </svg>
               Nuevo Estudiante
             </button>
-
             <button
               onClick={handleToggle}
               className="flex-1 sm:flex-none px-3 py-2 lg:px-4 lg:py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center text-sm lg:text-base cursor-pointer"
             >
+              {" "}
               <svg
                 className="w-4 h-4 mr-2"
                 fill="none"
@@ -76,7 +84,48 @@ export default function Filtro({ searchTerm, setSearchTerm }) {
           </div>
         </div>
       </div>
-      <DetalleFiltro display={toggle} />
+
+      <DetalleFiltro
+        display={toggle}
+        closeModal={handleToggle}
+        aplicarFiltros={handleAplicarFiltros}
+      />
+
+      <div className="grid grid-cols-2 gap-1 pb-3">
+        <div className="grid gap-1">
+          {filtradoPais?.map((pais) => (
+            <span
+              key={pais}
+              className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-blue-900 dark:text-blue-300"
+            >
+              {pais}
+            </span>
+          ))}
+        </div>
+        <div className="grid gap-1">
+          {filtradoEscuela?.map((escuela) => (
+            <span
+              key={escuela}
+              className="bg-yellow-100 text-yellow-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-red-900 dark:text-blue-300"
+            >
+              {escuela}
+            </span>
+          ))}
+        </div>
+        <div className="grid gap-1">
+          <span
+            className={`${
+              filtradoEstado === "Activo"
+                ? "bg-green-100 text-green-800"
+                : filtradoEstado === "Inactivo"
+                ? "bg-red-100 text-red-800"
+                : ""
+            } text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-red-900 dark:text-blue-300`}
+          >
+            {filtradoEstado}
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
