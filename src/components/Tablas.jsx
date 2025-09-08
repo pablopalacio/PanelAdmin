@@ -12,7 +12,7 @@ export default function Tablas({
   const navigate = useNavigate();
 
   const goToProfile = (id) => {
-    navigate(`/control-perfil/${id}`);
+    navigate(/control-perfil/${id});
   };
 
   const filteredData = useMemo(() => {
@@ -263,6 +263,6 @@ export default function Tablas({
           </div>
         ))}
       </div>
-    </>
-  );
+    </>
+  );
 }
