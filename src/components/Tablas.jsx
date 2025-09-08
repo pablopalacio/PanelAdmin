@@ -1,7 +1,7 @@
 import { useApi } from "../hooks/useApi";
 import { useNavigate } from "react-router-dom";
 
-export default function Tablas() {
+export default function Tablas({ searchTerm }) {
   const { data, loading, error } = useApi(
     "https://www.hs-service.api.crealape.com/api/v1/students"
   );
@@ -10,7 +10,9 @@ export default function Tablas() {
   const goToProfile = (id) => {
     navigate(`/control-perfil/${id}`);
   };
-
+  const filteredData = data?.filter((e) =>
+    e.full_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   const students = [
     {
       id: 1,
@@ -61,7 +63,7 @@ export default function Tablas() {
             <tr className={`${error ? "" : "hidden"}`}>
               <th>{error}</th>
             </tr>
-            {data?.map((e) => (
+            {filteredData?.map((e) => (
               <tr
                 key={e.id}
                 className="bg-white border-b border-gray-200 hover:bg-gray-50"
