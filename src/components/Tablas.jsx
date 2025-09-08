@@ -8,7 +8,7 @@ export default function Tablas({ searchTerm }) {
   const navigate = useNavigate();
 
   const goToProfile = (id) => {
-    navigate(`/control-perfil/${id}`);
+    navigate(`/Perfil-Estudiante/${id}`);
   };
   const filteredData = data?.filter((e) =>
     e.full_name.toLowerCase().includes(searchTerm.toLowerCase())
