@@ -145,7 +145,9 @@ function Estudiantes() {
               icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
             },
             {
-              number: `${cumplimiento}%`,
+              number: `${
+                cumplimiento != null ? Number(cumplimiento).toFixed(2) : "0.00"
+              }%`,
               label: "Tasa Cumplimiento",
               color: "purple",
               bgColor: "bg-purple-100",

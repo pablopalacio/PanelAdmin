@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import DetalleFiltro from "./DetalleFiltro";
 
 export default function Filtro({ searchTerm, setSearchTerm }) {
+  const [filtradoPais, setFiltradoPais] = useState([]);
+  const [filtradoEscuela, setFiltradoEscuela] = useState([]);
+  const [filtradoEstado, setFiltradoEstado] = useState("");
   const [toggle, setToggle] = useState(false);
   function handleToggle() {
     setToggle(!toggle);
@@ -76,7 +79,41 @@ export default function Filtro({ searchTerm, setSearchTerm }) {
           </div>
         </div>
       </div>
-      <DetalleFiltro display={toggle} />
+      <DetalleFiltro
+        display={toggle}
+        setFiltradoPais={setFiltradoPais}
+        setFiltradoEscuela={setFiltradoEscuela}
+        setFiltradoEstado={setFiltradoEstado}
+      />
+      <div className="grid grid-cols-2 gap-1 pb-3">
+        <div className="grid gap-1">
+          {filtradoPais.map((e) => (
+            <span className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-blue-900 dark:text-blue-300">
+              {e.pais}
+            </span>
+          ))}
+        </div>
+        <div className="grid gap-1">
+          {filtradoEscuela.map((e) => (
+            <span className="bg-yellow-100 text-yellow-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-red-900 dark:text-blue-300">
+              {e.escuela}
+            </span>
+          ))}
+        </div>
+        <div className="grid gap-1">
+          <span
+            className={`${
+              filtradoEstado === "Activo"
+                ? "bg-green-100 text-green-800"
+                : filtradoEstado === "Inactivo"
+                ? "bg-red-100 text-red-800"
+                : ""
+            }  text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-red-900 dark:text-blue-300`}
+          >
+            {filtradoEstado}
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
