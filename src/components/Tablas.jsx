@@ -1,51 +1,40 @@
 import { useApi } from "../hooks/useApi";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import EditModal from "./EditModal";
 
 export default function Tablas({ searchTerm }) {
   const { data, loading, error } = useApi(
     "https://www.hs-service.api.crealape.com/api/v1/students"
   );
   const navigate = useNavigate();
-
+  const [selectedStudent, setSelectedStudent] = useState(null);
   const goToProfile = (id) => {
     navigate(`/Perfil-Estudiante/${id}`);
   };
+  const handleEditClick = (student) => {
+    setSelectedStudent(student);
+  };
+  const handleCloseModal = () => {
+    setSelectedStudent(null);
+  };
+  const handleSave = (updatedStudent) => {
+    console.log("Guardado:", updatedStudent);
+    if (data) {
+      const index = data.findIndex((s) => s.id === updatedStudent.id);
+      if (index !== -1) {
+        data[index] = updatedStudent;
+      }
+    }
+    setSelectedStudent(null);
+  };
+
   const filteredData = data?.filter((e) =>
     e.full_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  const students = [
-    {
-      id: 1,
-      name: "Pablo Antonio Palacio",
-      phone: "+54 9 11 90909090",
-      school: "Frontend",
-      hours: "18/20",
-      country: "Arg",
-      status: "active",
-    },
-    {
-      id: 2,
-      name: "Gabriel Nehemias Rengifo Krunfli",
-      phone: "+54 9 11 90909090",
-      school: "Frontend",
-      hours: "09/20",
-      country: "Arg",
-      status: "inactive",
-    },
-    {
-      id: 3,
-      name: "Jeff Steven Gil Toribio",
-      phone: "+54 9 11 90909090",
-      school: "Frontend",
-      hours: "15/20",
-      country: "Per",
-      status: "active",
-    },
-  ];
 
   return (
     <>
-      {/* Vista Desktop */}
       <div className="hidden lg:block relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-center text-gray-100 uppercase bg-blue-600">
@@ -66,12 +55,10 @@ export default function Tablas({ searchTerm }) {
             {filteredData?.map((e) => (
               <tr
                 key={e.id}
-                className="bg-white border-b border-gray-200 hover:bg-gray-50"
-              >
+                className="bg-white border-b border-gray-200 hover:bg-gray-50">
                 <th
                   scope="row"
-                  className="px-4 py-4 text-start font-medium text-gray-900 whitespace-nowrap"
-                >
+                  className="px-4 py-4 text-start font-medium text-gray-900 whitespace-nowrap">
                   {e.full_name}
                 </th>
                 <td className="px-4 py-4">{e.phone}</td>
@@ -84,25 +71,21 @@ export default function Tablas({ searchTerm }) {
                   <p
                     className={`text-white px-2 py-1.5 rounded-xl text-center text-xs ${
                       e.status === "activo" ? "bg-green-500" : "bg-red-500"
-                    }`}
-                  >
+                    }`}>
                     {e.status === "activo" ? "Activo" : "Inactivo"}
                   </p>
                 </td>
                 <td className="px-4 py-4">
                   <div className="flex justify-center space-x-2">
-                    {/* Personita -> redirige */}
                     <button
                       onClick={() => goToProfile(e.id)}
-                      className="hover:text-blue-400 hover:scale-110 cursor-pointer transition duration-300"
-                    >
+                      className="hover:text-blue-400 hover:scale-110 cursor-pointer transition duration-300">
                       <svg
                         className="w-5 h-5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                      >
+                        strokeWidth="1.5">
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -110,15 +93,15 @@ export default function Tablas({ searchTerm }) {
                         />
                       </svg>
                     </button>
-                    {/* Editar */}
-                    <button className="hover:text-blue-400 hover:scale-110 cursor-pointer transition duration-300">
+                    <button
+                      onClick={() => handleEditClick(e)}
+                      className="hover:text-blue-400 hover:scale-110 cursor-pointer transition duration-300">
                       <svg
                         className="w-5 h-5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                      >
+                        strokeWidth="1.5">
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -126,15 +109,13 @@ export default function Tablas({ searchTerm }) {
                         />
                       </svg>
                     </button>
-                    {/* Eliminar */}
                     <button className="hover:text-red-500 hover:scale-110 cursor-pointer transition duration-300">
                       <svg
                         className="w-5 h-5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                      >
+                        strokeWidth="1.5">
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -149,15 +130,11 @@ export default function Tablas({ searchTerm }) {
           </tbody>
         </table>
       </div>
-
-      {/* Vista Mobile */}
       <div className="lg:hidden space-y-3">
         {data?.map((e) => (
           <div
             key={e.id}
-            className="bg-white rounded-lg shadow-md p-4 border border-gray-200"
-          >
-            {/* Header */}
+            className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
             <div className="flex justify-between items-start mb-3">
               <h3 className="font-semibold text-gray-800 text-sm flex-1 mr-2">
                 {e.full_name}
@@ -165,13 +142,10 @@ export default function Tablas({ searchTerm }) {
               <span
                 className={`px-2 py-1 rounded-xl text-white text-xs ${
                   e.status === "activo" ? "bg-green-500" : "bg-red-500"
-                }`}
-              >
+                }`}>
                 {e.status === "activo" ? "Activo" : "Inactivo"}
               </span>
             </div>
-
-            {/* Info */}
             <div className="grid grid-cols-2 gap-3 text-xs mb-3">
               <div>
                 <span className="text-gray-600 block">Teléfono:</span>
@@ -192,21 +166,16 @@ export default function Tablas({ searchTerm }) {
                 <span className="font-medium">{e.student.country.name}</span>
               </div>
             </div>
-
-            {/* Acciones */}
             <div className="flex justify-center space-x-4 pt-3 border-t border-gray-100">
-              {/* Personita -> redirige */}
               <button
                 onClick={() => goToProfile(e.id)}
-                className="p-2 hover:text-blue-400 hover:bg-blue-50 rounded-lg transition duration-300"
-              >
+                className="p-2 hover:text-blue-400 hover:bg-blue-50 rounded-lg transition duration-300">
                 <svg
                   className="w-4 h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                >
+                  strokeWidth="1.5">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -214,15 +183,15 @@ export default function Tablas({ searchTerm }) {
                   />
                 </svg>
               </button>
-              {/* Editar */}
-              <button className="p-2 hover:text-blue-400 hover:bg-blue-50 rounded-lg transition duration-300">
+              <button
+                onClick={() => handleEditClick(e)}
+                className="p-2 hover:text-blue-400 hover:bg-blue-50 rounded-lg transition duration-300">
                 <svg
                   className="w-4 h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                >
+                  strokeWidth="1.5">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -230,15 +199,13 @@ export default function Tablas({ searchTerm }) {
                   />
                 </svg>
               </button>
-              {/* Eliminar */}
               <button className="p-2 hover:text-red-500 hover:bg-red-50 rounded-lg transition duration-300">
                 <svg
                   className="w-4 h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                >
+                  strokeWidth="1.5">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -250,6 +217,13 @@ export default function Tablas({ searchTerm }) {
           </div>
         ))}
       </div>
+      {selectedStudent && (
+        <EditModal
+          student={selectedStudent}
+          onClose={handleCloseModal}
+          onSave={handleSave}
+        />
+      )}
     </>
   );
 }
