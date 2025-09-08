@@ -4,8 +4,12 @@ import { useNavigate } from "react-router-dom";
 import Aside from "../components/Aside";
 import Tablas from "../components/tablas";
 import Filtro from "../components/Filtro";
+import { useApi } from "../hooks/useApi";
 
 function Estudiantes() {
+  const { data, loading, error } = useApi(
+    "https://www.hs-service.api.crealape.com/api/v1/students"
+  );
   const { user, logout } = useApiLogin();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
@@ -19,7 +23,7 @@ function Estudiantes() {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
+  console.log(data);
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
       {/* Boton menu celular */}
@@ -83,7 +87,7 @@ function Estudiantes() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6 mb-4 lg:mb-6">
           {[
             {
-              number: "45",
+              number: `${data.length}`,
               label: "Total Estudiantes",
               color: "blue",
               bgColor: "bg-blue-100",
