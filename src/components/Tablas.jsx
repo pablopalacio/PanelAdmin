@@ -165,7 +165,6 @@ export default function Tablas({
           </tbody>
         </table>
       </div>
-
       {/* Vista Mobile */}
       <div className="lg:hidden space-y-3">
         {filteredData?.map((e) => (
@@ -263,6 +262,7 @@ export default function Tablas({
           </div>
         ))}
       </div>
+          
     </>
   );
 }
