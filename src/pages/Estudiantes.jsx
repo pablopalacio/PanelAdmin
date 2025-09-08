@@ -22,7 +22,7 @@ function Estudiantes() {
     setCumplimiento(suma / ((active?.length * 20) / 100));
     console.log(suma);
   }, [service]);
-  const [cumplimiento, setCumplimiento] = useState("50");
+  const [cumplimiento, setCumplimiento] = useState("");
   const { user, logout } = useApiLogin();
   const [active, setActive] = useState([]);
   const [inactive, setInactive] = useState([]);
@@ -47,15 +47,17 @@ function Estudiantes() {
     const filtradoI = data?.filter((e) => e.status === "inactivo");
     setInactive(filtradoI);
   }, [data]);
-  const total = active?.length ? (active.length * 20) / 100 : 1;
+
   useEffect(() => {
+    const total = (active?.length * 20) / 100;
     let suma = 0;
     service?.forEach((e) => {
       suma += e.amount_approved;
     });
-    setCumplimiento(suma / total);
-    console.log(suma);
-  }, [service]);
+    const newCumplimiento = suma / total;
+    setCumplimiento(newCumplimiento);
+    console.log(newCumplimiento);
+  }, [service, active]);
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
       {/* Boton menu celular */}
