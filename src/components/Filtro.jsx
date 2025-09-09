@@ -115,9 +115,9 @@ export default function Filtro({
         <div className="grid gap-1">
           <span
             className={`${
-              filtradoEstado === "Activo"
+              filtradoEstado === "activo"
                 ? "bg-green-100 text-green-800"
-                : filtradoEstado === "Inactivo"
+                : filtradoEstado === "inactivo"
                 ? "bg-red-100 text-red-800"
                 : ""
             } text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-red-900 dark:text-blue-300`}

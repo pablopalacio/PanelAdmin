@@ -10,11 +10,7 @@ function ControlPerfil() {
   } = useApi(`https://www.hs-service.api.crealape.com/api/v1/students/${id}`);
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
+    return <div></div>;
   }
 
   if (error) {
@@ -168,132 +164,6 @@ function ControlPerfil() {
           </div>
         </div>
       </div>
-
-      {/* Horas de servicio */}
-      {student.service_hours?.length > 0 ? (
-        <div>
-          <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 mr-2 text-blue-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            Horas de Servicio
-          </h3>
-          <div className="overflow-x-auto rounded-lg shadow-sm border border-gray-200">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Estado
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Tipo servicio
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Horas
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Fecha
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Fecha aprobación
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Evidencia
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {student.service_hours.map((hora, idx) => (
-                  <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-4 py-4 whitespace-nowrap">
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          hora.status === "Aprobado"
-                            ? "bg-green-100 text-green-800"
-                            : hora.status === "Pendiente"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
-                      >
-                        {hora.status || "-"}
-                      </span>
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
-                      {hora.type || "-"}
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
-                      {hora.hours ? `${hora.hours} h` : "-"}
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
-                      {hora.date || "-"}
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
-                      {hora.approval_date || "-"}
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-center">
-                      {hora.evidence ? (
-                        <a
-                          href={hora.evidence}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:text-blue-800 inline-flex items-center"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4 mr-1"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                            />
-                          </svg>
-                          Ver
-                        </a>
-                      ) : (
-                        "-"
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      ) : (
-        <div className="bg-gray-50 rounded-lg p-6 text-center border border-gray-200">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-12 w-12 mx-auto text-gray-400 mb-3"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <p className="text-gray-500">No hay horas de servicio registradas</p>
-        </div>
-      )}
     </div>
   );
 }
