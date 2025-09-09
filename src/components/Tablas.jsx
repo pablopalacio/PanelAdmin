@@ -12,7 +12,7 @@ export default function Tablas({
   const navigate = useNavigate();
 
   const goToProfile = (id) => {
-    navigate(`/control-perfil/${id}`);
+    navigate(`/Perfil-Estudiante/${id}`);
   };
 
   const filteredData = useMemo(() => {
@@ -53,7 +53,13 @@ export default function Tablas({
     aplicarFiltros,
   ]);
 
-  if (!data) return <p>Cargando...</p>;
+  if (!data)
+    return (
+      <div className="flex flex-col justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <p className="text-gray-600 mt-10">Cargando lista de estudiantes...</p>
+      </div>
+    );
 
   return (
     <>

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Aside from "../components/Aside";
 import { useApi } from "../hooks/useApi";
 import ControlPerfil from "../components/ControlPerfil";
+import TablaHorasDeServicio from "../components/TablaHorasDeServicio";
 
 function Estudiantes() {
   const { data, loading, error } = useApi(
@@ -100,6 +101,7 @@ function Estudiantes() {
       {/* Contenido Principal */}
       <div className="flex flex-col p-4 ml-0 lg:p-6 w-full lg:ml-80">
         <ControlPerfil />
+        <TablaHorasDeServicio />
       </div>
     </div>
   );

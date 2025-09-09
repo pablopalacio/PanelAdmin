@@ -78,14 +78,14 @@ export default function DetalleFiltro({ display, aplicarFiltros, closeModal }) {
             <h3 className="font-semibold py-2">Estado</h3>
             <div className="flex gap-2">
               <button
-                value="Activo"
+                value="activo"
                 onClick={(e) => setTempEstado(e.target.value)}
                 className="px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors cursor-pointer text-sm md:text-l"
               >
                 Activo
               </button>
               <button
-                value="Inactivo"
+                value="inactivo"
                 onClick={(e) => setTempEstado(e.target.value)}
                 className="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors cursor-pointer text-sm md:text-l"
               >
