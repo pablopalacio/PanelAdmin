@@ -29,7 +29,6 @@ export default function Tablas({
   const [loading, setLoading] = useState(false);
   const [localData, setLocalData] = useState(data || []);
 
-  // 🔄 Sincronizar localData cuando cambie la prop data
   useEffect(() => {
     setLocalData(data || []);
   }, [data]);
@@ -58,7 +57,7 @@ export default function Tablas({
       f_lastname: "",
       s_lastname: "",
       phone: "",
-      status: "",
+      status: {},
     });
   };
 
@@ -91,7 +90,6 @@ export default function Tablas({
         }
       );
 
-      // 🔄 Refrescar lista desde la API
       const refreshed = await axios.get(
         "https://www.hs-service.api.crealape.com/api/v1/users",
         {
@@ -159,7 +157,6 @@ export default function Tablas({
 
   return (
     <>
-      {/* 📌 Desktop */}
       <div className="hidden lg:block relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-center text-gray-100 uppercase bg-blue-600">
@@ -225,8 +222,8 @@ export default function Tablas({
                         value={editValues.status}
                         onChange={handleInputChange}
                         className="border px-1 rounded">
-                        <option value="activo">Activo</option>
-                        <option value="inactivo">Inactivo</option>
+                        <option value={1}>Activo</option>
+                        <option value={0}>Inactivo</option>
                       </select>
                       <button
                         onClick={() => handleSave(e.id)}
@@ -248,11 +245,11 @@ export default function Tablas({
                 <td className="px-4 py-4">
                   {Array.isArray(e.schools) && e.schools.length > 0
                     ? e.schools.map((s) => s.name).join(", ")
-                  : "Sin escuela"}
+                    : "Sin escuela"}
                 </td>
                 <td className="px-4 py-4">12/10</td>
                 <td className="px-4 py-4">
-                {e.student?.country?.name || "Sin país"}
+                  {e.student?.country?.name || "Sin país"}
                 </td>
                 <td className="px-4 py-4">
                   <p
@@ -267,7 +264,6 @@ export default function Tablas({
                     <button
                       onClick={() => goToProfile(e.id)}
                       className="hover:text-blue-400 hover:scale-110 cursor-pointer transition duration-300">
-                      {/* SVG Perfil */}
                       <svg
                         className="w-5 h-5"
                         fill="none"
@@ -289,7 +285,6 @@ export default function Tablas({
                     <button
                       onClick={() => handleEditClick(e)}
                       className="hover:text-blue-400 hover:scale-110 cursor-pointer transition duration-300">
-                      {/* SVG Editar */}
                       <svg
                         className="w-5 h-5"
                         fill="none"
@@ -308,7 +303,6 @@ export default function Tablas({
                       </svg>
                     </button>
                     <button className="hover:text-red-500 hover:scale-110 cursor-pointer transition duration-300">
-                      {/* SVG Eliminar */}
                       <svg
                         className="w-5 h-5"
                         fill="none"
@@ -346,8 +340,6 @@ export default function Tablas({
           </tbody>
         </table>
       </div>
-
-      {/* 📌 Mobile */}
       <div className="lg:hidden space-y-3">
         {filteredData?.map((e) => (
           <div
@@ -392,8 +384,8 @@ export default function Tablas({
                       value={editValues.status}
                       onChange={handleInputChange}
                       className="border px-1 rounded">
-                      <option value="activo">Activo</option>
-                      <option value="inactivo">Inactivo</option>
+                      <option value={1}>Activo</option>
+                      <option value={0}>Inactivo</option>
                     </select>
                   </div>
                   <div className="flex space-x-2 mt-2">
@@ -426,7 +418,6 @@ export default function Tablas({
               <button
                 onClick={() => goToProfile(e.id)}
                 className="hover:text-blue-400 hover:scale-110 cursor-pointer transition duration-300">
-                {/* SVG Perfil */}
                 <svg
                   className="w-5 h-5"
                   fill="none"
@@ -452,7 +443,6 @@ export default function Tablas({
               <button
                 onClick={() => handleEditClick(e)}
                 className="hover:text-blue-400 hover:scale-110 cursor-pointer transition duration-300">
-                {/* SVG Editar */}
                 <svg
                   className="w-5 h-5"
                   fill="none"
@@ -473,7 +463,6 @@ export default function Tablas({
                 </svg>
               </button>
               <button className="hover:text-red-500 hover:scale-110 cursor-pointer transition duration-300">
-                {/* SVG Eliminar */}
                 <svg
                   className="w-5 h-5"
                   fill="none"
