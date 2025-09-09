@@ -1,18 +1,23 @@
 import React, { useState } from "react";
 import { useApi } from "../hooks/useApi";
 
-export default function DetalleFiltro({ display, aplicarFiltros, closeModal }) {
+export default function DetalleFiltro({
+  display,
+  aplicarFiltros,
+  closeModal,
+  tempPais,
+  setTempPais,
+  tempEscuela,
+  setTempEscuela,
+  tempEstado,
+  setTempEstado,
+}) {
   const { data: paises } = useApi(
     "https://www.hs-service.api.crealape.com/api/v1/countries"
   );
   const { data: escuelas } = useApi(
     "https://www.hs-service.api.crealape.com/api/v1/schools/"
   );
-
-  const [tempPais, setTempPais] = useState([]);
-  const [tempEscuela, setTempEscuela] = useState([]);
-  const [tempEstado, setTempEstado] = useState("");
-
   const handlePushPais = (p) => {
     setTempPais((prev) =>
       prev.includes(p) ? prev.filter((pais) => pais !== p) : [...prev, p]
@@ -43,8 +48,8 @@ export default function DetalleFiltro({ display, aplicarFiltros, closeModal }) {
                   onClick={() => handlePushPais(p.name)}
                   className={`px-3 py-1 rounded-lg text-sm md:text-l transition-colors cursor-pointer ${
                     tempPais.includes(p.name)
-                      ? "bg-blue-700 text-white"
-                      : "bg-blue-600 text-white hover:bg-blue-700"
+                      ? "bg-blue-900 text-white"
+                      : "bg-blue-600 text-white hover:bg-blue-800"
                   }`}
                 >
                   {p.name}
@@ -62,8 +67,8 @@ export default function DetalleFiltro({ display, aplicarFiltros, closeModal }) {
                   onClick={() => handlePushEscuela(s.name)}
                   className={`px-3 py-1 rounded-lg text-sm md:text-l transition-colors cursor-pointer ${
                     tempEscuela.includes(s.name)
-                      ? "bg-yellow-700 text-white"
-                      : "bg-yellow-600 text-white hover:bg-yellow-700"
+                      ? "bg-violet-900 text-white"
+                      : "bg-violet-500 text-white hover:bg-violet-800"
                   }`}
                 >
                   {s.name}
@@ -78,14 +83,14 @@ export default function DetalleFiltro({ display, aplicarFiltros, closeModal }) {
             <h3 className="font-semibold py-2">Estado</h3>
             <div className="flex gap-2">
               <button
-                value="activo"
+                value="Activo"
                 onClick={(e) => setTempEstado(e.target.value)}
-                className="px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors cursor-pointer text-sm md:text-l"
+                className="px-3 py-1 bg-green-600 text-white rounded-lg a:bg-green-700 transition-colors cursor-pointer text-sm md:text-l"
               >
                 Activo
               </button>
               <button
-                value="inactivo"
+                value="Inactivo"
                 onClick={(e) => setTempEstado(e.target.value)}
                 className="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors cursor-pointer text-sm md:text-l"
               >

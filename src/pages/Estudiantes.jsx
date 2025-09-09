@@ -6,6 +6,7 @@ import Tablas from "../components/Tablas";
 import Filtro from "../components/Filtro";
 import { useApi } from "../hooks/useApi";
 import Statscards from "../components/statscards";
+import EditModal from "../components/EditModal";
 
 function Estudiantes() {
   const { data, loading, error } = useApi(
@@ -14,12 +15,18 @@ function Estudiantes() {
   const { data: service } = useApi(
     "https://www.hs-service.api.crealape.com/api/v1/services"
   );
-
+  /// filtros de busqueda
   const [filtradoPais, setFiltradoPais] = useState([]);
   const [filtradoEscuela, setFiltradoEscuela] = useState([]);
   const [filtradoEstado, setFiltradoEstado] = useState("");
   const [aplicarFiltros, setAplicarFiltros] = useState(false);
 
+  ///filtros temporales
+  const [tempPais, setTempPais] = useState([]);
+  const [tempEscuela, setTempEscuela] = useState([]);
+  const [tempEstado, setTempEstado] = useState("");
+
+  ////
   const [searchTerm, setSearchTerm] = useState("");
   const [active, setActive] = useState([]);
   const [inactive, setInactive] = useState([]);
@@ -61,6 +68,14 @@ function Estudiantes() {
     setAplicarFiltros((prev) => !prev); // forzar re-render en Tablas
   };
 
+  const cleanFilter = () => {
+    setFiltradoPais([]);
+    setFiltradoEscuela([]);
+    setFiltradoEstado("");
+    setTempPais([]);
+    setTempEscuela([]);
+    setTempEstado("");
+  };
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
       {/* Botón menú celular */}
@@ -120,6 +135,13 @@ function Estudiantes() {
           filtradoPais={filtradoPais}
           filtradoEscuela={filtradoEscuela}
           filtradoEstado={filtradoEstado}
+          cleanFilter={cleanFilter}
+          tempEscuela={tempEscuela}
+          setTempEscuela={setTempEscuela}
+          tempPais={tempPais}
+          setTempPais={setTempPais}
+          tempEstado={tempEstado}
+          setTempEstado={setTempEstado}
         />
 
         {/* Stats Cards */}

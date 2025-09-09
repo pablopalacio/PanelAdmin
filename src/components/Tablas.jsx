@@ -25,7 +25,9 @@ export default function Tablas({
           : true
       )
       .filter((e) =>
-        filtradoEstado ? e.status?.toLowerCase() === filtradoEstado : true
+        filtradoEstado
+          ? e.status?.toLowerCase() === filtradoEstado.toLowerCase()
+          : true
       )
       .filter((e) =>
         filtradoPais?.length > 0

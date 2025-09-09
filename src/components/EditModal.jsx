@@ -90,10 +90,7 @@ export default function EditModal({ student, onClose, onSave }) {
         </label>
 
         <div className="flex justify-end space-x-3">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-300 rounded"
-          >
+          <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded">
             Cancelar
           </button>
           <button
