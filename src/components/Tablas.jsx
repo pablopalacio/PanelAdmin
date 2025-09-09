@@ -203,28 +203,28 @@ export default function Tablas({
                           name="f_name"
                           value={editValues.f_name}
                           onChange={handleInputChange}
-                          className="border px-2 py-1 rounded text-sm w-24 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                          className="border px-2 py-1 rounded border-gray-500 text-sm w-24 focus:outline-none focus:ring-1 focus:ring-blue-500"
                           placeholder="1º nombre"
                         />
                         <input
                           name="m_name"
                           value={editValues.m_name}
                           onChange={handleInputChange}
-                          className="border px-2 py-1 rounded text-sm w-24 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                          className="border px-2 py-1 rounded border-gray-500 text-sm w-24 focus:outline-none focus:ring-1 focus:ring-blue-500"
                           placeholder="2º nombre"
                         />
                         <input
                           name="f_lastname"
                           value={editValues.f_lastname}
                           onChange={handleInputChange}
-                          className="border px-2 py-1 rounded text-sm w-24 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                          className="border px-2 py-1 rounded border-gray-500  text-sm w-24 focus:outline-none focus:ring-1 focus:ring-blue-500"
                           placeholder="1º apellido"
                         />
                         <input
                           name="s_lastname"
                           value={editValues.s_lastname}
                           onChange={handleInputChange}
-                          className="border px-2 py-1 rounded text-sm w-24 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                          className="border px-2 py-1 rounded border-gray-500  text-sm w-24 focus:outline-none focus:ring-1 focus:ring-blue-500"
                           placeholder="2º apellido"
                         />
                       </div>
@@ -239,7 +239,7 @@ export default function Tablas({
                       name="phone"
                       value={editValues.phone}
                       onChange={handleInputChange}
-                      className="border px-2 py-1 rounded text-sm w-32 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="border px-2 py-1 rounded border-gray-500  text-sm w-32 focus:outline-none focus:ring-1 focus:ring-blue-500"
                       placeholder="Teléfono"
                     />
                   ) : (
@@ -261,7 +261,7 @@ export default function Tablas({
                       name="status"
                       value={editValues.status}
                       onChange={handleInputChange}
-                      className="border px-2 py-1 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="border border-gray-500  px-2 py-1 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
                     >
                       <option value="activo">Activo</option>
                       <option value="inactivo">Inactivo</option>
@@ -400,28 +400,28 @@ export default function Tablas({
                       name="f_name"
                       value={editValues.f_name}
                       onChange={handleInputChange}
-                      className="border px-2 py-1 rounded text-sm col-span-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="border px-2 py-1 rounded border-gray-500  text-sm col-span-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
                       placeholder="Primer nombre"
                     />
                     <input
                       name="m_name"
                       value={editValues.m_name}
                       onChange={handleInputChange}
-                      className="border px-2 py-1 rounded text-sm col-span-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="border px-2 py-1 rounded border-gray-500  text-sm col-span-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
                       placeholder="Segundo nombre"
                     />
                     <input
                       name="f_lastname"
                       value={editValues.f_lastname}
                       onChange={handleInputChange}
-                      className="border px-2 py-1 rounded text-sm col-span-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="border px-2 py-1 rounded border-gray-500  text-sm col-span-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
                       placeholder="Apellido paterno"
                     />
                     <input
                       name="s_lastname"
                       value={editValues.s_lastname}
                       onChange={handleInputChange}
-                      className="border px-2 py-1 rounded text-sm col-span-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="border px-2 py-1 rounded border-gray-500  text-sm col-span-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
                       placeholder="Apellido materno"
                     />
                   </div>
@@ -429,14 +429,14 @@ export default function Tablas({
                     name="phone"
                     value={editValues.phone}
                     onChange={handleInputChange}
-                    className="border px-2 py-1 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="border px-2 py-1 rounded border-gray-500  text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
                     placeholder="Teléfono"
                   />
                   <select
                     name="status"
                     value={editValues.status}
                     onChange={handleInputChange}
-                    className="border px-2 py-1 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="border px-2 py-1 rounded border-gray-500  text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
                   >
                     <option value="activo">Activo</option>
                     <option value="inactivo">Inactivo</option>
