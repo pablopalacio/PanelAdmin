@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useApiLogin } from "../hooks/useApiLogin";
 import { useNavigate } from "react-router-dom";
 import Aside from "../components/Aside";
-import Filtro from "../components/Filtro";
+/* import Filtro from "../components/Filtro"; */
 
 function Escuela() {
   const { user, logout } = useApiLogin();
@@ -75,7 +75,7 @@ function Escuela() {
 
         {/* Busqueda y filtros */}
         <div>
-          <Filtro />
+{/*           <Filtro /> */}
         </div>
 
         {/* Contenido */}
