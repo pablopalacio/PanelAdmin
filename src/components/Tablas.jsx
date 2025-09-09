@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -14,29 +14,54 @@ export default function Tablas({
   filtradoEscuela,
   filtradoEstado,
   aplicarFiltros,
-  token, 
+  token,
 }) {
   const navigate = useNavigate();
   const [editingId, setEditingId] = useState(null);
   const [editValues, setEditValues] = useState({
     f_name: "",
+    m_name: "",
     s_name: "",
     f_lastname: "",
     s_lastname: "",
+    phone: "",
+    status: "",
   });
   const [loading, setLoading] = useState(false);
+  const [localData, setLocalData] = useState(data || []);
+
+  // 🔄 Sincronizar localData cuando cambie la prop data
+  useEffect(() => {
+    setLocalData(data || []);
+  }, [data]);
 
   const goToProfile = (id) => {
     navigate(`/Perfil-Estudiante/${id}`);
   };
 
-  const handleEditClick= (student) => {
+  const handleEditClick = (student) => {
     setEditingId(student.id);
     setEditValues({
       f_name: student.f_name || "",
+      m_name: student.m_name || "",
       s_name: student.s_name || "",
       f_lastname: student.f_lastname || "",
       s_lastname: student.s_lastname || "",
+      phone: student.phone || "",
+      status: student.status || "",
+    });
+  };
+
+  const handleCancel = () => {
+    setEditingId(null);
+    setEditValues({
+      f_name: "",
+      m_name: "",
+      s_name: "",
+      f_lastname: "",
+      s_lastname: "",
+      phone: "",
+      status: "",
     });
   };
 
@@ -49,27 +74,40 @@ export default function Tablas({
     setLoading(true);
     try {
       const tokenValue = token || getCookie("token");
-      const response = await axios.put(
-        `https://www.hs-service.api.crealape.com/api/v1/users/${id}`,
+      const url = `https://www.hs-service.api.crealape.com/api/v1/users/${id}`;
+      console.log("PUT URL:", url);
+      console.log("Payload:", editValues);
+
+      await axios.put(
+        url,
         {
           f_name: editValues.f_name,
+          m_name: editValues.m_name,
           s_name: editValues.s_name,
           f_lastname: editValues.f_lastname,
           s_lastname: editValues.s_lastname,
+          phone: editValues.phone,
+          status: editValues.status,
         },
         {
           headers: tokenValue ? { Authorization: `Bearer ${tokenValue}` } : {},
           withCredentials: true,
         }
       );
+
+      // 🔄 Refrescar lista desde la API
+      const refreshed = await axios.get(
+        "https://www.hs-service.api.crealape.com/api/v1/users",
+        {
+          headers: tokenValue ? { Authorization: `Bearer ${tokenValue}` } : {},
+          withCredentials: true,
+        }
+      );
+
+      setLocalData(refreshed.data);
       setEditingId(null);
-      if (data) {
-        const newData = data.map((e) =>
-          e.id === id ? { ...e, ...editValues } : e
-        );
-      }
     } catch (error) {
-      console.error("Error al guardar:", error);
+      console.error("Error al guardar:", error.response || error);
       alert("No se pudo actualizar el estudiante.");
     } finally {
       setLoading(false);
@@ -77,8 +115,8 @@ export default function Tablas({
   };
 
   const filteredData = useMemo(() => {
-    if (!data) return [];
-    return data
+    if (!localData) return [];
+    return localData
       .filter((e) =>
         searchTerm
           ? e.full_name?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -107,7 +145,7 @@ export default function Tablas({
           : true
       );
   }, [
-    data,
+    localData,
     searchTerm,
     filtradoEstado,
     filtradoPais,
@@ -115,7 +153,7 @@ export default function Tablas({
     aplicarFiltros,
   ]);
 
-  if (!data)
+  if (!localData)
     return (
       <div className="flex flex-col justify-center items-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
@@ -125,6 +163,7 @@ export default function Tablas({
 
   return (
     <>
+      {/* 📌 Desktop */}
       <div className="hidden lg:block relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-center text-gray-100 uppercase bg-blue-600">
@@ -154,10 +193,16 @@ export default function Tablas({
                   scope="row"
                   className="px-4 py-4 text-start font-medium text-gray-900 whitespace-nowrap">
                   {editingId === e.id ? (
-                    <div className="flex space-x-2">
+                    <div className="flex flex-wrap gap-2 items-center">
                       <input
                         name="f_name"
                         value={editValues.f_name}
+                        onChange={handleInputChange}
+                        className="border px-1 rounded w-20"
+                      />
+                      <input
+                        name="m_name"
+                        value={editValues.m_name}
                         onChange={handleInputChange}
                         className="border px-1 rounded w-20"
                       />
@@ -179,11 +224,30 @@ export default function Tablas({
                         onChange={handleInputChange}
                         className="border px-1 rounded w-24"
                       />
+                      <input
+                        name="phone"
+                        value={editValues.phone}
+                        onChange={handleInputChange}
+                        className="border px-1 rounded w-24"
+                      />
+                      <select
+                        name="status"
+                        value={editValues.status}
+                        onChange={handleInputChange}
+                        className="border px-1 rounded">
+                        <option value="activo">Activo</option>
+                        <option value="inactivo">Inactivo</option>
+                      </select>
                       <button
                         onClick={() => handleSave(e.id)}
                         className="ml-2 text-green-600 font-semibold"
                         disabled={loading}>
                         {loading ? "Guardando..." : "Guardar"}
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="ml-2 text-red-600 font-semibold">
+                        Cancelar
                       </button>
                     </div>
                   ) : (
@@ -192,10 +256,14 @@ export default function Tablas({
                 </th>
                 <td className="px-4 py-4">{e.phone}</td>
                 <td className="px-4 py-4">
-                  {e.schools.map((s) => s.name).join(", ")}
+                  {Array.isArray(e.schools) && e.schools.length > 0
+                    ? e.schools.map((s) => s.name).join(", ")
+                  : "Sin escuela"}
                 </td>
                 <td className="px-4 py-4">12/10</td>
-                <td className="px-4 py-4">{e.student.country.name}</td>
+                <td className="px-4 py-4">
+                {e.student?.country?.name || "Sin país"}
+                </td>
                 <td className="px-4 py-4">
                   <p
                     className={`text-white px-2 py-1.5 rounded-xl text-center text-xs ${
@@ -209,7 +277,7 @@ export default function Tablas({
                     <button
                       onClick={() => goToProfile(e.id)}
                       className="hover:text-blue-400 hover:scale-110 cursor-pointer transition duration-300">
-                      {/* SVG de perfil */}
+                      {/* SVG Perfil */}
                       <svg
                         className="w-5 h-5"
                         fill="none"
@@ -219,14 +287,19 @@ export default function Tablas({
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                          d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 
+                          0a9 9 0 1 0-11.963 0m11.963 
+                          0A8.966 8.966 0 0 1 12 21a8.966 
+                          8.966 0 0 1-5.982-2.275M15 
+                          9.75a3 3 0 1 1-6 0 3 3 0 0 1 
+                          6 0Z"
                         />
                       </svg>
                     </button>
                     <button
                       onClick={() => handleEditClick(e)}
                       className="hover:text-blue-400 hover:scale-110 cursor-pointer transition duration-300">
-                      {/* SVG del lápiz */}
+                      {/* SVG Editar */}
                       <svg
                         className="w-5 h-5"
                         fill="none"
@@ -236,11 +309,16 @@ export default function Tablas({
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z"
+                          d="m16.862 4.487 1.687-1.688a1.875 
+                          1.875 0 1 1 2.652 2.652L10.582 
+                          16.07a4.5 4.5 0 0 1-1.897 
+                          1.13L6 18l.8-2.685a4.5 4.5 
+                          0 0 1 1.13-1.897l8.932-8.931Z"
                         />
                       </svg>
                     </button>
                     <button className="hover:text-red-500 hover:scale-110 cursor-pointer transition duration-300">
+                      {/* SVG Eliminar */}
                       <svg
                         className="w-5 h-5"
                         fill="none"
@@ -250,7 +328,24 @@ export default function Tablas({
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                          d="m14.74 9-.346 
+                          9m-4.788 0L9.26 
+                          9m9.968-3.21c.342.052.682.107 
+                          1.022.166m-1.022-.165L18.16 
+                          19.673a2.25 2.25 0 0 1-2.244 
+                          2.077H8.084a2.25 2.25 0 0 
+                          1-2.244-2.077L4.772 
+                          5.79m14.456 0a48.108 
+                          48.108 0 0 0-3.478-.397m-12 
+                          .562c.34-.059.68-.114 
+                          1.022-.165m0 0a48.11 48.11 
+                          0 0 1 3.478-.397m7.5 
+                          0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 
+                          51.964 0 0 0-3.32 
+                          0c-1.18.037-2.09 
+                          1.022-2.09 2.201v.916m7.5 
+                          0a48.667 48.667 0 0 0-7.5 
+                          0"
                         />
                       </svg>
                     </button>
@@ -261,6 +356,8 @@ export default function Tablas({
           </tbody>
         </table>
       </div>
+
+      {/* 📌 Mobile */}
       <div className="lg:hidden space-y-3">
         {filteredData?.map((e) => (
           <div
@@ -268,11 +365,17 @@ export default function Tablas({
             className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
             <div className="flex justify-between items-start mb-3">
               {editingId === e.id ? (
-                <div className="flex flex-col space-y-1 flex-1">
-                  <div className="flex space-x-2">
+                <div className="flex flex-col space-y-2 flex-1">
+                  <div className="flex flex-wrap gap-2">
                     <input
                       name="f_name"
                       value={editValues.f_name}
+                      onChange={handleInputChange}
+                      className="border px-1 rounded w-20"
+                    />
+                    <input
+                      name="m_name"
+                      value={editValues.m_name}
                       onChange={handleInputChange}
                       className="border px-1 rounded w-20"
                     />
@@ -294,10 +397,32 @@ export default function Tablas({
                       onChange={handleInputChange}
                       className="border px-1 rounded w-24"
                     />
+                    <input
+                      name="phone"
+                      value={editValues.phone}
+                      onChange={handleInputChange}
+                      className="border px-1 rounded w-24"
+                    />
+                    <select
+                      name="status"
+                      value={editValues.status}
+                      onChange={handleInputChange}
+                      className="border px-1 rounded">
+                      <option value="activo">Activo</option>
+                      <option value="inactivo">Inactivo</option>
+                    </select>
+                  </div>
+                  <div className="flex space-x-2 mt-2">
                     <button
                       onClick={() => handleSave(e.id)}
-                      className="ml-2 text-green-600 font-semibold">
+                      className="text-green-600 font-semibold"
+                      disabled={loading}>
                       {loading ? "Guardando..." : "Guardar"}
+                    </button>
+                    <button
+                      onClick={handleCancel}
+                      className="text-red-600 font-semibold">
+                      Cancelar
                     </button>
                   </div>
                 </div>
@@ -312,6 +437,90 @@ export default function Tablas({
                 }`}>
                 {e.status === "activo" ? "Activo" : "Inactivo"}
               </span>
+            </div>
+
+            {/* 📌 Acciones también en mobile con SVG */}
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={() => goToProfile(e.id)}
+                className="hover:text-blue-400 hover:scale-110 cursor-pointer transition duration-300">
+                {/* SVG Perfil */}
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17.982 18.725A7.488 
+                    7.488 0 0 0 12 
+                    15.75a7.488 7.488 0 0 
+                    0-5.982 2.975m11.963 
+                    0a9 9 0 1 0-11.963 
+                    0m11.963 0A8.966 8.966 0 
+                    0 1 12 21a8.966 8.966 0 0 
+                    1-5.982-2.275M15 
+                    9.75a3 3 0 1 1-6 0 3 
+                    3 0 0 1 6 0Z"
+                  />
+                </svg>
+              </button>
+              <button
+                onClick={() => handleEditClick(e)}
+                className="hover:text-blue-400 hover:scale-110 cursor-pointer transition duration-300">
+                {/* SVG Editar */}
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m16.862 4.487 1.687-1.688a1.875 
+                    1.875 0 1 1 2.652 
+                    2.652L10.582 
+                    16.07a4.5 4.5 0 0 
+                    1-1.897 1.13L6 
+                    18l.8-2.685a4.5 
+                    4.5 0 0 1 1.13-1.897l8.932-8.931Z"
+                  />
+                </svg>
+              </button>
+              <button className="hover:text-red-500 hover:scale-110 cursor-pointer transition duration-300">
+                {/* SVG Eliminar */}
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m14.74 9-.346 
+                    9m-4.788 0L9.26 
+                    9m9.968-3.21c.342.052.682.107 
+                    1.022.166m-1.022-.165L18.16 
+                    19.673a2.25 2.25 0 0 
+                    1-2.244 2.077H8.084a2.25 
+                    2.25 0 0 1-2.244-2.077L4.772 
+                    5.79m14.456 0a48.108 48.108 
+                    0 0 0-3.478-.397m-12 
+                    .562c.34-.059.68-.114 
+                    1.022-.165m0 0a48.11 
+                    48.11 0 0 1 3.478-.397m7.5 
+                    0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 
+                    51.964 0 0 0-3.32 
+                    0c-1.18.037-2.09 
+                    1.022-2.09 2.201v.916m7.5 
+                    0a48.667 48.667 0 0 0-7.5 0"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
         ))}
