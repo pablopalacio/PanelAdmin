@@ -5,6 +5,7 @@ import Aside from "../components/Aside";
 import Tablas from "../components/Tablas";
 import Filtro from "../components/Filtro";
 import { useApi } from "../hooks/useApi";
+import Statscards from "../components/statscards";
 
 function Estudiantes() {
   const { data, loading, error } = useApi(
@@ -122,9 +123,12 @@ function Estudiantes() {
         />
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6 mb-4 lg:mb-6">
-          {/* Aquí puedes poner tus tarjetas de estadísticas */}
-        </div>
+        <Statscards
+          data={data}
+          active={active}
+          inactive={inactive}
+          cumplimiento={cumplimiento}
+        />
 
         {/* Tabla estudiantes */}
         <div className="bg-white rounded-xl shadow-sm p-4 lg:p-6 mb-4 lg:mb-6">
