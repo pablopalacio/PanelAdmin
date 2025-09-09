@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import ForgotPassword from "./pages/ForgotPassword"; // <-- Import agregado
 import Estudiantes from "./pages/Estudiantes";
 import Controllers from "./pages/Controllers";
 import Reclutadores from "./pages/Reclutador";
@@ -17,11 +18,12 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          {/* Rutas públicas */}
+
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
-          {/* Rutas protegidas */}
+
           <Route
             path="/estudiantes"
             element={

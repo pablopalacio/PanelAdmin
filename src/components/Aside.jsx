@@ -18,17 +18,12 @@ export default function Aside() {
   const handleNavigation = (path) => {
     navigate(path);
   };
-
   const handleLogout = () => {
-    logout();
-    navigate("/");
+    logout(); 
+    navigate("/"); 
   };
 
-  // Función para verificar si la ruta está activa
-  const isActive = (path) => {
-    return location.pathname === path;
-  };
-
+  const isActive = (path) => location.pathname === path;
   return (
     <aside className="w-80 fixed h-screen bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl p-6 font-sans rounded-xl">
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 2xl:p-4 p-4 rounded-xl shadow-sm mb-6">
@@ -45,8 +40,7 @@ export default function Aside() {
               className="h-4 w-4 text-gray-500 mr-1"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
+              stroke="currentColor">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -63,7 +57,6 @@ export default function Aside() {
           </div>
         </div>
       </div>
-
       <div className="mt-10 2xl:mt-6">
         <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 pl-3">
           Menú Principal
@@ -77,8 +70,7 @@ export default function Aside() {
                 isActive(item.path)
                   ? "bg-blue-100 text-blue-700 border-l-4 border-blue-600"
                   : "text-gray-700 hover:text-blue-700 hover:bg-blue-50"
-              }`}
-            >
+              }`}>
               <span className="text-sm 2xl:text-xl mr-3 group-hover:scale-110 transition-transform">
                 {item.icon}
               </span>
@@ -92,8 +84,7 @@ export default function Aside() {
                 }`}
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
+                stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -107,15 +98,13 @@ export default function Aside() {
         <div className="flex justify-center">
           <button
             onClick={handleLogout}
-            className=" w-40 2xl:w-full bg-gradient-to-r from-red-500 to-red-600 text-white p-2 2xl:py-3 rounded-xl text-xs 2xl:text-sm font-medium hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer flex items-center justify-center mt-9"
-          >
+            className="w-40 2xl:w-full bg-gradient-to-r from-red-500 to-red-600 text-white p-2 2xl:py-3 rounded-xl text-xs 2xl:text-sm font-medium hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer flex items-center justify-center mt-9">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 mr-2"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
+              stroke="currentColor">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
