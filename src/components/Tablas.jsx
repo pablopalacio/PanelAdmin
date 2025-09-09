@@ -21,7 +21,6 @@ export default function Tablas({
   const [editValues, setEditValues] = useState({
     f_name: "",
     m_name: "",
-    s_name: "",
     f_lastname: "",
     s_lastname: "",
     phone: "",
@@ -44,7 +43,6 @@ export default function Tablas({
     setEditValues({
       f_name: student.f_name || "",
       m_name: student.m_name || "",
-      s_name: student.s_name || "",
       f_lastname: student.f_lastname || "",
       s_lastname: student.s_lastname || "",
       phone: student.phone || "",
@@ -57,7 +55,6 @@ export default function Tablas({
     setEditValues({
       f_name: "",
       m_name: "",
-      s_name: "",
       f_lastname: "",
       s_lastname: "",
       phone: "",
@@ -83,7 +80,6 @@ export default function Tablas({
         {
           f_name: editValues.f_name,
           m_name: editValues.m_name,
-          s_name: editValues.s_name,
           f_lastname: editValues.f_lastname,
           s_lastname: editValues.s_lastname,
           phone: editValues.phone,
@@ -203,12 +199,6 @@ export default function Tablas({
                       <input
                         name="m_name"
                         value={editValues.m_name}
-                        onChange={handleInputChange}
-                        className="border px-1 rounded w-20"
-                      />
-                      <input
-                        name="s_name"
-                        value={editValues.s_name}
                         onChange={handleInputChange}
                         className="border px-1 rounded w-20"
                       />
@@ -380,12 +370,6 @@ export default function Tablas({
                       className="border px-1 rounded w-20"
                     />
                     <input
-                      name="s_name"
-                      value={editValues.s_name}
-                      onChange={handleInputChange}
-                      className="border px-1 rounded w-20"
-                    />
-                    <input
                       name="f_lastname"
                       value={editValues.f_lastname}
                       onChange={handleInputChange}
@@ -438,8 +422,6 @@ export default function Tablas({
                 {e.status === "activo" ? "Activo" : "Inactivo"}
               </span>
             </div>
-
-            {/* 📌 Acciones también en mobile con SVG */}
             <div className="flex justify-end space-x-2">
               <button
                 onClick={() => goToProfile(e.id)}
