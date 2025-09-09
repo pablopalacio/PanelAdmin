@@ -74,9 +74,7 @@ function Reclutador() {
         </header>
 
         {/* Busqueda y filtros */}
-        <div>
-          <Filtro />
-        </div>
+        <div></div>
 
         {/* Contenido */}
         <div className="bg-white rounded-xl shadow-sm p-4 lg:p-6 mb-4 lg:mb-6"></div>
