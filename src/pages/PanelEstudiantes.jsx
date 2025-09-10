@@ -1,5 +1,6 @@
 import React from "react";
 import { useApiLogin } from "../hooks/useApiLogin";
+import Logout from "../components/logout";
 
 export default function PanelEstudiantes() {
   const { user, logout } = useApiLogin();
@@ -14,9 +15,9 @@ export default function PanelEstudiantes() {
           src="/Diseño sin título (2).png"
           alt=""
         />
-        <button className=" absolute top-2 right-2 py-2 px-5 bg-red-600 hover:bg-red-700 cursor-pointer text-white rounded-lg font-semibold transition duration-200 shadow-md">
-          Logout
-        </button>
+        <div className="absolute top-2 right-2">
+          <Logout logout={logout} />
+        </div>
         <div className="absolute lg:top-55 md:top-35 top-38 md:left-10 left-4 lg:w-48 lg:h-48 md:w-36 md:h-36 w-24 h-24 8xl:w-24 8xl:h-24 bg-gradient-to-r from-blue-200 to-indigo-200 rounded-full flex items-center justify-center border-4 border-white shadow-md">
           <span className="lg:text-8xl md:text-6xl text-4xl">👤</span>
         </div>
@@ -26,7 +27,7 @@ export default function PanelEstudiantes() {
         <section className="bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl  w-full flex flex-col justify-center items-center text-gray-800">
           <p className="pt-15 font-semibold text-xl pb-4">
             Bienvenido{" "}
-            <span className="font-light text-md">{user.full_name}</span>{" "}
+            <span className="font-light text-md">{user?.full_name}</span>{" "}
           </p>
         </section>
         <div className=" md:flex ">
@@ -37,43 +38,43 @@ export default function PanelEstudiantes() {
                 <p className="font-semibold">
                   Nombre:{" "}
                   <span className="font-light text-sm">
-                    {user.f_name} {user.s_name}
+                    {user?.f_name} {user?.s_name}
                   </span>
                 </p>
                 <p className="font-semibold">
                   Apellido:{" "}
                   <span className="font-light text-sm">
-                    {user.f_lastname} {user.s_lastname}
+                    {user?.f_lastname} {user?.s_lastname}
                   </span>
                 </p>
                 <p className="font-semibold">
                   Telefono:{" "}
                   <span className="font-light text-sm">
-                    {user.phone ? user.phone : "No providenciado"}
+                    {user?.phone ? user?.phone : "No providenciado"}
                   </span>
                 </p>
                 <p className="font-semibold">
                   Pais:{" "}
                   <span className="font-light text-sm">
-                    {user.student.country.name}
+                    {user?.student.country.name}
                   </span>
                 </p>
                 <p className="font-semibold">
                   Escuela:{" "}
                   <span className="font-light text-sm">
-                    {user.schools[0].name}
+                    {user?.schools[0].name}
                   </span>
                 </p>
                 <p className="font-semibold">
                   Controller:{" "}
                   <span className="font-light text-sm">
-                    {user.student.controller.full_name}
+                    {user?.student.controller.full_name}
                   </span>
                 </p>
                 <p className="font-semibold ">
                   Reclutador:{" "}
                   <span className="font-light text-sm">
-                    {user.student.recruiter.full_name}
+                    {user?.student.recruiter.full_name}
                   </span>
                 </p>
               </div>
