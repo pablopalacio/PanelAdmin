@@ -168,12 +168,6 @@ function Login() {
           </div>
         )}
 
-        <div className="mt-2 text-center">
-          <button className="text-sm p text-blue-600 hover:text-blue-800">
-            Cambiar Clave
-          </button>
-        </div>
-
         <div className="mt-8 pt-6 border-t border-gray-200 text-center">
           <Link
             to="/"
