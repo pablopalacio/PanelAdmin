@@ -1,3 +1,5 @@
+import "./index.css";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -11,9 +13,6 @@ import PrivateRoute from "./components/PrivateRoute";
 import PerfilEstudiante from "./pages/PerfilEstudiante";
 import PanelEstudiantes from "./pages/PanelEstudiantes";
 
-import "./index.css";
-import PanelEstudiantes from "./pages/PanelEstudiantes";
-
 function App() {
   return (
     <Router>
@@ -22,9 +21,6 @@ function App() {
           {/* Rutas públicas */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/controller" element={<Controllers />} />
-          <Route path="/panelestudiante" element={<PanelEstudiantes />} />
-          <Route path="/reclutador" element={<Reclutadores />} />
 
           {/* Rutas protegidas */}
           <Route
