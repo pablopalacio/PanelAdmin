@@ -45,7 +45,7 @@ export default function Tablas({
       f_lastname: student.f_lastname || "",
       s_lastname: student.s_lastname || "",
       phone: student.phone || "",
-      status: student.status || "activo",
+      status: student.status || "",
     });
   };
 
@@ -57,12 +57,12 @@ export default function Tablas({
       f_lastname: "",
       s_lastname: "",
       phone: "",
-      status: "activo",
+      status: "",
     });
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target; 
     setEditValues((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -71,7 +71,6 @@ export default function Tablas({
     try {
       const tokenValue = token || getCookie("token");
       const url = `https://www.hs-service.api.crealape.com/api/v1/users/${id}`;
-
       await axios.put(
         url,
         {
@@ -263,8 +262,9 @@ export default function Tablas({
                       onChange={handleInputChange}
                       className="border border-gray-500  px-2 py-1 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
                     >
-                      <option value="activo">Activo</option>
-                      <option value="inactivo">Inactivo</option>
+                      <option >Selecionar Estado</option>
+                      <option value="1">Activo</option>
+                      <option value="0">Inactivo</option>
                     </select>
                   ) : (
                     <p
@@ -438,8 +438,9 @@ export default function Tablas({
                     onChange={handleInputChange}
                     className="border px-2 py-1 rounded border-gray-500  text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
                   >
-                    <option value="activo">Activo</option>
-                    <option value="inactivo">Inactivo</option>
+                    <option >Selecionar Estado</option>
+                    <option value="1">Activo</option>
+                    <option value="0">Inactivo</option>
                   </select>
                 </div>
               ) : (
