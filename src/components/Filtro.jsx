@@ -31,7 +31,7 @@ export default function Filtro({
             <div className="relative">
               <input
                 type="text"
-                placeholder="Buscar estudiantes..."
+                placeholder="Buscar"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm lg:text-base"
@@ -70,7 +70,7 @@ export default function Filtro({
                   d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                 />
               </svg>
-              Nuevo Estudiante
+              Nuevo
             </button>
             <button
               onClick={handleToggle}

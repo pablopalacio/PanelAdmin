@@ -2,26 +2,15 @@ import { useEffect, useState } from "react";
 import { useApiLogin } from "../hooks/useApiLogin";
 import { useNavigate } from "react-router-dom";
 import Aside from "../components/Aside";
-import { useApi } from "../hooks/useApi";
 import ControlPerfil from "../components/ControlPerfil";
 import TablaHorasDeServicio from "../components/TablaHorasDeServicio";
+import axiosInstance from "../config/axiosConfig";
 
-function Estudiantes() {
-  const { data, loading, error } = useApi(
-    "https://www.hs-service.api.crealape.com/api/v1/students"
-  );
-  const { data: service } = useApi(
-    "https://www.hs-service.api.crealape.com/api/v1/services"
-  );
-  useEffect(() => {
-    let suma = 0;
-    service?.forEach((e) => {
-      suma += e.amount_approved;
-    });
-
-    setCumplimiento(suma / ((active?.length * 20) / 100));
-    console.log(suma);
-  }, [service]);
+function PerfilEstudiante() {
+  const [data, setData] = useState([]);
+  const [service, setService] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [cumplimiento, setCumplimiento] = useState("50");
   const { user, logout } = useApiLogin();
   const [active, setActive] = useState([]);
@@ -29,6 +18,32 @@ function Estudiantes() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Función para cargar datos
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Cargar estudiantes
+      const studentsResponse = await axiosInstance.get("/students");
+      setData(studentsResponse.data);
+
+      // Cargar servicios
+      const servicesResponse = await axiosInstance.get("/services");
+      setService(servicesResponse.data);
+    } catch (err) {
+      console.error("Error fetching data:", err);
+      setError(err.response?.data?.message || err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Cargar datos al montar el componente
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -38,24 +53,52 @@ function Estudiantes() {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  // Filtro de activos e inactivos
   useEffect(() => {
     const filtradoA = data?.filter((e) => e.status === "activo");
     setActive(filtradoA);
-    console.log(filtradoA);
-  }, [data]);
-  useEffect(() => {
+
     const filtradoI = data?.filter((e) => e.status === "inactivo");
     setInactive(filtradoI);
   }, [data]);
-  const total = active?.length ? (active.length * 20) / 100 : 1;
+
+  // Cálculo de cumplimiento
   useEffect(() => {
+    const total = active?.length ? (active.length * 20) / 100 : 1;
     let suma = 0;
     service?.forEach((e) => {
       suma += e.amount_approved;
     });
     setCumplimiento(suma / total);
-    console.log(suma);
-  }, [service]);
+  }, [service, active]);
+
+  // Mostrar loading mientras se cargan los datos
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  // Mostrar error si hay problema en la carga
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="bg-white rounded-lg shadow-md p-6 text-center">
+          <p className="text-red-500">Error al cargar los datos: {error}</p>
+          <button
+            onClick={fetchData}
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Reintentar
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
       {/* Boton menu celular */}
@@ -107,4 +150,4 @@ function Estudiantes() {
   );
 }
 
-export default Estudiantes;
+export default PerfilEstudiante;

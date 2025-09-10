@@ -1,16 +1,40 @@
 import { useParams } from "react-router-dom";
-import { useApi } from "../hooks/useApi";
+import { useState, useEffect } from "react";
+import axiosInstance from "../config/axiosConfig";
 
 function ControlPerfil() {
   const { id } = useParams();
-  const {
-    data: student,
-    loading,
-    error,
-  } = useApi(`https://www.hs-service.api.crealape.com/api/v1/students/${id}`);
+  const [student, setStudent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchStudent = async () => {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get(`/students/${id}`);
+        setStudent(response.data);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching student:", err);
+        setError(
+          err.response?.data?.message || "Error al cargar el estudiante"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStudent();
+  }, [id]);
 
   if (loading) {
-    return <div></div>;
+    return (
+      <div className="h-full w-full flex flex-col justify-center items-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <p className="text-gray-600 mt-10">Cargando perfil...</p>
+      </div>
+    );
   }
 
   if (error) {
@@ -95,7 +119,7 @@ function ControlPerfil() {
                   <span className="text-gray-700">{student.phone}</span>
                 </div>
               )}
-              {student.student.country?.name && (
+              {student.student?.country?.name && (
                 <div className="flex items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -139,7 +163,7 @@ function ControlPerfil() {
                   </span>
                 </div>
               )}
-              {student.student.controller?.f_name && (
+              {student.student?.controller?.f_name && (
                 <div className="flex items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

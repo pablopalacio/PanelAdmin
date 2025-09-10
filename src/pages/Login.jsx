@@ -6,7 +6,15 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
-  const { login, error, loading } = useApiLogin();
+  const {
+    login,
+    isAdmin,
+    isStudent,
+    isController,
+    isRecruiter,
+    error,
+    loading,
+  } = useApiLogin();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -21,8 +29,25 @@ function Login() {
     try {
       const result = await login(email, password);
       if (result && result.user) {
-        console.log("Login exitoso, redirigiendo a estudiantes...");
-        navigate("/Estudiantes");
+        console.log("Login exitoso, redirigiendo según rol...");
+
+        // 📍 REDIRECCIÓN SEGÚN EL ROL DEL USUARIO
+        if (isAdmin()) {
+          navigate("/Estudiantes");
+          console.log("Redirigiendo a panel de administrador");
+        } else if (isStudent()) {
+          navigate("/panel-estudiante"); // ← AQUÍ VA A PanelEstudiante.jsx
+          console.log("Redirigiendo a panel de estudiante");
+        } else if (isController()) {
+          navigate("/controller/panel");
+          console.log("Redirigiendo a panel de controller");
+        } else if (isRecruiter()) {
+          navigate("/recruiter/candidates");
+          console.log("Redirigiendo a panel de reclutador");
+        } else {
+          navigate("/PanelEstudiantes"); // Ruta por defecto si no coincide ningún rol
+          console.log("Redirigiendo a página por defecto");
+        }
       }
     } catch (err) {
       console.error("Error de login:", err);
@@ -46,6 +71,7 @@ function Login() {
     setPassword("1234567");
     setLoginError("");
   };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
@@ -145,8 +171,19 @@ function Login() {
           </button>
         </form>
 
+        {/* Botón para credenciales de prueba (opcional) */}
+        <div className="mt-4 text-center">
+          <button
+            type="button"
+            onClick={handleTestCredentials}
+            className="text-sm text-blue-600 hover:text-blue-800 underline"
+          >
+            Usar credenciales de prueba
+          </button>
+        </div>
+
         {(error || loginError) && (
-          <div className=" p-3 text-red-700 rounded-lg text-sm">
+          <div className="mt-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
             {(() => {
               const errorMessage = error || loginError;
 
@@ -168,8 +205,8 @@ function Login() {
           </div>
         )}
 
-        <div className="mt-2 text-center">
-          <button className="text-sm p text-blue-600 hover:text-blue-800">
+        <div className="mt-6 text-center">
+          <button className="text-sm text-blue-600 hover:text-blue-800">
             Cambiar Clave
           </button>
         </div>
