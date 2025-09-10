@@ -31,12 +31,12 @@ function Login() {
       if (result && result.user) {
         console.log("Login exitoso, redirigiendo según rol...");
 
-        // 📍 REDIRECCIÓN SEGÚN EL ROL DEL USUARIO
+        //  REDIRECCIÓN SEGÚN EL ROL DEL USUARIO
         if (isAdmin()) {
           navigate("/Estudiantes");
           console.log("Redirigiendo a panel de administrador");
         } else if (isStudent()) {
-          navigate("/panel-estudiante"); // ← AQUÍ VA A PanelEstudiante.jsx
+          navigate("/Panel-Estudiante"); // ← AQUÍ VA A PanelEstudiante.jsx
           console.log("Redirigiendo a panel de estudiante");
         } else if (isController()) {
           navigate("/controller/panel");
