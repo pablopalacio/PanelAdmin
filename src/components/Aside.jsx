@@ -64,12 +64,6 @@ export default function Aside() {
             <div className="mt-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-[10px] 2xl:text-xs font-medium">
               Administrador
             </div>
-            <button
-              onClick={() => setOpenModal(true)}
-              className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs 2xl:text-sm font-medium hover:bg-blue-700 transition-colors shadow-md"
-            >
-              Cambiar Contraseña
-            </button>
           </div>
         </div>
 
@@ -113,7 +107,7 @@ export default function Aside() {
               </li>
             ))}
           </ul>
-          <div className="flex justify-center">
+          <div className="flex flex-col justify-center">
             <button
               onClick={handleLogout}
               className=" w-40 2xl:w-full bg-gradient-to-r from-red-500 to-red-600 text-white p-2 2xl:py-3 rounded-xl text-xs 2xl:text-sm font-medium hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer flex items-center justify-center mt-9"
@@ -133,6 +127,10 @@ export default function Aside() {
                 />
               </svg>
               CERRAR SESIÓN
+            </button>
+
+            <button className="text-sm text-center text-blue-600 hover:text-blue-800 mt-3 cursor-pointer">
+              Cambiar Clave
             </button>
           </div>
         </div>

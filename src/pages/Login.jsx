@@ -171,17 +171,6 @@ function Login() {
           </button>
         </form>
 
-        {/* Botón para credenciales de prueba (opcional) */}
-        <div className="mt-4 text-center">
-          <button
-            type="button"
-            onClick={handleTestCredentials}
-            className="text-sm text-blue-600 hover:text-blue-800 underline"
-          >
-            Usar credenciales de prueba
-          </button>
-        </div>
-
         {(error || loginError) && (
           <div className="mt-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
             {(() => {
