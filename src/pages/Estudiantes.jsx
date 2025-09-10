@@ -7,11 +7,13 @@ import Filtro from "../components/Filtro";
 import { useApi } from "../hooks/useApi";
 import Statscards from "../components/statscards";
 import EditModal from "../components/EditModal";
+import NewUser from "../components/NewUser";
 
 function Estudiantes() {
   const { data, loading, error } = useApi(
     "https://www.hs-service.api.crealape.com/api/v1/students"
   );
+  console.log(data);
   const { data: service } = useApi(
     "https://www.hs-service.api.crealape.com/api/v1/services"
   );
@@ -31,7 +33,7 @@ function Estudiantes() {
   const [active, setActive] = useState([]);
   const [inactive, setInactive] = useState([]);
   const [cumplimiento, setCumplimiento] = useState("");
-
+  const [toggleModal, setToggleModal] = useState(false);
   const { user, logout } = useApiLogin();
   const navigate = useNavigate();
 
@@ -78,6 +80,11 @@ function Estudiantes() {
   };
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
+      <NewUser
+        toggleModal={toggleModal}
+        setToggleModal={setToggleModal}
+        onSave={handleAplicarFiltros}
+      />
       {/* Botón menú celular */}
       <button
         onClick={toggleSidebar}
@@ -142,6 +149,7 @@ function Estudiantes() {
           setTempPais={setTempPais}
           tempEstado={tempEstado}
           setTempEstado={setTempEstado}
+          setToggleModal={setToggleModal}
         />
 
         {/* Stats Cards */}
