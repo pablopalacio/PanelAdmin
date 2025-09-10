@@ -1,6 +1,10 @@
 import React from "react";
+import { useApiLogin } from "../hooks/useApiLogin";
 
 export default function PanelEstudiantes() {
+  const { user, logout } = useApiLogin();
+  console.log(user);
+
   return (
     <>
       <footer className="w-full relative">
@@ -19,32 +23,58 @@ export default function PanelEstudiantes() {
       </footer>
 
       <main className="w-full">
-        <section className="bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl w-full flex flex-col justify-center items-center text-gray-800">
-          <span>Nombre</span>
-          <span>Correo</span>
+        <section className="bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl  w-full flex flex-col justify-center items-center text-gray-800">
+          <p className="pt-15 font-semibold text-xl pb-4">
+            Bienvenido{" "}
+            <span className="font-light text-md">{user.full_name}</span>{" "}
+          </p>
         </section>
-        <div className=" md:flex">
+        <div className=" md:flex ">
           <section className="w-full px-2 py-6">
             <div className="w-full bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl px-4 rounded-2xl ">
               <h2 className="font-semibold text-xl text-center p-4">Perfil</h2>
-              <div>
+              <div className="pb-4">
+                <p className="font-semibold">
+                  Nombre:{" "}
+                  <span className="font-light text-sm">
+                    {user.f_name} {user.s_name}
+                  </span>
+                </p>
+                <p className="font-semibold">
+                  Apellido:{" "}
+                  <span className="font-light text-sm">
+                    {user.f_lastname} {user.s_lastname}
+                  </span>
+                </p>
                 <p className="font-semibold">
                   Telefono:{" "}
-                  <span className="font-light text-sm">11 9090-9090</span>
+                  <span className="font-light text-sm">
+                    {user.phone ? user.phone : "No providenciado"}
+                  </span>
                 </p>
                 <p className="font-semibold">
-                  Pais: <span className="font-light text-sm">Argentina</span>
+                  Pais:{" "}
+                  <span className="font-light text-sm">
+                    {user.student.country.name}
+                  </span>
                 </p>
                 <p className="font-semibold">
-                  Escuela: <span className="font-light text-sm">Front-end</span>
+                  Escuela:{" "}
+                  <span className="font-light text-sm">
+                    {user.schools[0].name}
+                  </span>
                 </p>
                 <p className="font-semibold">
                   Controller:{" "}
-                  <span className="font-light text-sm">Jose Pelico</span>
+                  <span className="font-light text-sm">
+                    {user.student.controller.full_name}
+                  </span>
                 </p>
-                <p className="font-semibold">
+                <p className="font-semibold ">
                   Reclutador:{" "}
-                  <span className="font-light text-sm">Jose Hernandez</span>
+                  <span className="font-light text-sm">
+                    {user.student.recruiter.full_name}
+                  </span>
                 </p>
               </div>
             </div>
