@@ -4,19 +4,16 @@ import { useNavigate } from "react-router-dom";
 import Aside from "../components/Aside";
 import Tablas from "../components/Tablas";
 import Filtro from "../components/Filtro";
-import { useApi } from "../hooks/useApi";
 import Statscards from "../components/statscards";
-import EditModal from "../components/EditModal";
 import NewUser from "../components/NewUser";
+import axiosInstance from "../config/axiosConfig";
 
 function Estudiantes() {
-  const { data, loading, error } = useApi(
-    "https://www.hs-service.api.crealape.com/api/v1/students"
-  );
-  console.log(data);
-  const { data: service } = useApi(
-    "https://www.hs-service.api.crealape.com/api/v1/services"
-  );
+  const [data, setData] = useState([]);
+  const [service, setService] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   /// filtros de busqueda
   const [filtradoPais, setFiltradoPais] = useState([]);
   const [filtradoEscuela, setFiltradoEscuela] = useState([]);
@@ -38,6 +35,32 @@ function Estudiantes() {
   const navigate = useNavigate();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Función para cargar datos
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Cargar estudiantes
+      const studentsResponse = await axiosInstance.get("/students");
+      setData(studentsResponse.data);
+
+      // Cargar servicios
+      const servicesResponse = await axiosInstance.get("/services");
+      setService(servicesResponse.data);
+    } catch (err) {
+      console.error("Error fetching data:", err);
+      setError(err.response?.data?.message || err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Cargar datos al montar el componente
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -78,6 +101,33 @@ function Estudiantes() {
     setTempEscuela([]);
     setTempEstado("");
   };
+
+  // Mostrar loading mientras se cargan los datos
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  // Mostrar error si hay problema en la carga
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="bg-white rounded-lg shadow-md p-6 text-center">
+          <p className="text-red-500">Error al cargar los datos: {error}</p>
+          <button
+            onClick={fetchData}
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Reintentar
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
       <NewUser

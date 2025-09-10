@@ -1,23 +1,41 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import { useApiWithRefresh } from "../hooks/useApiWithRefresh";
+import axiosInstance from "../config/axiosConfig";
 import { useApiLogin } from "../hooks/useApiLogin";
 
 export default function TablaHorasDeServicio() {
   const { id } = useParams();
-  const { token, user } = useApiLogin();
+  const { user } = useApiLogin();
 
-  const { data, loading, error, refresh } = useApiWithRefresh(
-    "https://www.hs-service.api.crealape.com/api/v1/services"
-  );
-
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [editingRow, setEditingRow] = useState(null);
   const [approvalValues, setApprovalValues] = useState({});
 
+  // Función para obtener los datos
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await axiosInstance.get("/services");
+      setData(response.data);
+    } catch (err) {
+      console.error("Error fetching services:", err);
+      setError(err.response?.data?.message || err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Cargar datos al montar el componente - SOLO UNA VEZ
+  useEffect(() => {
+    fetchData();
+  }, []); // Array de dependencias vacío para que se ejecute solo una vez
+
   // Agregamos un useEffect para depurar la información
   useEffect(() => {
-    if (user && data) {
+    if (user && data.length > 0) {
       console.log("Usuario logueado:", user);
       data.forEach((service) => {
         console.log(`--- Servicio ID: ${service.id} ---`);
@@ -52,19 +70,13 @@ export default function TablaHorasDeServicio() {
 
   const handleApproveSave = async (service) => {
     try {
-      await axios.patch(
-        `https://www.hs-service.api.crealape.com/api/v1/review/${service.id}`,
-        {
-          ...approvalValues,
-          amount_approved: parseInt(approvalValues.amount_approved) || 0,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true,
-        }
-      );
+      await axiosInstance.patch(`/review/${service.id}`, {
+        ...approvalValues,
+        amount_approved: parseInt(approvalValues.amount_approved) || 0,
+      });
+
       setEditingRow(null);
-      refresh();
+      fetchData(); // Refrescar los datos
       alert("¡Servicio revisado con éxito!");
     } catch (err) {
       console.error("Error completo:", err);
@@ -100,7 +112,7 @@ export default function TablaHorasDeServicio() {
     return (
       <div className="h-full w-full flex flex-col justify-center items-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-        <p className="text-gray-600 mt-10">Cargando perfil...</p>
+        <p className="text-gray-600 mt-10">Cargando servicios...</p>
       </div>
     );
   }

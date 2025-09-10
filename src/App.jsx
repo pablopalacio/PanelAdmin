@@ -9,6 +9,7 @@ import Escuela from "./pages/Escuela";
 import ControlPerfil from "./components/ControlPerfil";
 import PrivateRoute from "./components/PrivateRoute";
 import PerfilEstudiante from "./pages/PerfilEstudiante";
+import PanelEstudiantes from "./pages/PanelEstudiantes";
 
 import "./index.css";
 import PanelEstudiantes from "./pages/PanelEstudiantes";
@@ -82,6 +83,15 @@ function App() {
             element={
               <PrivateRoute>
                 <ControlPerfil />
+              </PrivateRoute>
+            }
+          />
+          {/* Panel de estudiante */}
+          <Route
+            path="/Panel-Estudiante"
+            element={
+              <PrivateRoute>
+                <PanelEstudiantes />
               </PrivateRoute>
             }
           />

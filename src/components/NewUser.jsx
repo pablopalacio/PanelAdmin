@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useApiNewUser } from "../hooks/useApiPost";
+import axiosInstance from "../config/axiosConfig";
 
 export default function NewUser({ onSave, toggleModal, setToggleModal }) {
   const [fname, setFname] = useState("");
@@ -12,32 +12,107 @@ export default function NewUser({ onSave, toggleModal, setToggleModal }) {
   const [controller, setController] = useState("");
   const [recruiter, setRecruiter] = useState("");
   const [country, setCountry] = useState("");
-  const [message, setMessage] = useState("");
-  const { createUser, data, loading, error } = useApiNewUser();
+  const [role, setRole] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [availableData, setAvailableData] = useState({
+    recruiters: [],
+    controllers: [],
+    countries: [],
+    schools: [],
+    roles: [],
+  });
 
-  const handleNewUser = async () => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Obtener todos los datos necesarios
+        const [countriesRes, schoolsRes, usersRes] = await Promise.all([
+          axiosInstance.get("/countries"),
+          axiosInstance.get("/schools"),
+          axiosInstance.get("/users"),
+        ]);
+
+        // Extraer roles únicos de los usuarios
+        const rolesMap = new Map();
+        usersRes.data.forEach((user) => {
+          if (user.role) {
+            rolesMap.set(user.role.id, user.role);
+          }
+        });
+        const uniqueRoles = Array.from(rolesMap.values());
+
+        // Filtrar usuarios por rol
+        const recruiters = usersRes.data.filter((user) => user.role_id === 3);
+        const controllers = usersRes.data.filter((user) => user.role_id === 2);
+
+        setAvailableData({
+          recruiters,
+          controllers,
+          countries: countriesRes.data,
+          schools: schoolsRes.data,
+          roles: uniqueRoles,
+        });
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError(
+          "Error al cargar datos del formulario: " +
+            (err.response?.data?.message || err.message)
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (toggleModal) {
+      fetchData();
+    }
+  }, [toggleModal]);
+
+  const handleNewUser = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    // Validaciones básicas
+    if (!role) {
+      setError("Por favor selecciona un rol");
+      setLoading(false);
+      return;
+    }
+
+    // Validación: escuela requerida para todos excepto administradores
+    if (role !== "1" && schools.length === 0) {
+      setError("Por favor selecciona una escuela");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const nuevoUsuario = {
+      const userData = {
         f_name: fname,
-        s_name: sname,
+        s_name: sname || null,
         f_lastname: flastname,
-        s_lastname: slastname,
+        s_lastname: slastname || null,
         email,
         password,
-        role_id: 4,
-        schools: schools, // array aunque sea 1 solo
-        controller_id: controller,
-        recruiter_id: recruiter,
-        country_id: country,
+        role_id: parseInt(role),
+        phone: null,
+        country_id: country ? parseInt(country) : null,
+        // Siempre enviar schools, pero vacío para administradores
+        schools: role === "1" ? [] : schools.map((school) => parseInt(school)),
       };
 
-      const res = await createUser(
-        "https://www.hs-service.api.crealape.com/api/v1/users/",
-        nuevoUsuario
-      );
-      setMessage("✅ Usuario creado correctamente");
-      onSave();
-      alert("✅ Usuario creado correctamente");
+      // Solo agregar estos campos específicos para estudiantes
+      if (role === "4") {
+        userData.controller_id = controller ? parseInt(controller) : null;
+        userData.recruiter_id = recruiter ? parseInt(recruiter) : null;
+      }
+
+      await axiosInstance.post("/users/", userData);
 
       // Limpieza de formulario
       setFname("");
@@ -47,240 +122,282 @@ export default function NewUser({ onSave, toggleModal, setToggleModal }) {
       setEmail("");
       setPassword("");
       setSchools([]);
-      setController(0);
-      setRecruiter(0);
-      setCountry(0);
+      setController("");
+      setRecruiter("");
+      setCountry("");
+      setRole("");
+
+      alert("✅ Usuario creado correctamente");
+      onSave();
       setToggleModal(false);
     } catch (err) {
-      alert("Error creando usuario:", message);
-      setMessage(
-        "❌ Error al crear usuario: " +
-          (err.response?.data?.message || err.message)
-      );
+      console.error("Error creando usuario:", err);
+      const errorMessage =
+        err.response?.data?.message || err.message || "Error desconocido";
+      setError("❌ Error al crear usuario: " + errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
+
+  const handleRoleChange = (e) => {
+    const selectedRole = e.target.value;
+    setRole(selectedRole);
+
+    // Limpiar campos específicos de estudiantes cuando no es estudiante
+    if (selectedRole !== "4") {
+      setRecruiter("");
+      setController("");
+    }
+
+    // Limpiar escuela si es admin (rol 1) ya que no se necesita
+    if (selectedRole === "1") {
+      setSchools([]);
+    }
+  };
+
   return (
     <div
-      className={`fixed inset-0  items-center justify-center bg-black/45 z-50
-        ${toggleModal ? "flex" : "hidden"}
-        `}
+      className={`fixed inset-0 items-center justify-center bg-black/45 z-50 ${
+        toggleModal ? "flex" : "hidden"
+      }`}
     >
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleNewUser();
-        }}
-        className="max-w-lg mx-auto bg-white p-5 w-[80%] rounded-2xl"
+        onSubmit={handleNewUser}
+        className="max-w-lg mx-auto bg-white p-5 w-[90%] rounded-2xl max-h-[90vh] overflow-y-auto"
       >
-        <div
-          onClick={() => setToggleModal(false)}
-          className="w-full flex justify-end"
-        >
-          <svg
-            className="w-5 h-5 hover:text-blue-700  cursor-pointer  text-gray-800 dark:text-white"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
+        <div className="w-full flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold text-gray-800">Nuevo Usuario</h2>
+          <button
+            type="button"
+            onClick={() => setToggleModal(false)}
+            className="text-gray-500 hover:text-gray-700 text-2xl"
+            disabled={loading}
           >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18 17.94 6M18 18 6.06 6"
-            />
-          </svg>
+            ×
+          </button>
         </div>
 
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="relative z-0 w-full mb-5 group">
-            <input
-              onChange={(e) => setFname(e.target.value)}
-              value={fname}
-              type="text"
-              name="floating_first_name"
-              id="floating_first_name"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              required
-            />
-            <label
-              htmlFor="floating_first_name"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-            >
-              Primer Nombre
-            </label>
+        {error && (
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded">
+            <p className="text-red-700 text-sm">{error}</p>
           </div>
-          <div className="relative z-0 w-full mb-5 group">
-            <input
-              onChange={(e) => setSname(e.target.value)}
-              value={sname}
-              type="text"
-              name="floating_second_name"
-              id="floating_secondt_name"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              required
-            />
-            <label
-              htmlFor="floating_last_name"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-            >
-              Segundo Nombre
-            </label>
-          </div>
-        </div>
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="relative z-0 w-full mb-5 group">
-            <input
-              onChange={(e) => setFlastname(e.target.value)}
-              value={flastname}
-              type="text"
-              name="floating_first_lastname"
-              id="floating_first_lastname"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              required
-            />
-            <label
-              htmlFor="floating_first_lastname"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-            >
-              Primer Apellido
-            </label>
-          </div>
-          <div className="relative z-0 w-full mb-5 group">
-            <input
-              onChange={(e) => setSlastname(e.target.value)}
-              value={slastname}
-              type="text"
-              name="floating_second_lastname"
-              id="floating_second_lastname"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              required
-            />
-            <label
-              htmlFor="floating_last_name"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-            >
-              Segundo Apelldo
-            </label>
-          </div>
-        </div>
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="relative z-0 w-full mb-5 group">
-            <input
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              type="email"
-              name="floating_email"
-              id="floating_email"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              required
-            />
-            <label
-              htmlFor="floating_email"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-            >
-              Email
-            </label>
-          </div>
+        )}
 
-          <div className="relative z-0 w-full mb-5 group">
-            <input
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-              type="password"
-              name="floating_password"
-              id="floating_password"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              required
-            />
-            <label
-              htmlFor="floating_password"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-            >
-              Password
-            </label>
+        {loading && !availableData.countries.length ? (
+          <div className="text-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+            <p className="text-gray-600 mt-2">Cargando datos...</p>
           </div>
-        </div>
-        <div className="grid grid-cols-2 gap-6">
-          <div className="relative z-0 w-full mb-5 group">
-            <select className="block cursor-pointer py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
-              <option>Rol</option>
-              <option value="4">Estudiante</option>
-            </select>
-          </div>
-          <div className="relative z-0 w-full mb-5 group">
-            <select
-              onChange={(e) => setSchools([Number(e.target.value)])}
-              value={schools[0] || ""}
-              className="block cursor-pointer py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            >
-              <option>Escuela</option>
-              <option value="1">Programacion</option>
-              <option value="2">Ingles</option>
-              <option value="3">Matematicas</option>
-              <option value="4">Redes</option>
-              <option value="5">Marketing Digital</option>
-              <option value="8">FullStack</option>
-              <option value="16">Python</option>
-            </select>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-6">
-          <div className="relative z-0 w-full mb-5 group">
-            <select
-              onChange={(e) => setRecruiter(Number(e.target.value))}
-              value={recruiter ?? ""}
-              className="block cursor-pointer py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            >
-              <option>Reclutador</option>
-              <option value="27">Gonzalo Perez</option>
-              <option value="36">Luffy D. Monkey</option>
-            </select>
-          </div>
-          <div className="relative z-0 w-full mb-5 group">
-            <select
-              onChange={(e) => setController(Number(e.target.value))}
-              value={controller ?? ""}
-              className="block cursor-pointer py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            >
-              <option>Controller</option>
-              <option value="2">Jorge Sosa Nuñez</option>
-              <option value="5">Jorge Sosa Nuñez</option>
-              <option value="24">Diego Maradona</option>
-              <option value="28">El Jefaso dos uno</option>
-            </select>
-          </div>
-        </div>
-        <div className="relative z-0 w-full mb-5 group">
-          <select
-            onChange={(e) => setCountry(Number(e.target.value))}
-            value={country ?? ""}
-            className="block cursor-pointer py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-          >
-            <option>Pais</option>
-            <option value="1">Russian Federation</option>
-            <option value="2">Cameroon</option>
-            <option value="3">Chile</option>
-            <option value="4">Guatemala</option>
-            <option value="5">Sweden</option>
-          </select>
-        </div>
+        ) : (
+          <>
+            {/* Rol */}
+            <div className="relative z-0 w-full mb-5 group">
+              <select
+                onChange={handleRoleChange}
+                value={role}
+                className="block cursor-pointer py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                required
+                disabled={loading}
+              >
+                <option value="">Seleccionar Rol *</option>
+                {availableData.roles.map((role) => (
+                  <option key={role.id} value={role.id}>
+                    {role.name}
+                  </option>
+                ))}
+              </select>
+              <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                Rol
+              </label>
+            </div>
 
-        <button
-          type="submit"
-          className="text-white cursor-pointer bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        >
-          Submit
-        </button>
+            <div className="grid md:grid-cols-2 md:gap-6">
+              <div className="relative z-0 w-full mb-5 group">
+                <input
+                  onChange={(e) => setFname(e.target.value)}
+                  value={fname}
+                  type="text"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  required
+                  disabled={loading}
+                />
+                <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                  Primer Nombre *
+                </label>
+              </div>
+              <div className="relative z-0 w-full mb-5 group">
+                <input
+                  onChange={(e) => setSname(e.target.value)}
+                  value={sname}
+                  type="text"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  disabled={loading}
+                />
+                <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                  Segundo Nombre
+                </label>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 md:gap-6">
+              <div className="relative z-0 w-full mb-5 group">
+                <input
+                  onChange={(e) => setFlastname(e.target.value)}
+                  value={flastname}
+                  type="text"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  required
+                  disabled={loading}
+                />
+                <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                  Primer Apellido *
+                </label>
+              </div>
+              <div className="relative z-0 w-full mb-5 group">
+                <input
+                  onChange={(e) => setSlastname(e.target.value)}
+                  value={slastname}
+                  type="text"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  disabled={loading}
+                />
+                <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                  Segundo Apellido
+                </label>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 md:gap-6">
+              <div className="relative z-0 w-full mb-5 group">
+                <input
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                  type="email"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  required
+                  disabled={loading}
+                />
+                <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                  Email *
+                </label>
+              </div>
+
+              <div className="relative z-0 w-full mb-5 group">
+                <input
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                  type="password"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  required
+                  disabled={loading}
+                />
+                <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                  Password *
+                </label>
+              </div>
+            </div>
+
+            {/* Escuela - no requerida para administradores (rol 1) */}
+            {role !== "1" && (
+              <div className="relative z-0 w-full mb-5 group">
+                <select
+                  onChange={(e) => setSchools([e.target.value])}
+                  value={schools[0] || ""}
+                  className="block cursor-pointer py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  required={role !== "1"} // Requerido para todos excepto administradores
+                  disabled={loading}
+                >
+                  <option value="">Seleccionar Escuela *</option>
+                  {availableData.schools.map((school) => (
+                    <option key={school.id} value={school.id}>
+                      {school.name}
+                    </option>
+                  ))}
+                </select>
+                <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                  Escuela *
+                </label>
+              </div>
+            )}
+
+            {/* Campos específicos solo para estudiantes */}
+            {role === "4" && (
+              <>
+                <div className="relative z-0 w-full mb-5 group">
+                  <select
+                    onChange={(e) => setRecruiter(e.target.value)}
+                    value={recruiter}
+                    className="block cursor-pointer py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    disabled={loading}
+                  >
+                    <option value="">Seleccionar Reclutador (opcional)</option>
+                    {availableData.recruiters.map((rec) => (
+                      <option key={rec.id} value={rec.id}>
+                        {rec.full_name}
+                      </option>
+                    ))}
+                  </select>
+                  <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                    Reclutador
+                  </label>
+                </div>
+
+                <div className="relative z-0 w-full mb-5 group">
+                  <select
+                    onChange={(e) => setController(e.target.value)}
+                    value={controller}
+                    className="block cursor-pointer py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    disabled={loading}
+                  >
+                    <option value="">Seleccionar Controller (opcional)</option>
+                    {availableData.controllers.map((cont) => (
+                      <option key={cont.id} value={cont.id}>
+                        {cont.full_name}
+                      </option>
+                    ))}
+                  </select>
+                  <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                    Controller
+                  </label>
+                </div>
+              </>
+            )}
+
+            <div className="relative z-0 w-full mb-5 group">
+              <select
+                onChange={(e) => setCountry(e.target.value)}
+                value={country}
+                className="block cursor-pointer py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                disabled={loading}
+              >
+                <option value="">Seleccionar País (opcional)</option>
+                {availableData.countries.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+              <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                País
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-600 text-white py-2.5 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? "Creando usuario..." : "Crear Usuario"}
+            </button>
+          </>
+        )}
       </form>
     </div>
   );
