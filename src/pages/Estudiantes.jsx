@@ -130,7 +130,7 @@ function Estudiantes() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
+    <div className="min-h-screen border bg-gray-100 flex flex-col lg:flex-row">
       <NewUser
         toggleModal={toggleModal}
         setToggleModal={setToggleModal}
