@@ -213,7 +213,7 @@ export default function MapaHorasServicio() {
         </MapContainer>
 
         {/* Leyenda del mapa */}
-        <div className="absolute bottom-4 left-4 bg-white p-3 rounded shadow-md z-1000">
+        {/* <div className="absolute bottom-4 left-4 bg-white p-3 rounded shadow-md z-1000">
           <div className="text-sm font-semibold mb-2">Horas de servicio</div>
           <div className="flex items-center mb-1">
             <div
@@ -236,7 +236,7 @@ export default function MapaHorasServicio() {
             ></div>
             <span className="text-xs">Muchas horas</span>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Información del país seleccionado */}

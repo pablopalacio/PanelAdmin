@@ -112,7 +112,7 @@ export default function TablaHorasDeServicio() {
     return (
       <div className="h-full w-full flex flex-col justify-center items-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-        <p className="text-gray-600 mt-10">Cargando servicios...</p>
+        <p className="text-gray-600 mt-3">Cargando servicios...</p>
       </div>
     );
   }
