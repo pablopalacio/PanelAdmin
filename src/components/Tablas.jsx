@@ -174,7 +174,7 @@ export default function Tablas({
     <>
       {/* Vista Desktop */}
       <div className="hidden lg:block relative overflow-x-auto shadow-lg sm:rounded-xl">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-700">
+        <table className="w-full text-xs text-left rtl:text-right text-gray-700">
           <thead className="text-xs text-center text-white uppercase bg-gradient-to-r from-blue-600 to-indigo-700">
             <tr>
               <th className="px-6 py-4 font-semibold tracking-wide">Nombre</th>
@@ -209,7 +209,7 @@ export default function Tablas({
                         d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
-                    <span className="text-lg font-medium">
+                    <span className="text-sm font-medium">
                       No se encontraron estudiantes
                     </span>
                   </div>
@@ -225,7 +225,7 @@ export default function Tablas({
               >
                 <th
                   scope="row"
-                  className="px-6 py-4 text-start font-medium text-gray-900 whitespace-nowrap"
+                  className="px-3 py-4 text-start font-medium text-gray-900 whitespace-nowrap"
                 >
                   {editingId === e.id ? (
                     <div className="flex flex-col">
@@ -264,7 +264,7 @@ export default function Tablas({
                     <span className="font-semibold">{e.full_name}</span>
                   )}
                 </th>
-                <td className="px-6 py-4">
+                <td className="px-3 py-4">
                   {editingId === e.id ? (
                     <input
                       name="phone"
@@ -277,16 +277,16 @@ export default function Tablas({
                     e.phone
                   )}
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-4 py-4">
                   {Array.isArray(e.schools) && e.schools.length > 0
                     ? e.schools.map((s) => s.name).join(", ")
                     : "Sin escuela"}
                 </td>
-                <td className="px-6 py-4 font-medium">12/10</td>
-                <td className="px-6 py-4">
+                <td className="px-4 py-4 font-medium">12/10</td>
+                <td className="px-4 py-4">
                   {e.student?.country?.name || "Sin país"}
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-4 py-4">
                   {editingId === e.id ? (
                     <select
                       name="status"
@@ -346,7 +346,7 @@ export default function Tablas({
                     </span>
                   )}
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-3 py-4">
                   <div className="flex justify-center space-x-3">
                     {editingId === e.id ? (
                       <>
@@ -359,7 +359,7 @@ export default function Tablas({
                           {loading ? (
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5 animate-spin"
+                              className="h-3 w-3 animate-spin"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -374,7 +374,7 @@ export default function Tablas({
                           ) : (
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5"
+                              className="h-3 w-3"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -395,7 +395,7 @@ export default function Tablas({
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
+                            className="h-3 w-3"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -418,7 +418,7 @@ export default function Tablas({
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
+                            className="h-4 w-4"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -438,7 +438,7 @@ export default function Tablas({
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
+                            className="h-3 w-3"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -454,7 +454,7 @@ export default function Tablas({
                         <button className="text-red-500 bg-red-50 hover:bg-red-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
+                            className="h-3 w-3"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"

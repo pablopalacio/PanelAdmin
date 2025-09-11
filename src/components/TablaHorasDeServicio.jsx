@@ -144,28 +144,28 @@ export default function TablaHorasDeServicio() {
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
       {/* Tabla para vista de escritorio */}
       <div className="hidden lg:block relative overflow-x-auto">
-        <table className="w-full text-sm text-left text-gray-700">
+        <table className="w-full text-xs text-left text-gray-700">
           <thead className="text-xs text-center text-white uppercase bg-gradient-to-r from-blue-600 to-indigo-700">
             <tr>
-              <th className="px-6 py-4 font-semibold tracking-wide">
+              <th className="px-3 py-3 font-semibold tracking-wide">
                 Categoría
               </th>
-              <th className="px-6 py-4 font-semibold tracking-wide">
+              <th className="px-3 py-3 font-semibold tracking-wide">
                 Horas Reportadas
               </th>
-              <th className="px-6 py-4 font-semibold tracking-wide">
+              <th className="px-3 py-3 font-semibold tracking-wide">
                 Horas Aprobadas
               </th>
-              <th className="px-6 py-4 font-semibold tracking-wide">Estado</th>
-              <th className="px-6 py-4 font-semibold tracking-wide">Fecha</th>
-              <th className="px-6 py-4 font-semibold tracking-wide">Revisor</th>
-              <th className="px-6 py-4 font-semibold tracking-wide">
+              <th className="px-3 py-3 font-semibold tracking-wide">Estado</th>
+              <th className="px-3 py-3 font-semibold tracking-wide">Fecha</th>
+              <th className="px-3 py-3 font-semibold tracking-wide">Revisor</th>
+              <th className="px-3 py-3 font-semibold tracking-wide">
                 Comentario
               </th>
-              <th className="px-6 py-4 font-semibold tracking-wide">
+              <th className="px-3 py-3 font-semibold tracking-wide">
                 Evidencia
               </th>
-              <th className="px-6 py-4 font-semibold tracking-wide">
+              <th className="px-3 py-3 font-semibold tracking-wide">
                 Acciones
               </th>
             </tr>
@@ -178,13 +178,13 @@ export default function TablaHorasDeServicio() {
                   index % 2 === 0 ? "bg-white" : "bg-gray-50"
                 } border-b border-gray-200 hover:bg-blue-50 transition-colors duration-150`}
               >
-                <td className="px-6 py-4 font-medium text-gray-900">
+                <td className="px-3 py-3 font-medium text-gray-900">
                   {service.category?.name}
                 </td>
-                <td className="px-6 py-4 font-medium">
+                <td className="px-3 py-3 font-medium">
                   {service.amount_reported}
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-3 py-3">
                   {editingRow === service.id ? (
                     <input
                       type="number"
@@ -203,7 +203,7 @@ export default function TablaHorasDeServicio() {
                     </span>
                   )}
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-3 py-3">
                   {editingRow === service.id ? (
                     <select
                       value={approvalValues.status || "2"}
@@ -351,7 +351,7 @@ export default function TablaHorasDeServicio() {
                           {saving ? (
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5 animate-spin"
+                              className="h-3 w-3 animate-spin"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -366,7 +366,7 @@ export default function TablaHorasDeServicio() {
                           ) : (
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5"
+                              className="h-3 w-3"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -387,7 +387,7 @@ export default function TablaHorasDeServicio() {
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
+                            className="h-3 w-3"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -408,7 +408,7 @@ export default function TablaHorasDeServicio() {
                         title="Revisar"
                       >
                         <svg
-                          className="w-5 h-5"
+                          className="w-4 h-4"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"

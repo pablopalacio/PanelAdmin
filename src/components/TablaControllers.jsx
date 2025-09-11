@@ -85,9 +85,7 @@ export default function TablaControllers({ searchTerm }) {
             ? {
                 ...item,
                 ...payload,
-                // Asegurar que el estado se guarda como número
                 status: statusValue,
-                // Actualizar el nombre completo
                 full_name: `${editValues.f_name} ${editValues.s_name || ""} ${
                   editValues.f_lastname
                 } ${editValues.s_lastname || ""}`
@@ -325,7 +323,7 @@ export default function TablaControllers({ searchTerm }) {
                             {saving ? (
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5 animate-spin"
+                                className="h-3 w-3 animate-spin"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
@@ -340,7 +338,7 @@ export default function TablaControllers({ searchTerm }) {
                             ) : (
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5"
+                                className="h-3 w-3"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
@@ -361,7 +359,7 @@ export default function TablaControllers({ searchTerm }) {
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5"
+                              className="h-3 w-3"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -383,7 +381,7 @@ export default function TablaControllers({ searchTerm }) {
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
+                            className="h-4 w-4"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
