@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useApiLogin } from "../hooks/useApiLogin";
 import { useNavigate } from "react-router-dom";
 import Aside from "../components/Aside";
-import Filtro from "../components/Filtro";
 import TablaReclutador from "../components/TablaReclutador";
 
 function Reclutador() {
@@ -61,7 +60,6 @@ function Reclutador() {
       >
         <Aside />
       </div>
-
       {/* Contenido Principal */}
       <div className="flex flex-col p-4 ml-0 lg:p-6 w-full lg:ml-80">
         {/* Header */}
@@ -73,10 +71,6 @@ function Reclutador() {
             Gestiona la información de los Reclutadores
           </p>
         </header>
-
-        {/* Busqueda y filtros */}
-        <div></div>
-
         {/* Contenido */}
         <div className="bg-white rounded-xl shadow-sm p-4 lg:p-6 mb-4 lg:mb-6">
           <TablaReclutador />

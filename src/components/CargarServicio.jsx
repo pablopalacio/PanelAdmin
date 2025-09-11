@@ -16,12 +16,10 @@ export default function CargarServicio() {
     "Revision",
     "Templo",
   ];
-
   const handleClick = (value) => {
     setCategory_id(value);
     console.log("Seleccionaste:", value);
   };
-
   const postData = async (nuevoServicio) => {
     try {
       setLoading(true);
@@ -32,7 +30,7 @@ export default function CargarServicio() {
       formData.append("description", nuevoServicio.description);
       formData.append("category_id", nuevoServicio.category_id);
       formData.append("evidence", nuevoServicio.evidence);
-
+      //
       const response = await axiosInstance.post("/services", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -57,7 +55,6 @@ export default function CargarServicio() {
       evidence: evidence,
     });
   };
-
   return (
     <>
       {" "}

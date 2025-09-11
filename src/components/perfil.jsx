@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../config/axiosConfig";
 
@@ -26,7 +25,6 @@ export default function Perfil({ user }) {
       setLoading(false);
     }
   };
-
   // Cargar datos al montar el componente
   useEffect(() => {
     fetchData();

@@ -4,13 +4,12 @@ import axios from "../config/axiosConfig";
 import { useNavigate, useLocation } from "react-router-dom";
 import CambiarContraseña from "../components/CambiarContraseña";
 import EditarPerfil from "../components/EditarPerfil";
-import Logout from "./logout";
+import Logout from "./Logout";
 
 export default function Aside({ usuario }) {
   const { user, logout } = useApiLogin();
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(user);
   const [openModal, setOpenModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [roles, setRoles] = useState([]);
@@ -101,19 +100,6 @@ export default function Aside({ usuario }) {
           ? "flex"
           : usuario === 2
           ? "flex"
-          : usuario === 3
-          ? "hidden"
-          : "",
-    },
-    {
-      name: "Escuela",
-      icon: "🏫",
-      path: "/escuela",
-      class:
-        usuario === 1
-          ? "flex"
-          : usuario === 2
-          ? "hidden"
           : usuario === 3
           ? "hidden"
           : "",

@@ -24,7 +24,6 @@ function ControlPerfil() {
         setLoading(false);
       }
     };
-
     fetchStudent();
   }, [id]);
 
@@ -36,7 +35,6 @@ function ControlPerfil() {
       </div>
     );
   }
-
   if (error) {
     return (
       <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg shadow-sm">
@@ -191,5 +189,4 @@ function ControlPerfil() {
     </div>
   );
 }
-
 export default ControlPerfil;
