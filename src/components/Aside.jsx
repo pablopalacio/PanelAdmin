@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useApiLogin } from "../hooks/useApiLogin";
+import axios from "../config/axiosConfig";
 import { useNavigate, useLocation } from "react-router-dom";
 import CambiarContraseña from "../components/CambiarContraseña";
+import EditarPerfil from "../components/EditarPerfil";
 import Logout from "./logout";
+
 
 export default function Aside() {
   const { user, logout } = useApiLogin();
@@ -10,6 +13,57 @@ export default function Aside() {
   const location = useLocation();
   console.log(user);
   const [openModal, setOpenModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [roles, setRoles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await axios.get("/roles");
+        setRoles(response.data);
+      } catch (err) {
+        setError(err);
+        console.error("Error fetching roles:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRoles();
+  }, []);
+
+  const getRoleName = (roleId) => {
+    if (!roleId) return "Administrador";
+    const role = roles.find((r) => r.id === roleId);
+    return role ? role.name : "Usuario";
+  };
+
+  const getUserName = () => {
+    if (!user) return "ADMINISTRADOR";
+
+    const firstName = user.f_name || "";
+    const middleName = user.m_name || "";
+    const firstLastName = user.f_lastname || "";
+    const secondLastName = user.s_lastname || "";
+
+    const fullName = [firstName, middleName, firstLastName, secondLastName]
+      .filter(Boolean)
+      .join(" ");
+
+    return fullName.toUpperCase() || "ADMINISTRADOR";
+  };
+
+  const getUserEmail = () => {
+    if (!user) return "admin@funval.test";
+    return user.email || "admin@funval.test";
+  };
+
+  const getUserRoleId = () => {
+    if (!user) return null;
+    return user.role_id || null;
+  };
 
   const menuItems = [
     { name: "Estudiantes", icon: "👨‍🎓", path: "/estudiantes" },
@@ -23,6 +77,19 @@ export default function Aside() {
     navigate(path);
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
+  const handleChangePassword = () => {
+    setOpenModal(true);
+  };
+
+  const handleEditProfile = () => {
+    setOpenEditModal(true);
+  };
+
   const isActive = (path) => {
     return location.pathname === path;
   };
@@ -31,12 +98,37 @@ export default function Aside() {
     <>
       <aside className="w-80 fixed h-screen bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl p-6 font-sans rounded-xl">
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 2xl:p-4 p-4 rounded-xl shadow-sm mb-6">
-          <div className="flex flex-col items-center mb-2 gap-2">
-            <div className="w-18 h-18 2xl:w-24 2xl:h-24 bg-gradient-to-r from-blue-200 to-indigo-200 rounded-full flex items-center justify-center border-4 border-white shadow-md">
-              <span className="text-3xl">👤</span>
+          <div className="flex flex-col items-center mb-2 gap-2 relative">
+            {/* Contenedor de la foto de perfil con el ícono de edición */}
+            <div className="relative">
+              <div className="w-18 h-18 2xl:w-24 2xl:h-24 bg-gradient-to-r from-blue-200 to-indigo-200 rounded-full flex items-center justify-center border-4 border-white shadow-md">
+                <span className="text-3xl">👤</span>
+              </div>
+              {/* Botón de editar perfil */}
+              <button
+                onClick={handleEditProfile}
+                className="absolute -bottom-1 cursor-pointer -right-1 bg-blue-500 hover:bg-blue-600 text-white p-1.5 rounded-full border-2 border-white shadow-md transition-all duration-200 hover:scale-110"
+                title="Editar perfil"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-3 w-3"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+              </button>
             </div>
+
             <h3 className="font-bold text-gray-800 text-sm mt-1 2xl:text-lg 2xl:mt-2">
-              {user?.name?.toUpperCase() || "ADMINISTRADOR"}
+              {getUserName()}
             </h3>
             <div className="flex items-center">
               <svg
@@ -54,9 +146,18 @@ export default function Aside() {
                 />
               </svg>
               <p className="text-xs 2xl:text-sm text-gray-500">
-                {user?.email || "admin@funval.test"}
+                {getUserEmail()}
               </p>
             </div>
+
+            <div className="mt-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-[10px] 2xl:text-xs font-medium">
+              {loading
+                ? "Cargando..."
+                : error
+                ? "Error al cargar rol"
+                : getRoleName(getUserRoleId())}
+            </div>
+
             <div className="mt-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-[10px] 2xl:text-xs font-medium"></div>
             <button
               onClick={() => setOpenModal(true)}
@@ -64,6 +165,7 @@ export default function Aside() {
             >
               Cambiar Contraseña
             </button>
+
           </div>
         </div>
 
@@ -107,12 +209,47 @@ export default function Aside() {
               </li>
             ))}
           </ul>
+          <div className="flex flex-col justify-center">
+            <button
+              onClick={handleLogout}
+              className="w-40 2xl:w-full bg-gradient-to-r from-red-500 to-red-600 text-white p-2 2xl:py-3 rounded-xl text-xs 2xl:text-sm font-medium hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer flex items-center justify-center mt-9"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                />
+              </svg>
+              CERRAR SESIÓN
+            </button>
+
+            <button
+              onClick={handleChangePassword}
+              className="text-sm text-center text-blue-600 hover:text-blue-800 mt-3 cursor-pointer"
+            >
+              Cambiar Clave
+            </button>
+
           <div className="flex justify-center">
             <Logout logout={logout} />
+
           </div>
         </div>
       </aside>
       <CambiarContraseña open={openModal} onClose={() => setOpenModal(false)} />
+      <EditarPerfil
+        open={openEditModal}
+        onClose={() => setOpenEditModal(false)}
+        user={user}
+      />
     </>
   );
 }
