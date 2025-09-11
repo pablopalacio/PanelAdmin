@@ -103,14 +103,15 @@ function Estudiantes() {
   };
 
   // Mostrar loading mientras se cargan los datos
-  if (loading) {
+  /*  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <p className="text-gray-600 mt-10">Cargando servicios...</p>
       </div>
     );
   }
-
+ */
   // Mostrar error si hay problema en la carga
   if (error) {
     return (

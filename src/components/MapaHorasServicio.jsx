@@ -38,24 +38,13 @@ export default function MapaHorasServicio() {
     fetchWorldData();
   }, []);
 
-  // Horas de servicio por país hardcodeadas
+  // Horas de servicio por país hardcodeadas (solo para los países seleccionados)
   const horasPorPais = useMemo(
     () => ({
+      Cameroon: 8,
       Chile: 15,
-      Brazil: 32,
-      "United States": 45,
-      Spain: 18,
-      Australia: 27,
-      France: 22,
-      Germany: 38,
-      Japan: 29,
-      China: 50,
-      India: 35,
-      Mexico: 20,
-      Canada: 30,
-      Argentina: 17,
-      "South Africa": 19,
-      Italy: 25,
+      Guatemala: 12,
+      Sweden: 20,
     }),
     []
   );
@@ -63,21 +52,10 @@ export default function MapaHorasServicio() {
   // Mapeo de nombres de países entre diferentes convenciones
   const nombrePaisesMap = useMemo(
     () => ({
+      Cameroon: "Cameroon",
       Chile: "Chile",
-      Brazil: "Brazil",
-      "United States": "United States of America",
-      Spain: "Spain",
-      Australia: "Australia",
-      France: "France",
-      Germany: "Germany",
-      Japan: "Japan",
-      China: "China",
-      India: "India",
-      Mexico: "Mexico",
-      Canada: "Canada",
-      Argentina: "Argentina",
-      "South Africa": "South Africa",
-      Italy: "Italy",
+      Guatemala: "Guatemala",
+      Sweden: "Sweden",
     }),
     []
   );
@@ -85,7 +63,7 @@ export default function MapaHorasServicio() {
   // Función para determinar el color según las horas
   const getColorByHoras = useCallback((horas) => {
     if (!horas || horas === 0) return "#CCCCCC";
-    const intensity = Math.min(1, horas / 50);
+    const intensity = Math.min(1, horas / 20);
     const r = Math.floor(59 + 196 * intensity);
     const g = Math.floor(130 - 80 * intensity);
     const b = Math.floor(200 - 145 * intensity);
@@ -106,6 +84,28 @@ export default function MapaHorasServicio() {
     },
     [nombrePaisesMap]
   );
+
+  // Filtrar países para excluir Rusia y Fiji, y solo colorear los seleccionados
+  const filteredWorldData = useMemo(() => {
+    if (!worldData) return null;
+
+    const paisesExcluidos = ["Russia", "Fiji"];
+    const paisesConColor = Object.keys(horasPorPais);
+
+    return {
+      ...worldData,
+      features: worldData.features
+        .filter((feature) => !paisesExcluidos.includes(feature.properties.name))
+        .map((feature) => {
+          // Solo los países seleccionados tendrán propiedades de horas
+          if (paisesConColor.includes(feature.properties.name)) {
+            return feature;
+          }
+          // Para otros países, mantener la estructura pero sin datos de horas
+          return feature;
+        }),
+    };
+  }, [worldData, horasPorPais]);
 
   // Estilo para cada país en el mapa
   const estiloPais = useCallback(
@@ -140,31 +140,36 @@ export default function MapaHorasServicio() {
       const nombrePaisAPI = getNombrePaisAPI(nombrePaisGeoJSON);
       const horas = horasPorPais[nombrePaisAPI] || 0;
 
-      layer.on({
-        mouseover: (e) => {
-          setPaisHover(nombrePaisAPI);
-          layer.setStyle({
-            weight: 2,
-            color: "#FFFF00",
-            fillOpacity: 0.7,
-          });
-        },
-        mouseout: (e) => {
-          setPaisHover(null);
-          layer.setStyle(estiloPais(feature));
-        },
-        click: (e) => {
-          setPaisSeleccionado(nombrePaisAPI);
-        },
-      });
+      // Solo agregar eventos a países con horas
+      if (horas > 0) {
+        layer.on({
+          mouseover: (e) => {
+            setPaisHover(nombrePaisAPI);
+            layer.setStyle({
+              weight: 2,
+              color: "#FFFF00",
+              fillOpacity: 0.7,
+            });
+          },
+          mouseout: (e) => {
+            setPaisHover(null);
+            layer.setStyle(estiloPais(feature));
+          },
+          click: (e) => {
+            setPaisSeleccionado(nombrePaisAPI);
+          },
+        });
+      }
 
-      // Tooltip bind
-      layer.bindTooltip(`
-        <div class="p-1">
-          <strong>${nombrePaisAPI}</strong><br/>
-          ${horas} horas de servicio
-        </div>
-      `);
+      // Tooltip bind solo para países con horas
+      if (horas > 0) {
+        layer.bindTooltip(`
+          <div class="p-1">
+            <strong>${nombrePaisAPI}</strong><br/>
+            ${horas} horas de servicio
+          </div>
+        `);
+      }
     },
     [horasPorPais, estiloPais, getNombrePaisAPI]
   );
@@ -198,9 +203,9 @@ export default function MapaHorasServicio() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          {worldData && (
+          {filteredWorldData && (
             <GeoJSON
-              data={worldData}
+              data={filteredWorldData}
               style={estiloPais}
               onEachFeature={onEachPais}
             />
