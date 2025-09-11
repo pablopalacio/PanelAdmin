@@ -1,130 +1,208 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../config/axiosConfig";
 import { useApiLogin } from "../hooks/useApiLogin";
+import { useNavigate } from "react-router-dom";
 
-export default function CambiarContraseña({ open, onClose }) {
-  const { token } = useApiLogin();
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+const CambiarContraseña = ({ open, onClose }) => {
+  const { logout } = useApiLogin();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+  const [formData, setFormData] = useState({
+    old_password: "",
+    new_password: "",
+    confirm_password: "",
+  });
 
-  if (!open) return null;
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage("");
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
 
-    if (newPassword !== confirmPassword) {
-      setMessage("❌ Las contraseñas nuevas no coinciden");
+    // Validar que todos los campos estén llenos
+    if (
+      !formData.old_password ||
+      !formData.new_password ||
+      !formData.confirm_password
+    ) {
+      setError("Todos los campos son obligatorios");
+      setLoading(false);
+      return;
+    }
+
+    // Validar que la nueva contraseña sea diferente a la actual
+    if (formData.old_password === formData.new_password) {
+      setError("La nueva contraseña debe ser diferente a la actual");
+      setLoading(false);
+      return;
+    }
+
+    // Validar que las nuevas contraseñas coincidan
+    if (formData.new_password !== formData.confirm_password) {
+      setError("Las nuevas contraseñas no coinciden");
+      setLoading(false);
       return;
     }
 
     try {
-      setLoading(true);
-      const response = await axios.post(
-        "https://www.hs-service.api.crealape.com/api/v1/auth/change-password",
-        {
-          old_password: oldPassword,
-          new_password: newPassword,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true,
-        }
-      );
+      // Enviar solo los campos requeridos por el endpoint
+      const payload = {
+        old_password: formData.old_password,
+        new_password: formData.new_password,
+      };
 
-      setMessage("✅ Contraseña cambiada con éxito");
-      setOldPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
+      await axios.put("/auth/change-password", payload);
+
+      setSuccess(true);
+      setFormData({ old_password: "", new_password: "", confirm_password: "" });
+
+      // Cerrar sesión y redirigir a Login
+      setTimeout(() => {
+        logout();
+        navigate("/Login");
+        onClose();
+      }, 1500);
     } catch (err) {
-      console.error("Error al cambiar contraseña:", err);
-      setMessage(err.response?.data?.message || "❌ Error al cambiar la contraseña");
+      console.error("Error changing password:", err);
+
+      if (err.response?.status === 401) {
+        setError("Contraseña actual incorrecta");
+      } else if (err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else {
+        setError(
+          "Error al cambiar la contraseña. Por favor, intente nuevamente."
+        );
+      }
     } finally {
       setLoading(false);
     }
   };
 
+  const handleClose = () => {
+    setError(null);
+    setSuccess(false);
+    setFormData({ old_password: "", new_password: "", confirm_password: "" });
+    setLoading(false);
+    onClose();
+  };
+
+  if (!open) return null;
+
   return (
-    <div className="fixed inset-0 bg-black/35 flex items-center justify-center z-50">
-      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">Cambiar Contraseña</h2>
-          <p className="text-gray-600">Actualiza tu contraseña de manera segura</p>
+    <div
+      className={`fixed inset-0 items-center justify-center bg-black/45 z-50 ${
+        open ? "flex" : "hidden"
+      }`}
+    >
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-md mx-auto bg-white p-5 w-[90%] rounded-2xl max-h-[90vh] overflow-y-auto"
+      >
+        <div className="w-full flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold text-gray-800">
+            Cambiar Contraseña
+          </h2>
+          <button
+            type="button"
+            onClick={handleClose}
+            className="text-gray-500 hover:text-gray-700 text-2xl cursor-pointer"
+            disabled={loading}
+          >
+            ×
+          </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Contraseña actual
-            </label>
-            <input
-              type="password"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-              placeholder="•••••••"
-              required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+        {error && (
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded">
+            <p className="text-red-700 text-sm">{error}</p>
           </div>
+        )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nueva contraseña
-            </label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="•••••••"
-              required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+        {success && (
+          <div className="bg-green-50 border-l-4 border-green-500 p-4 mb-4 rounded">
+            <p className="text-green-700 text-sm">
+              ✅ Contraseña cambiada correctamente. Vuelva a iniciar sesión...
+            </p>
           </div>
+        )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Confirmar nueva contraseña
-            </label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="•••••••"
-              required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
+        <div className="relative z-0 w-full mb-5 group">
+          <input
+            type="password"
+            name="old_password"
+            value={formData.old_password}
+            onChange={handleInputChange}
+            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder=" "
+            required
+            disabled={loading}
+          />
+          <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+            Contraseña Actual *
+          </label>
+        </div>
 
-          {message && (
-            <p className="text-center text-sm font-medium text-gray-700">{message}</p>
-          )}
+        <div className="relative z-0 w-full mb-5 group">
+          <input
+            type="password"
+            name="new_password"
+            value={formData.new_password}
+            onChange={handleInputChange}
+            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder=" "
+            required
+            disabled={loading}
+          />
+          <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+            Nueva Contraseña *
+          </label>
+        </div>
 
-          <div className="flex space-x-4 mt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="w-1/2 py-3 px-4 rounded-lg font-semibold border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
-            >
-              Cancelar
-            </button>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-1/2 py-3 px-4 rounded-lg font-semibold transition-colors duration-200 ${
-                loading
-                  ? "bg-blue-400 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700 text-white"
-              }`}
-            >
-              {loading ? "Guardando..." : "Cambiar"}
-            </button>
-          </div>
-        </form>
-      </div>
+        <div className="relative z-0 w-full mb-5 group">
+          <input
+            type="password"
+            name="confirm_password"
+            value={formData.confirm_password}
+            onChange={handleInputChange}
+            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder=" "
+            required
+            disabled={loading}
+          />
+          <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+            Confirmar Nueva Contraseña *
+          </label>
+        </div>
+        <div className="w-full flex justify-center items-center">
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-37 text-sm cursor-pointer bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mx-auto inline-block mr-2"></div>
+                Cambiando...
+              </>
+            ) : (
+              "Cambiar Contraseña"
+            )}
+          </button>
+        </div>
+      </form>
     </div>
   );
-}
+};
+
+export default CambiarContraseña;

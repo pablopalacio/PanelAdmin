@@ -7,7 +7,7 @@ export default function StatsCardsHorasServicio({
   horasPendientes,
 }) {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6 mb-4 lg:mb-6">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3  w-full">
       {[
         {
           number: totalMundial || 0,

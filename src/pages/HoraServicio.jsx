@@ -77,7 +77,7 @@ function HoraServicio() {
         <div></div>
 
         {/* Contenido */}
-        <div className=" rounded-xl shadow-sm p-4 lg:p-6 mb-4 lg:mb-6">
+        <div className=" rounded-xl w-full shadow-sm ">
           <PanelHorasServicio />
         </div>
       </div>
