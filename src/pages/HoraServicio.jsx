@@ -7,7 +7,6 @@ import PanelHorasServicio from "../components/PanelHorasServicio";
 function HoraServicio() {
   const { user, logout } = useApiLogin();
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleLogout = () => {

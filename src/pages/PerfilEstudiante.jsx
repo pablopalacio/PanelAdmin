@@ -16,7 +16,6 @@ function PerfilEstudiante() {
   const [active, setActive] = useState([]);
   const [inactive, setInactive] = useState([]);
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Función para cargar datos

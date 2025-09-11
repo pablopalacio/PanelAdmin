@@ -28,7 +28,6 @@ const CambiarContraseña = ({ open, onClose }) => {
     setLoading(true);
     setError(null);
     setSuccess(false);
-
     // Validar que todos los campos estén llenos
     if (
       !formData.old_password ||
@@ -39,21 +38,18 @@ const CambiarContraseña = ({ open, onClose }) => {
       setLoading(false);
       return;
     }
-
     // Validar que la nueva contraseña sea diferente a la actual
     if (formData.old_password === formData.new_password) {
       setError("La nueva contraseña debe ser diferente a la actual");
       setLoading(false);
       return;
     }
-
     // Validar que las nuevas contraseñas coincidan
     if (formData.new_password !== formData.confirm_password) {
       setError("Las nuevas contraseñas no coinciden");
       setLoading(false);
       return;
     }
-
     try {
       // Enviar solo los campos requeridos por el endpoint
       const payload = {
@@ -65,7 +61,6 @@ const CambiarContraseña = ({ open, onClose }) => {
 
       setSuccess(true);
       setFormData({ old_password: "", new_password: "", confirm_password: "" });
-
       // Cerrar sesión y redirigir a Login
       setTimeout(() => {
         logout();
@@ -136,7 +131,6 @@ const CambiarContraseña = ({ open, onClose }) => {
             </p>
           </div>
         )}
-
         <div className="relative z-0 w-full mb-5 group">
           <input
             type="password"
@@ -152,7 +146,6 @@ const CambiarContraseña = ({ open, onClose }) => {
             Contraseña Actual *
           </label>
         </div>
-
         <div className="relative z-0 w-full mb-5 group">
           <input
             type="password"

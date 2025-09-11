@@ -7,7 +7,6 @@ import Estudiantes from "./pages/Estudiantes";
 import Controllers from "./pages/Controllers";
 import Reclutadores from "./pages/Reclutador";
 import HoraServicio from "./pages/HoraServicio";
-import Escuela from "./pages/Escuela";
 import ControlPerfil from "./components/ControlPerfil";
 import PrivateRoute from "./components/PrivateRoute";
 import PerfilEstudiante from "./pages/PerfilEstudiante";
@@ -55,15 +54,6 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route
-            path="/escuela"
-            element={
-              <PrivateRoute>
-                <Escuela />
-              </PrivateRoute>
-            }
-          />
-
           <Route
             path="/Perfil-Estudiante/:id"
             element={

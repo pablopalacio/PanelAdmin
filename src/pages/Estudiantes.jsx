@@ -105,15 +105,15 @@ function Estudiantes() {
   };
 
   // Mostrar loading mientras se cargan los datos
-  /*  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-        <p className="text-gray-600 mt-10">Cargando servicios...</p>
-      </div>
-    );
-  }
- */
+  // if (loading) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center">
+  //       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+  //       <p className="text-gray-600 mt-10 text-center">Cargando servicios...</p>
+  //     </div>
+  //   );
+  // }
+
   // Mostrar error si hay problema en la carga
   if (error) {
     return (
@@ -132,7 +132,7 @@ function Estudiantes() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
+    <div className="min-h-screen border bg-gray-100 flex flex-col lg:flex-row">
       <NewUser
         toggleModal={toggleModal}
         setToggleModal={setToggleModal}
@@ -172,7 +172,7 @@ function Estudiantes() {
           isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
-        <Aside usuario={user.role_id} />
+        <Aside usuario={user.role_id} setToggleModal={setToggleModal} />
       </div>
 
       {/* Contenido principal */}
@@ -202,7 +202,6 @@ function Estudiantes() {
           setTempPais={setTempPais}
           tempEstado={tempEstado}
           setTempEstado={setTempEstado}
-          setToggleModal={setToggleModal}
         />
 
         {/* Stats Cards */}
@@ -214,6 +213,7 @@ function Estudiantes() {
         />
 
         {/* Tabla estudiantes */}
+
         <div className="bg-white rounded-xl shadow-sm p-4 lg:p-6 mb-4 lg:mb-6">
           <h2 className="text-base lg:text-xl font-semibold text-gray-800 mb-4">
             Lista de Estudiantes

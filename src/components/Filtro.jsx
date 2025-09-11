@@ -54,25 +54,6 @@ export default function Filtro({
 
           <div className="flex flex-col sm:flex-row gap-2">
             <button
-              onClick={() => setToggleModal(true)}
-              className="flex-1 sm:flex-none px-3 py-2 lg:px-4 lg:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center text-sm lg:text-base cursor-pointer"
-            >
-              <svg
-                className="w-4 h-4 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                />
-              </svg>
-              Nuevo
-            </button>
-            <button
               onClick={handleToggle}
               className="flex-1 sm:flex-none px-3 py-2 lg:px-4 lg:py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center text-sm lg:text-base cursor-pointer"
             >
