@@ -1,72 +1,119 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import axiosInstance from "../config/axiosConfig";
 
-export default function CargarServicio({ user }) {
-  //   console.log(user);
-  //   const fetchData = async () => {
-  //     try {
-  //       setLoading(true);
-  //       setError(null);
-  //       // Cargar servicios
-  //       const servicesResponse = await axiosInstance.get("/services");
-  //       setService(servicesResponse.data);
-  //     } catch (err) {
-  //       console.error("Error fetching data:", err);
-  //       setError(err.response?.data?.message || err.message);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   useEffect(() => {
-  //     fetchData();
-  //   }, []);
+export default function CargarServicio() {
+  const [amount_reported, setAmount_reported] = useState(0);
+  const [description, setDescription] = useState("");
+  const [category_id, setCategory_id] = useState(null);
+  const [evidence, setEvidence] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  //   console.log(amount_reported, description, category_id);
+  const categories = [
+    "Indexar",
+    "Instructor",
+    "Liderazgo",
+    "Revision",
+    "Templo",
+  ];
+
+  const handleClick = (value) => {
+    setCategory_id(value);
+    console.log("Seleccionaste:", value);
+  };
+
+  const postData = async (nuevoServicio) => {
+    try {
+      setLoading(true);
+      loading === true ? alert("enviando...") : "";
+      setError(null);
+      const formData = new FormData();
+      formData.append("amount_reported", nuevoServicio.amount_reported);
+      formData.append("description", nuevoServicio.description);
+      formData.append("category_id", nuevoServicio.category_id);
+      formData.append("evidence", nuevoServicio.evidence);
+
+      const response = await axiosInstance.post("/services", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("Respuesta POST:", response.data);
+      alert("✅ Enviado con Exito!");
+    } catch (err) {
+      console.error("Error al enviar:", err);
+      setError(err.response?.data?.message || err.message);
+      alert("❌ error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = () => {
+    postData({
+      amount_reported: amount_reported,
+      description: description,
+      category_id: category_id,
+      evidence: evidence,
+    });
+  };
 
   return (
     <>
       {" "}
       <div className="w-full bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl px-4 rounded-2xl ">
-        <h3 className="font-semibold text-xl text-center p-4">
+        <h3 className="font-semibold text-xl md:text-2xl text-center p-4">
           Horas de Servicio
         </h3>
-        <h4 className="font-semibold">Tipo de Servicio</h4>
+        <h4 className="font-semibold lg:text-lg">Tipo de Servicio</h4>
         <div className="flex flex-wrap gap-2 p-4">
-          <button className="px-2 py-1 bg-blue-600 hover:bg-blue-700 cursor-pointer text-white rounded-lg font-semibold transition duration-200 shadow-md">
-            Indexar
-          </button>
-          <button className="px-2 py-1 bg-blue-600 hover:bg-blue-700 cursor-pointer text-white rounded-lg font-semibold transition duration-200 shadow-md">
-            Servicio
-          </button>{" "}
-          <button className="px-2 py-1 bg-blue-600 hover:bg-blue-700 cursor-pointer text-white rounded-lg font-semibold transition duration-200 shadow-md">
-            Templo
-          </button>{" "}
-          <button className="px-2 py-1 bg-blue-600 hover:bg-blue-700 cursor-pointer text-white rounded-lg font-semibold transition duration-200 shadow-md">
-            Liderazgo
-          </button>{" "}
-          <button className="px-2 py-1 bg-blue-600 hover:bg-blue-700 cursor-pointer text-white rounded-lg font-semibold transition duration-200 shadow-md">
-            Instructor
-          </button>
-          <button className="px-2 py-1 bg-blue-600 hover:bg-blue-700 cursor-pointer text-white rounded-lg font-semibold transition duration-200 shadow-md">
-            Brujula
-          </button>
+          {categories.map((cat, index) => (
+            <button
+              key={cat}
+              value={index + 1}
+              onClick={() => handleClick(index + 1)}
+              className={`px-2 py-1 cursor-pointer text-white rounded-lg font-semibold transition duration-200 shadow-md
+            ${
+              category_id === cat
+                ? "bg-blue-800"
+                : "bg-blue-600 hover:bg-blue-700"
+            }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
         <div className="py-4">
           <div>
-            <h4 className="font-semibold">Cantidad de Horas</h4>
-            <div className="flex gap-4 items-center">
-              <button className="bg-red-600 text-white rounded-full px-3 py-1">
+            <h4 className="font-semibold lg:text-lg">Cantidad de Horas</h4>
+            <div className="flex gap-4 p-4 items-center">
+              <button
+                onClick={() =>
+                  amount_reported === 0
+                    ? ""
+                    : setAmount_reported(amount_reported - 1)
+                }
+                className="bg-red-600 text-white rounded-full px-3 py-1"
+              >
                 -
               </button>
-              <span className="text-xl">0</span>
-              <button className="bg-blue-600 text-white rounded-full px-3 py-1">
+              <span className="text-xl">{amount_reported}</span>
+              <button
+                onClick={() => setAmount_reported(amount_reported + 1)}
+                className="bg-blue-600 text-white rounded-full px-3 py-1"
+              >
                 +
               </button>
             </div>
             <div className="py-4">
-              <h4>Descripción</h4>
+              <h4 className="font-semibold lg:text-lg">Descripción</h4>
 
               <form className="max-w-sm mx-auto">
                 <textarea
                   id="message"
                   rows="4"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                   className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Escribe aqui algun comentario..."
                 ></textarea>
@@ -74,7 +121,7 @@ export default function CargarServicio({ user }) {
             </div>
           </div>
           <div>
-            <h4 className="font-bold">Cargar Evidencias</h4>
+            <h4 className="font-bold lg:text-lg">Cargar Evidencias</h4>
 
             <div className="flex items-center justify-center w-full">
               <label
@@ -105,15 +152,24 @@ export default function CargarServicio({ user }) {
                     SVG, PNG, JPG or GIF (MAX. 800x400px)
                   </p>
                 </div>
-                <input id="dropzone-file" type="file" className="hidden" />
+                <input
+                  id="dropzone-file"
+                  type="file"
+                  accept="application/pdf"
+                  onChange={(e) => setEvidence(e.target.files[0])}
+                  className="hidden"
+                />
               </label>
             </div>
           </div>
-          <div>
+          <div className="flex gap-3 p-4">
             <button className="px-2 py-1 bg-red-600 hover:bg-red-700 cursor-pointer text-white rounded-lg font-semibold transition duration-200 shadow-md">
               Cancelar
             </button>
-            <button className="px-2 py-1 bg-blue-600 hover:bg-blue-700 cursor-pointer text-white rounded-lg font-semibold transition duration-200 shadow-md">
+            <button
+              onClick={handleSubmit}
+              className="px-2 py-1 bg-blue-600 hover:bg-blue-700 cursor-pointer text-white rounded-lg font-semibold transition duration-200 shadow-md"
+            >
               Enviar
             </button>
           </div>
