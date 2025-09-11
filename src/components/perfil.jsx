@@ -26,7 +26,7 @@ export default function Perfil({ user }) {
       setLoading(false);
     }
   };
-  console.log(service);
+
   // Cargar datos al montar el componente
   useEffect(() => {
     fetchData();

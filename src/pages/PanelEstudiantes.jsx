@@ -6,7 +6,6 @@ import CargarServicio from "../components/cargarServicio";
 
 export default function PanelEstudiantes() {
   const { user, logout } = useApiLogin();
-  console.log(user);
 
   return (
     <>
@@ -38,7 +37,7 @@ export default function PanelEstudiantes() {
           </section>
 
           <section className="w-full px-2 py-6">
-            <CargarServicio user={user} />
+            <CargarServicio />
           </section>
         </div>
       </main>
