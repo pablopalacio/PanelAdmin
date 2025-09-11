@@ -8,39 +8,37 @@ export default function PanelEstudiantes() {
   const { user, logout } = useApiLogin();
 
   return (
-    <>
-      <footer className="w-full relative">
-        {" "}
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+      <header className="relative w-full overflow-hidden">
         <img
           className="lg:h-[300px] h-[200px] w-full object-cover"
           src="/Diseño sin título (2).png"
-          alt=""
+          alt="Header background"
         />
-        <div className="absolute top-0 right-2">
+        <div className="absolute top-4 right-4">
           <Logout logout={logout} />
         </div>
-        <div className="absolute lg:top-55 md:top-35 top-38 md:left-10 left-4 lg:w-48 lg:h-48 md:w-36 md:h-36 w-24 h-24 8xl:w-24 8xl:h-24 bg-gradient-to-r from-blue-200 to-indigo-200 rounded-full flex items-center justify-center border-4 border-white shadow-md">
-          <span className="lg:text-8xl md:text-6xl text-4xl">👤</span>
-        </div>
-      </footer>
+      </header>
 
-      <main className="w-full">
-        <section className="bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl  w-full flex flex-col justify-center items-center text-gray-800">
-          <p className="pt-15 font-semibold text-xl md:text-2xl pb-4">
+      <main className="w-[70%]  mx-auto px-4 pb-10">
+        <section className="bg-white rounded-xl shadow-md mt-6 p-6 text-center">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
             Bienvenido{" "}
-            <span className="font-light text-md">{user?.full_name}</span>{" "}
-          </p>
+            <span className="font-normal text-blue-600">{user?.full_name}</span>
+          </h1>
         </section>
-        <div className=" md:flex ">
-          <section className="w-full px-2 py-6 grid gap-6 ">
+        <div className="md:flex gap-6 mt-6">
+          <section className="w-full md:w-2/5">
             <Perfil user={user} />
           </section>
-
-          <section className="w-full px-2 py-6">
+          <section className="w-full md:w-3/5 mt-6 md:mt-0">
             <CargarServicio />
           </section>
         </div>
       </main>
-    </>
+      <div className="absolute hidden lg:top-48 md:top-32 top-28 md:left-10 left-4 lg:w-48 lg:h-48 md:w-36 md:h-36 w-24 h-24 bg-gradient-to-r from-blue-200 to-indigo-200 rounded-full md:flex items-center justify-center border-4 border-white shadow-xl">
+        <span className="lg:text-8xl md:text-6xl text-4xl">👤</span>
+      </div>
+    </div>
   );
 }
