@@ -106,7 +106,7 @@ const EditarPerfil = ({ open, onClose, user }) => {
           <button
             type="button"
             onClick={handleClose}
-            className="text-gray-500 hover:text-gray-700 text-2xl"
+            className="text-gray-500 hover:text-gray-700 text-2xl cursor-pointer"
             disabled={loading}
           >
             ×
@@ -205,21 +205,22 @@ const EditarPerfil = ({ open, onClose, user }) => {
             Email (no editable)
           </label>
         </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 text-white py-2.5 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {loading ? (
-            <>
-              <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mx-auto inline-block mr-2"></div>
-              Guardando...
-            </>
-          ) : (
-            "Guardar Cambios"
-          )}
-        </button>
+        <div className="w-full flex justify-center items-center">
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-37 bg-blue-600  text-white cursor-pointer py-2.5 text-sm rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mx-auto inline-block mr-2"></div>
+                Guardando...
+              </>
+            ) : (
+              "Guardar Cambios"
+            )}
+          </button>
+        </div>
       </form>
     </div>
   );

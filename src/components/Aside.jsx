@@ -6,7 +6,6 @@ import CambiarContraseña from "../components/CambiarContraseña";
 import EditarPerfil from "../components/EditarPerfil";
 import Logout from "./logout";
 
-
 export default function Aside() {
   const { user, logout } = useApiLogin();
   const navigate = useNavigate();
@@ -157,15 +156,6 @@ export default function Aside() {
                 ? "Error al cargar rol"
                 : getRoleName(getUserRoleId())}
             </div>
-
-            <div className="mt-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-[10px] 2xl:text-xs font-medium"></div>
-            <button
-              onClick={() => setOpenModal(true)}
-              className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs 2xl:text-sm font-medium hover:bg-blue-700 transition-colors shadow-md"
-            >
-              Cambiar Contraseña
-            </button>
-
           </div>
         </div>
 
@@ -210,26 +200,9 @@ export default function Aside() {
             ))}
           </ul>
           <div className="flex flex-col justify-center">
-            <button
-              onClick={handleLogout}
-              className="w-40 2xl:w-full bg-gradient-to-r from-red-500 to-red-600 text-white p-2 2xl:py-3 rounded-xl text-xs 2xl:text-sm font-medium hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer flex items-center justify-center mt-9"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                />
-              </svg>
-              CERRAR SESIÓN
-            </button>
+            <div className="flex justify-center">
+              <Logout logout={logout} />
+            </div>
 
             <button
               onClick={handleChangePassword}
@@ -237,10 +210,6 @@ export default function Aside() {
             >
               Cambiar Clave
             </button>
-
-          <div className="flex justify-center">
-            <Logout logout={logout} />
-
           </div>
         </div>
       </aside>

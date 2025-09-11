@@ -186,7 +186,7 @@ export default function MapaHorasServicio() {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6">
+    <div className="bg-white rounded-xl shadow-sm p-4">
       <h2 className="text-xl font-bold text-gray-800 mb-4">
         Distribución de Horas por País
       </h2>
