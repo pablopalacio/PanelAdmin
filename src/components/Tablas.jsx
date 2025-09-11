@@ -1,6 +1,13 @@
 import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import {
+  CheckIcon,
+  XMarkIcon,
+  UserCircleIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
 
 const getCookie = (name) => {
   const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
@@ -62,7 +69,7 @@ export default function Tablas({
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target; 
+    const { name, value } = e.target;
     setEditValues((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -165,157 +172,239 @@ export default function Tablas({
 
   return (
     <>
-      <div className="hidden lg:block relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-          <thead className="text-xs text-center text-gray-100 uppercase bg-blue-600">
+      {/* Vista Desktop */}
+      <div className="hidden lg:block relative overflow-x-auto shadow-lg sm:rounded-xl">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-700">
+          <thead className="text-xs text-center text-white uppercase bg-gradient-to-r from-blue-600 to-indigo-700">
             <tr>
-              <th className="px-4 py-3">Nombre</th>
-              <th className="px-4 py-3">Teléfono</th>
-              <th className="px-4 py-3">Escuela</th>
-              <th className="px-4 py-3">Horas</th>
-              <th className="px-4 py-3">País</th>
-              <th className="px-4 py-3">Estado</th>
-              <th className="px-4 py-3">Acciones</th>
+              <th className="px-6 py-4 font-semibold tracking-wide">Nombre</th>
+              <th className="px-6 py-4 font-semibold tracking-wide">
+                Teléfono
+              </th>
+              <th className="px-6 py-4 font-semibold tracking-wide">Escuela</th>
+              <th className="px-6 py-4 font-semibold tracking-wide">Horas</th>
+              <th className="px-6 py-4 font-semibold tracking-wide">País</th>
+              <th className="px-6 py-4 font-semibold tracking-wide">Estado</th>
+              <th className="px-6 py-4 font-semibold tracking-wide">
+                Acciones
+              </th>
             </tr>
           </thead>
           <tbody className="text-center">
             {filteredData?.length === 0 && (
               <tr>
-                <td colSpan={7} className="py-4 text-gray-600">
-                  No se encontraron estudiantes
+                <td colSpan={7} className="py-8 text-gray-500 text-center">
+                  <div className="flex flex-col items-center justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-12 w-12 text-gray-400 mb-2"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <span className="text-lg font-medium">
+                      No se encontraron estudiantes
+                    </span>
+                  </div>
                 </td>
               </tr>
             )}
-            {filteredData?.map((e) => (
+            {filteredData?.map((e, index) => (
               <tr
                 key={e.id}
-                className="bg-white border-b border-gray-200 hover:bg-gray-50"
+                className={`${
+                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                } border-b border-gray-200 hover:bg-blue-50 transition-colors duration-150`}
               >
                 <th
                   scope="row"
-                  className="px-4 py-4 text-start font-medium text-gray-900 whitespace-nowrap"
+                  className="px-6 py-4 text-start font-medium text-gray-900 whitespace-nowrap"
                 >
                   {editingId === e.id ? (
-                    <div className="flex flex-col ">
-                      <div className="grid grid-cols-2 gap-1 items-center ">
+                    <div className="flex flex-col">
+                      <div className="grid grid-cols-2 gap-2 items-center">
                         <input
                           name="f_name"
                           value={editValues.f_name}
                           onChange={handleInputChange}
-                          className="border px-2 py-1 rounded border-gray-500 text-sm w-24 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                          className="border px-3 py-2 rounded-lg border-gray-300 text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           placeholder="1º nombre"
                         />
                         <input
                           name="m_name"
                           value={editValues.m_name}
                           onChange={handleInputChange}
-                          className="border px-2 py-1 rounded border-gray-500 text-sm w-24 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                          className="border px-3 py-2 rounded-lg border-gray-300 text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           placeholder="2º nombre"
                         />
                         <input
                           name="f_lastname"
                           value={editValues.f_lastname}
                           onChange={handleInputChange}
-                          className="border px-2 py-1 rounded border-gray-500  text-sm w-24 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                          className="border px-3 py-2 rounded-lg border-gray-300 text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           placeholder="1º apellido"
                         />
                         <input
                           name="s_lastname"
                           value={editValues.s_lastname}
                           onChange={handleInputChange}
-                          className="border px-2 py-1 rounded border-gray-500  text-sm w-24 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                          className="border px-3 py-2 rounded-lg border-gray-300 text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           placeholder="2º apellido"
                         />
                       </div>
                     </div>
                   ) : (
-                    e.full_name
+                    <span className="font-semibold">{e.full_name}</span>
                   )}
                 </th>
-                <td className="px-4 py-4">
+                <td className="px-6 py-4">
                   {editingId === e.id ? (
                     <input
                       name="phone"
                       value={editValues.phone}
                       onChange={handleInputChange}
-                      className="border px-2 py-1 rounded border-gray-500  text-sm w-32 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="border px-3 py-2 rounded-lg border-gray-300 text-sm w-32 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="Teléfono"
                     />
                   ) : (
                     e.phone
                   )}
                 </td>
-                <td className="px-4 py-4">
+                <td className="px-6 py-4">
                   {Array.isArray(e.schools) && e.schools.length > 0
                     ? e.schools.map((s) => s.name).join(", ")
                     : "Sin escuela"}
                 </td>
-                <td className="px-4 py-4">12/10</td>
-                <td className="px-4 py-4">
+                <td className="px-6 py-4 font-medium">12/10</td>
+                <td className="px-6 py-4">
                   {e.student?.country?.name || "Sin país"}
                 </td>
-                <td className="px-4 py-4">
+                <td className="px-6 py-4">
                   {editingId === e.id ? (
                     <select
                       name="status"
                       value={editValues.status}
                       onChange={handleInputChange}
-                      className="border border-gray-500  px-2 py-1 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="border border-gray-300 px-3 py-2 rounded-lg text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
-                      <option >Selecionar Estado</option>
+                      <option>Seleccionar Estado</option>
                       <option value="1">Activo</option>
                       <option value="0">Inactivo</option>
                     </select>
                   ) : (
-                    <p
-                      className={`text-white px-2 py-1.5 rounded-xl text-center text-xs ${
-                        e.status === "activo" ? "bg-green-500" : "bg-red-500"
+                    <span
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                        e.status === "activo"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
                       }`}
                     >
-                      {e.status === "activo" ? "Activo" : "Inactivo"}
-                    </p>
+                      {e.status === "activo" ? (
+                        <>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 mr-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                          Activo
+                        </>
+                      ) : (
+                        <>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 mr-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                          Inactivo
+                        </>
+                      )}
+                    </span>
                   )}
                 </td>
-                <td className="px-4 py-4">
-                  <div className="flex justify-center space-x-2">
+                <td className="px-6 py-4">
+                  <div className="flex justify-center space-x-3">
                     {editingId === e.id ? (
                       <>
                         <button
                           onClick={() => handleSave(e.id)}
                           disabled={loading}
-                          className="text-green-500 hover:text-green-700 cursor-pointer hover:scale-105 transition-colors duration-200"
+                          className="text-white bg-green-500 hover:bg-green-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200"
                           title="Guardar"
                         >
-                          <svg
-                            className="w-5 h-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            strokeWidth="1.5"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                            />
-                          </svg>
+                          {loading ? (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5 animate-spin"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                              />
+                            </svg>
+                          ) : (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          )}
                         </button>
                         <button
                           onClick={handleCancel}
-                          className="text-red-500 hover:text-red-700 cursor-pointer hover:scale-105 transition-colors duration-200"
+                          className="text-white bg-red-500 hover:bg-red-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200"
                           title="Cancelar"
                         >
                           <svg
-                            className="w-5 h-5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
                             fill="none"
-                            stroke="currentColor"
                             viewBox="0 0 24 24"
-                            strokeWidth="1.5"
+                            stroke="currentColor"
                           >
                             <path
                               strokeLinecap="round"
                               strokeLinejoin="round"
-                              d="M6 18 18 6M6 6l12 12"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
                             />
                           </svg>
                         </button>
@@ -324,54 +413,57 @@ export default function Tablas({
                       <>
                         <button
                           onClick={() => goToProfile(e.id)}
-                          className="text-[#8d8e91] hover:text-blue-400 cursor-pointer hover:scale-105 transition-colors duration-200"
+                          className="text-blue-500 bg-blue-50 hover:bg-blue-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200"
                           title="Ver perfil"
                         >
                           <svg
-                            className="w-5 h-5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
                             fill="none"
-                            stroke="currentColor"
                             viewBox="0 0 24 24"
-                            strokeWidth="1.5"
+                            stroke="currentColor"
                           >
                             <path
                               strokeLinecap="round"
                               strokeLinejoin="round"
-                              d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                              strokeWidth={2}
+                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                             />
                           </svg>
                         </button>
                         <button
                           onClick={() => handleEditClick(e)}
-                          className="text-[#8d8e91] hover:text-blue-400 cursor-pointer hover:scale-105 transition-colors duration-200"
+                          className="text-indigo-500 bg-indigo-50 hover:bg-indigo-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200"
                           title="Editar estudiante"
                         >
                           <svg
-                            className="w-5 h-5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
                             fill="none"
-                            stroke="currentColor"
                             viewBox="0 0 24 24"
-                            strokeWidth="1.5"
+                            stroke="currentColor"
                           >
                             <path
                               strokeLinecap="round"
                               strokeLinejoin="round"
-                              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z"
+                              strokeWidth={2}
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                             />
                           </svg>
                         </button>
-                        <button className="text-[#8d8e91] hover:text-red-500 hover:scale-110 cursor-pointer transition duration-300">
+                        <button className="text-red-500 bg-red-50 hover:bg-red-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200">
                           <svg
-                            className="w-5 h-5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
                             fill="none"
-                            stroke="currentColor"
                             viewBox="0 0 24 24"
-                            strokeWidth="1.5"
+                            stroke="currentColor"
                           >
                             <path
                               strokeLinecap="round"
                               strokeLinejoin="round"
-                              d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                              strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                             />
                           </svg>
                         </button>
@@ -386,42 +478,42 @@ export default function Tablas({
       </div>
 
       {/* Vista Mobile */}
-      <div className="lg:hidden space-y-3 p-4">
+      <div className="lg:hidden space-y-4 p-4">
         {filteredData?.map((e) => (
           <div
             key={e.id}
-            className="bg-white rounded-lg shadow-md p-4 border border-gray-200"
+            className="bg-white rounded-xl shadow-md p-5 border border-gray-100 hover:shadow-lg transition-shadow duration-200"
           >
-            <div className="flex justify-between items-start mb-3">
+            <div className="flex justify-between items-start mb-4">
               {editingId === e.id ? (
-                <div className="flex flex-col space-y-2 w-full">
-                  <div className="grid grid-cols-2 gap-2">
+                <div className="flex flex-col space-y-3 w-full">
+                  <div className="grid grid-cols-2 gap-3">
                     <input
                       name="f_name"
                       value={editValues.f_name}
                       onChange={handleInputChange}
-                      className="border px-2 py-1 rounded border-gray-500  text-sm col-span-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="border px-3 py-2 rounded-lg border-gray-300 text-sm col-span-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="Primer nombre"
                     />
                     <input
                       name="m_name"
                       value={editValues.m_name}
                       onChange={handleInputChange}
-                      className="border px-2 py-1 rounded border-gray-500  text-sm col-span-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="border px-3 py-2 rounded-lg border-gray-300 text-sm col-span-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="Segundo nombre"
                     />
                     <input
                       name="f_lastname"
                       value={editValues.f_lastname}
                       onChange={handleInputChange}
-                      className="border px-2 py-1 rounded border-gray-500  text-sm col-span-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="border px-3 py-2 rounded-lg border-gray-300 text-sm col-span-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="Apellido paterno"
                     />
                     <input
                       name="s_lastname"
                       value={editValues.s_lastname}
                       onChange={handleInputChange}
-                      className="border px-2 py-1 rounded border-gray-500  text-sm col-span-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="border px-3 py-2 rounded-lg border-gray-300 text-sm col-span-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="Apellido materno"
                     />
                   </div>
@@ -429,31 +521,69 @@ export default function Tablas({
                     name="phone"
                     value={editValues.phone}
                     onChange={handleInputChange}
-                    className="border px-2 py-1 rounded border-gray-500  text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="border px-3 py-2 rounded-lg border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Teléfono"
                   />
                   <select
                     name="status"
                     value={editValues.status}
                     onChange={handleInputChange}
-                    className="border px-2 py-1 rounded border-gray-500  text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="border px-3 py-2 rounded-lg border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
-                    <option >Selecionar Estado</option>
+                    <option>Seleccionar Estado</option>
                     <option value="1">Activo</option>
                     <option value="0">Inactivo</option>
                   </select>
                 </div>
               ) : (
                 <>
-                  <h3 className="font-semibold text-gray-800 text-sm flex-1 mr-2">
+                  <h3 className="font-semibold text-gray-800 text-base flex-1 mr-2">
                     {e.full_name}
                   </h3>
                   <span
-                    className={`px-2 py-1 rounded-xl text-white text-xs ${
-                      e.status === "activo" ? "bg-green-500" : "bg-red-500"
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                      e.status === "activo"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-red-100 text-red-800"
                     }`}
                   >
-                    {e.status === "activo" ? "Activo" : "Inactivo"}
+                    {e.status === "activo" ? (
+                      <>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4 mr-1"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                        Activo
+                      </>
+                    ) : (
+                      <>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4 mr-1"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                        Inactivo
+                      </>
+                    )}
                   </span>
                 </>
               )}
@@ -461,100 +591,165 @@ export default function Tablas({
 
             {editingId !== e.id && (
               <>
-                <div className="grid grid-cols-2 gap-2 text-sm mb-3">
+                <div className="grid grid-cols-2 gap-4 text-sm mb-4">
                   <div>
-                    <span className="text-gray-600 block">Teléfono:</span>
-                    <span>{e.phone || "No especificado"}</span>
+                    <span className="text-gray-600 block mb-1 font-medium">
+                      Teléfono:
+                    </span>
+                    <span className="font-medium">
+                      {e.phone || "No especificado"}
+                    </span>
                   </div>
                   <div>
-                    <span className="text-gray-600 block">Escuela:</span>
-                    <span>
+                    <span className="text-gray-600 block mb-1 font-medium">
+                      Escuela:
+                    </span>
+                    <span className="font-medium">
                       {Array.isArray(e.schools) && e.schools.length > 0
                         ? e.schools.map((s) => s.name).join(", ")
                         : "Sin escuela"}
                     </span>
                   </div>
                   <div>
-                    <span className="text-gray-600 block">País:</span>
-                    <span>{e.student?.country?.name || "Sin país"}</span>
+                    <span className="text-gray-600 block mb-1 font-medium">
+                      País:
+                    </span>
+                    <span className="font-medium">
+                      {e.student?.country?.name || "Sin país"}
+                    </span>
                   </div>
                   <div>
-                    <span className="text-gray-600 block">Horas:</span>
-                    <span>12/10</span>
+                    <span className="text-gray-600 block mb-1 font-medium">
+                      Horas:
+                    </span>
+                    <span className="font-medium">12/10</span>
                   </div>
                 </div>
               </>
             )}
 
-            <div className="flex justify-end space-x-2">
+            <div className="flex justify-end space-x-3">
               {editingId === e.id ? (
                 <>
                   <button
                     onClick={() => handleSave(e.id)}
                     disabled={loading}
-                    className="px-3 py-1 bg-green-500 text-white rounded hover:scale-105 text-sm transition-colors duration-200 flex-1 disabled:opacity-50"
+                    className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 disabled:opacity-50 shadow-md"
                   >
-                    {loading ? "Guardando..." : "Guardar"}
+                    {loading ? (
+                      <>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4 animate-spin"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                          />
+                        </svg>
+                        <span>Guardando...</span>
+                      </>
+                    ) : (
+                      <>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                        <span>Guardar</span>
+                      </>
+                    )}
                   </button>
                   <button
                     onClick={handleCancel}
-                    className="px-3 py-1 bg-red-500 text-white rounded hover:scale-105 text-sm transition-colors duration-200 flex-1"
+                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md"
                   >
-                    Cancelar
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                    <span>Cancelar</span>
                   </button>
                 </>
               ) : (
                 <>
                   <button
                     onClick={() => goToProfile(e.id)}
-                    className="text-[#8d8e91] hover:text-blue-400 cursor-pointer hover:scale-105 transition-colors duration-200"
+                    className="text-blue-500 bg-blue-50 hover:bg-blue-100 p-2 rounded-lg shadow transition-all duration-200 flex items-center justify-center"
                     title="Ver perfil"
                   >
                     <svg
-                      className="w-5 h-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
                       fill="none"
-                      stroke="currentColor"
                       viewBox="0 0 24 24"
-                      strokeWidth="1.5"
+                      stroke="currentColor"
                     >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                        strokeWidth={2}
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                       />
                     </svg>
                   </button>
                   <button
                     onClick={() => handleEditClick(e)}
-                    className="text-[#8d8e91] hover:text-blue-400 cursor-pointer hover:scale-105 transition-colors duration-200"
+                    className="text-indigo-500 bg-indigo-50 hover:bg-indigo-100 p-2 rounded-lg shadow transition-all duration-200 flex items-center justify-center"
                     title="Editar estudiante"
                   >
                     <svg
-                      className="w-5 h-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
                       fill="none"
-                      stroke="currentColor"
                       viewBox="0 0 24 24"
-                      strokeWidth="1.5"
+                      stroke="currentColor"
                     >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z"
+                        strokeWidth={2}
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                       />
                     </svg>
                   </button>
-                  <button className="text-[#8d8e91] hover:text-red-500 hover:scale-110 cursor-pointer transition duration-300">
+                  <button className="text-red-500 bg-red-50 hover:bg-red-100 p-2 rounded-lg shadow transition-all duration-200 flex items-center justify-center">
                     <svg
-                      className="w-5 h-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
                       fill="none"
-                      stroke="currentColor"
                       viewBox="0 0 24 24"
-                      strokeWidth="1.5"
+                      stroke="currentColor"
                     >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                        strokeWidth={2}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                       />
                     </svg>
                   </button>
