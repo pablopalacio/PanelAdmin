@@ -39,7 +39,7 @@ function Login() {
           navigate("/panel-estudiante"); // ← AQUÍ VA A PanelEstudiante.jsx
           console.log("Redirigiendo a panel de estudiante");
         } else if (isController()) {
-          navigate("/controller/panel");
+          navigate("/Estudiantes");
           console.log("Redirigiendo a panel de controller");
         } else if (isRecruiter()) {
           navigate("/recruiter/candidates");
