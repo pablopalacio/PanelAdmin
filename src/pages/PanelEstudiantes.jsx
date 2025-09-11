@@ -27,7 +27,7 @@ export default function PanelEstudiantes() {
 
       <main className="w-full">
         <section className="bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl  w-full flex flex-col justify-center items-center text-gray-800">
-          <p className="pt-15 font-semibold text-xl pb-4">
+          <p className="pt-15 font-semibold text-xl md:text-2xl pb-4">
             Bienvenido{" "}
             <span className="font-light text-md">{user?.full_name}</span>{" "}
           </p>

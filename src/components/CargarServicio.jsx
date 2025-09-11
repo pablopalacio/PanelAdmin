@@ -1,33 +1,15 @@
 import React, { useEffect } from "react";
 
 export default function CargarServicio({ user }) {
-  //   console.log(user);
-  //   const fetchData = async () => {
-  //     try {
-  //       setLoading(true);
-  //       setError(null);
-  //       // Cargar servicios
-  //       const servicesResponse = await axiosInstance.get("/services");
-  //       setService(servicesResponse.data);
-  //     } catch (err) {
-  //       console.error("Error fetching data:", err);
-  //       setError(err.response?.data?.message || err.message);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   useEffect(() => {
-  //     fetchData();
-  //   }, []);
-
+  console.log(user);
   return (
     <>
       {" "}
       <div className="w-full bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl px-4 rounded-2xl ">
-        <h3 className="font-semibold text-xl text-center p-4">
+        <h3 className="font-semibold text-xl md:text-2xl text-center p-4">
           Horas de Servicio
         </h3>
-        <h4 className="font-semibold">Tipo de Servicio</h4>
+        <h4 className="font-semibold lg:text-lg">Tipo de Servicio</h4>
         <div className="flex flex-wrap gap-2 p-4">
           <button className="px-2 py-1 bg-blue-600 hover:bg-blue-700 cursor-pointer text-white rounded-lg font-semibold transition duration-200 shadow-md">
             Indexar
@@ -50,8 +32,8 @@ export default function CargarServicio({ user }) {
         </div>
         <div className="py-4">
           <div>
-            <h4 className="font-semibold">Cantidad de Horas</h4>
-            <div className="flex gap-4 items-center">
+            <h4 className="font-semibold lg:text-lg">Cantidad de Horas</h4>
+            <div className="flex gap-4 p-4 items-center">
               <button className="bg-red-600 text-white rounded-full px-3 py-1">
                 -
               </button>
@@ -61,7 +43,7 @@ export default function CargarServicio({ user }) {
               </button>
             </div>
             <div className="py-4">
-              <h4>Descripción</h4>
+              <h4 className="font-semibold lg:text-lg">Descripción</h4>
 
               <form className="max-w-sm mx-auto">
                 <textarea
@@ -74,7 +56,7 @@ export default function CargarServicio({ user }) {
             </div>
           </div>
           <div>
-            <h4 className="font-bold">Cargar Evidencias</h4>
+            <h4 className="font-bold lg:text-lg">Cargar Evidencias</h4>
 
             <div className="flex items-center justify-center w-full">
               <label
@@ -109,7 +91,7 @@ export default function CargarServicio({ user }) {
               </label>
             </div>
           </div>
-          <div>
+          <div className="flex gap-3 p-4">
             <button className="px-2 py-1 bg-red-600 hover:bg-red-700 cursor-pointer text-white rounded-lg font-semibold transition duration-200 shadow-md">
               Cancelar
             </button>
