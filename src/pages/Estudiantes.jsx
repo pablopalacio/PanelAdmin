@@ -132,7 +132,7 @@ function Estudiantes() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
+    <div className="min-h-screen border bg-gray-100 flex flex-col lg:flex-row">
       <NewUser
         toggleModal={toggleModal}
         setToggleModal={setToggleModal}
@@ -214,6 +214,7 @@ function Estudiantes() {
         />
 
         {/* Tabla estudiantes */}
+
         <div className="bg-white rounded-xl shadow-sm p-4 lg:p-6 mb-4 lg:mb-6">
           <h2 className="text-base lg:text-xl font-semibold text-gray-800 mb-4">
             Lista de Estudiantes

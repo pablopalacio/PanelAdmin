@@ -12,6 +12,7 @@ export default function TablaHorasDeServicio() {
   const [error, setError] = useState(null);
   const [editingRow, setEditingRow] = useState(null);
   const [approvalValues, setApprovalValues] = useState({});
+  const [saving, setSaving] = useState(false);
 
   // Función para obtener los datos
   const fetchData = async () => {
@@ -31,20 +32,7 @@ export default function TablaHorasDeServicio() {
   // Cargar datos al montar el componente - SOLO UNA VEZ
   useEffect(() => {
     fetchData();
-  }, []); // Array de dependencias vacío para que se ejecute solo una vez
-
-  // Agregamos un useEffect para depurar la información
-  useEffect(() => {
-    if (user && data.length > 0) {
-      console.log("Usuario logueado:", user);
-      data.forEach((service) => {
-        console.log(`--- Servicio ID: ${service.id} ---`);
-        console.log("ID de usuario del servicio:", service.user?.id);
-        console.log("Rol de usuario logueado:", user.role);
-        console.log("Estado del servicio:", service.status);
-      });
-    }
-  }, [user, data]);
+  }, []);
 
   const studentServices =
     data?.filter((service) => service.user?.id === parseInt(id)) || [];
@@ -69,6 +57,7 @@ export default function TablaHorasDeServicio() {
   };
 
   const handleApproveSave = async (service) => {
+    setSaving(true);
     try {
       await axiosInstance.patch(`/review/${service.id}`, {
         ...approvalValues,
@@ -100,6 +89,8 @@ export default function TablaHorasDeServicio() {
         }
       }
       alert(errorMessage);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -119,7 +110,7 @@ export default function TablaHorasDeServicio() {
 
   if (error) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 text-center">
+      <div className="bg-white rounded-xl shadow-md p-6 text-center">
         <p className="text-red-500">
           Error al cargar las horas de servicio: {error}
         </p>
@@ -129,7 +120,7 @@ export default function TablaHorasDeServicio() {
 
   if (!studentServices || studentServices.length === 0) {
     return (
-      <div className="bg-gray-50 rounded-lg p-6 text-center border border-gray-200">
+      <div className="bg-gray-50 rounded-xl p-6 text-center border border-gray-200">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-12 w-12 mx-auto text-gray-400 mb-3"
@@ -150,34 +141,50 @@ export default function TablaHorasDeServicio() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="bg-white rounded-xl shadow-lg overflow-hidden">
       {/* Tabla para vista de escritorio */}
       <div className="hidden lg:block relative overflow-x-auto">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-          <thead className="text-xs text-center text-gray-100 uppercase bg-blue-600">
+        <table className="w-full text-xs text-left text-gray-700">
+          <thead className="text-xs text-center text-white uppercase bg-gradient-to-r from-blue-600 to-indigo-700">
             <tr>
-              <th className="px-4 py-3">Categoría</th>
-              <th className="px-4 py-3">Horas Reportadas</th>
-              <th className="px-4 py-3">Horas Aprobadas</th>
-              <th className="px-4 py-3">Estado</th>
-              <th className="px-4 py-3">Fecha</th>
-              <th className="px-4 py-3">Revisor</th>
-              <th className="px-4 py-3">Comentario</th>
-              <th className="px-4 py-3">Evidencia</th>
-              <th className="px-4 py-3">Acciones</th>
+              <th className="px-3 py-3 font-semibold tracking-wide">
+                Categoría
+              </th>
+              <th className="px-3 py-3 font-semibold tracking-wide">
+                Horas Reportadas
+              </th>
+              <th className="px-3 py-3 font-semibold tracking-wide">
+                Horas Aprobadas
+              </th>
+              <th className="px-3 py-3 font-semibold tracking-wide">Estado</th>
+              <th className="px-3 py-3 font-semibold tracking-wide">Fecha</th>
+              <th className="px-3 py-3 font-semibold tracking-wide">Revisor</th>
+              <th className="px-3 py-3 font-semibold tracking-wide">
+                Comentario
+              </th>
+              <th className="px-3 py-3 font-semibold tracking-wide">
+                Evidencia
+              </th>
+              <th className="px-3 py-3 font-semibold tracking-wide">
+                Acciones
+              </th>
             </tr>
           </thead>
           <tbody className="text-center">
-            {studentServices.map((service) => (
+            {studentServices.map((service, index) => (
               <tr
                 key={service.id}
-                className="bg-white border-b border-gray-200 hover:bg-gray-50"
+                className={`${
+                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                } border-b border-gray-200 hover:bg-blue-50 transition-colors duration-150`}
               >
-                <td className="px-4 py-4 font-medium text-gray-900">
+                <td className="px-3 py-3 font-medium text-gray-900">
                   {service.category?.name}
                 </td>
-                <td className="px-4 py-4">{service.amount_reported}</td>
-                <td className="px-4 py-4">
+                <td className="px-3 py-3 font-medium">
+                  {service.amount_reported}
+                </td>
+                <td className="px-3 py-3">
                   {editingRow === service.id ? (
                     <input
                       type="number"
@@ -188,13 +195,15 @@ export default function TablaHorasDeServicio() {
                           amount_approved: e.target.value,
                         })
                       }
-                      className="w-20 p-1 border rounded text-center"
+                      className="w-20 p-2 border border-gray-300 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   ) : (
-                    service.amount_approved
+                    <span className="font-medium">
+                      {service.amount_approved}
+                    </span>
                   )}
                 </td>
-                <td className="px-4 py-4">
+                <td className="px-3 py-3">
                   {editingRow === service.id ? (
                     <select
                       value={approvalValues.status || "2"}
@@ -204,35 +213,87 @@ export default function TablaHorasDeServicio() {
                           status: e.target.value,
                         })
                       }
-                      className="p-1 border rounded text-center text-xs"
+                      className="p-2 border border-gray-300 rounded-lg text-center text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="2">Pendiente</option>
                       <option value="1">Aprobado</option>
                       <option value="0">Rechazado</option>
                     </select>
                   ) : (
-                    <p
-                      className={`text-white px-2 py-1.5 rounded-xl text-center text-xs ${
+                    <span
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
                         service.status === "Approved"
-                          ? "bg-green-500"
+                          ? "bg-green-100 text-green-800"
                           : service.status === "Pending"
-                          ? "bg-yellow-500"
-                          : "bg-red-500"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-red-100 text-red-800"
                       }`}
                     >
-                      {service.status === "Approved"
-                        ? "Aprobado"
-                        : service.status === "Pending"
-                        ? "Pendiente"
-                        : "Rechazado"}
-                    </p>
+                      {service.status === "Approved" ? (
+                        <>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 mr-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                          Aprobado
+                        </>
+                      ) : service.status === "Pending" ? (
+                        <>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 mr-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                          Pendiente
+                        </>
+                      ) : (
+                        <>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 mr-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                          Rechazado
+                        </>
+                      )}
+                    </span>
                   )}
                 </td>
-                <td className="px-4 py-4">
+                <td className="px-6 py-4 font-medium">
                   {new Date(service.created_at).toLocaleDateString()}
                 </td>
-                <td className="px-4 py-4">{service.reviewer?.full_name}</td>
-                <td className="px-4 py-4">
+                <td className="px-6 py-4 font-medium">
+                  {service.reviewer?.full_name || "Sin revisor"}
+                </td>
+                <td className="px-6 py-4">
                   {editingRow === service.id ? (
                     <textarea
                       value={approvalValues.comment || ""}
@@ -242,17 +303,19 @@ export default function TablaHorasDeServicio() {
                           comment: e.target.value,
                         })
                       }
-                      className="w-full p-1 border rounded text-sm"
+                      className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       rows="2"
                     />
                   ) : (
-                    service.comment || "Sin comentarios"
+                    <span className="font-medium">
+                      {service.comment || "Sin comentarios"}
+                    </span>
                   )}
                 </td>
-                <td className="px-4 py-4">
+                <td className="px-6 py-4">
                   <button
                     onClick={() => handleViewEvidence(service.id)}
-                    className="text[#8d8e91] hover:text-blue-400 cursor-pointer hover:scale-105 transition-colors duration-200"
+                    className="text-blue-500 bg-blue-50 hover:bg-blue-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200"
                     title="Ver evidencia en nueva pestaña"
                   >
                     <svg
@@ -275,45 +338,65 @@ export default function TablaHorasDeServicio() {
                     </svg>
                   </button>
                 </td>
-                <td className="px-4 py-4">
-                  <div className="flex justify-center space-x-2">
+                <td className="px-6 py-4">
+                  <div className="flex justify-center space-x-3">
                     {editingRow === service.id ? (
                       <>
                         <button
                           onClick={() => handleApproveSave(service)}
-                          className="text-green-500  cursor-pointer hover:scale-105 transition-colors duration-200"
+                          disabled={saving}
+                          className="text-white bg-green-500 hover:bg-green-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200"
                           title="Guardar"
                         >
-                          <svg
-                            className="w-5 h-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            strokeWidth="1.5"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                            />
-                          </svg>
+                          {saving ? (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-3 w-3 animate-spin"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                              />
+                            </svg>
+                          ) : (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-3 w-3"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          )}
                         </button>
                         <button
                           onClick={handleCancelEdit}
-                          className="text-red-500  cursor-pointer hover:scale-115 transition-colors duration-200"
+                          className="text-white bg-red-500 hover:bg-red-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200"
                           title="Cancelar"
                         >
                           <svg
-                            className="w-5 h-5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-3 w-3"
                             fill="none"
-                            stroke="currentColor"
                             viewBox="0 0 24 24"
-                            strokeWidth="1.5"
+                            stroke="currentColor"
                           >
                             <path
                               strokeLinecap="round"
                               strokeLinejoin="round"
-                              d="M6 18 18 6M6 6l12 12"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
                             />
                           </svg>
                         </button>
@@ -321,11 +404,11 @@ export default function TablaHorasDeServicio() {
                     ) : (
                       <button
                         onClick={() => handleApproveClick(service)}
-                        className="text-[#8d8e91] hover:text-blue-400  cursor-pointer hover:scale-105 transition-colors duration-200"
+                        className="text-indigo-500 bg-indigo-50 hover:bg-indigo-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200"
                         title="Revisar"
                       >
                         <svg
-                          className="w-5 h-5"
+                          className="w-4 h-4"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -334,7 +417,7 @@ export default function TablaHorasDeServicio() {
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                           />
                         </svg>
                       </button>
@@ -348,23 +431,29 @@ export default function TablaHorasDeServicio() {
       </div>
 
       {/* Vista Mobile */}
-      <div className="lg:hidden space-y-3 p-4">
+      <div className="lg:hidden space-y-4 p-4">
         {studentServices.map((service) => (
           <div
             key={service.id}
-            className="bg-white rounded-lg shadow-md p-4 border border-gray-200"
+            className="bg-white rounded-xl shadow-md p-5 border border-gray-100 hover:shadow-lg transition-shadow duration-200"
           >
-            <div className="grid grid-cols-2 gap-3 text-sm mb-3">
+            <div className="grid grid-cols-2 gap-4 text-sm mb-4">
               <div>
-                <span className="text-gray-600 block">Categoría:</span>
+                <span className="text-gray-600 block mb-1 font-medium">
+                  Categoría:
+                </span>
                 <span className="font-medium">{service.category?.name}</span>
               </div>
               <div>
-                <span className="text-gray-600 block">Horas Reportadas:</span>
+                <span className="text-gray-600 block mb-1 font-medium">
+                  Horas Reportadas:
+                </span>
                 <span className="font-medium">{service.amount_reported}</span>
               </div>
               <div>
-                <span className="text-gray-600 block">Horas Aprobadas:</span>
+                <span className="text-gray-600 block mb-1 font-medium">
+                  Horas Aprobadas:
+                </span>
                 {editingRow === service.id ? (
                   <input
                     type="number"
@@ -375,14 +464,16 @@ export default function TablaHorasDeServicio() {
                         amount_approved: e.target.value,
                       })
                     }
-                    className="w-full p-1 border rounded text-center"
+                    className="w-full p-2 border border-gray-300 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 ) : (
                   <span className="font-medium">{service.amount_approved}</span>
                 )}
               </div>
               <div>
-                <span className="text-gray-600 block">Estado:</span>
+                <span className="text-gray-600 block mb-1 font-medium">
+                  Estado:
+                </span>
                 {editingRow === service.id ? (
                   <select
                     value={approvalValues.status || "2"}
@@ -392,7 +483,7 @@ export default function TablaHorasDeServicio() {
                         status: e.target.value,
                       })
                     }
-                    className="w-full p-1 border rounded text-center text-xs"
+                    className="w-full p-2 border border-gray-300 rounded-lg text-center text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     <option value="2">Pendiente</option>
                     <option value="1">Aprobado</option>
@@ -400,38 +491,94 @@ export default function TablaHorasDeServicio() {
                   </select>
                 ) : (
                   <span className="font-medium">
-                    <p
-                      className={`text-white px-2 py-1 rounded-xl text-center text-xs ${
+                    <span
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
                         service.status === "Approved"
-                          ? "bg-green-500"
+                          ? "bg-green-100 text-green-800"
                           : service.status === "Pending"
-                          ? "bg-yellow-500"
-                          : "bg-red-500"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-red-100 text-red-800"
                       }`}
                     >
-                      {service.status === "Approved"
-                        ? "Aprobado"
-                        : service.status === "Pending"
-                        ? "Pendiente"
-                        : "Rechazado"}
-                    </p>
+                      {service.status === "Approved" ? (
+                        <>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 mr-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                          Aprobado
+                        </>
+                      ) : service.status === "Pending" ? (
+                        <>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 mr-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                          Pendiente
+                        </>
+                      ) : (
+                        <>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 mr-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                          Rechazado
+                        </>
+                      )}
+                    </span>
                   </span>
                 )}
               </div>
               <div>
-                <span className="text-gray-600 block">Fecha:</span>
+                <span className="text-gray-600 block mb-1 font-medium">
+                  Fecha:
+                </span>
                 <span className="font-medium">
                   {new Date(service.created_at).toLocaleDateString()}
                 </span>
               </div>
               <div>
-                <span className="text-gray-600 block">Revisor:</span>
+                <span className="text-gray-600 block mb-1 font-medium">
+                  Revisor:
+                </span>
                 <span className="font-medium">
-                  {service.reviewer?.full_name}
+                  {service.reviewer?.full_name || "Sin revisor"}
                 </span>
               </div>
               <div className="col-span-2">
-                <span className="text-gray-600 block">Comentario:</span>
+                <span className="text-gray-600 block mb-1 font-medium">
+                  Comentario:
+                </span>
                 {editingRow === service.id ? (
                   <textarea
                     value={approvalValues.comment || ""}
@@ -441,7 +588,7 @@ export default function TablaHorasDeServicio() {
                         comment: e.target.value,
                       })
                     }
-                    className="w-full p-1 border rounded text-sm"
+                    className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     rows="2"
                   />
                 ) : (
@@ -451,14 +598,16 @@ export default function TablaHorasDeServicio() {
                 )}
               </div>
               <div className="col-span-2">
-                <span className="text-gray-600 block">Evidencia:</span>
+                <span className="text-gray-600 block mb-1 font-medium">
+                  Evidencia:
+                </span>
                 <button
                   onClick={() => handleViewEvidence(service.id)}
-                  className="text-[#dadde1]  transition-colors duration-200 flex items-center"
+                  className="text-blue-500 bg-blue-50 hover:bg-blue-100 px-3 py-2 rounded-lg shadow transition-all duration-200 flex items-center"
                   title="Ver evidencia en nueva pestaña"
                 >
                   <svg
-                    className="w-4 h-4 mr-1"
+                    className="w-4 h-4 mr-2"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -479,28 +628,88 @@ export default function TablaHorasDeServicio() {
                 </button>
               </div>
             </div>
-            <div className="flex justify-end space-x-2">
+            <div className="flex justify-end space-x-3">
               {editingRow === service.id ? (
                 <>
                   <button
                     onClick={() => handleApproveSave(service)}
-                    className="px-3 py-1 bg-green-500 text-white rounded hover:scale-105 text-sm transition-colors duration-200"
+                    disabled={saving}
+                    className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md"
                   >
-                    Guardar
+                    {saving ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 animate-spin"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    )}
+                    <span>{saving ? "Guardando..." : "Guardar"}</span>
                   </button>
                   <button
                     onClick={handleCancelEdit}
-                    className="px-3 py-1 bg-red-500 text-white rounded hover:scale-105 text-sm transition-colors duration-200"
+                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md"
                   >
-                    Cancelar
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                    <span>Cancelar</span>
                   </button>
                 </>
               ) : (
                 <button
                   onClick={() => handleApproveClick(service)}
-                  className="px-3 py-1 bg-blue-500 text-white rounded cursor-pointer hover:scale-105 text-sm transition-colors duration-200"
+                  className="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md"
                 >
-                  Revisar
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
+                  <span>Revisar</span>
                 </button>
               )}
             </div>

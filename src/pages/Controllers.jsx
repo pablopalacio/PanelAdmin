@@ -3,6 +3,7 @@ import { useApiLogin } from "../hooks/useApiLogin";
 import { useNavigate } from "react-router-dom";
 import Aside from "../components/Aside";
 import Filtro from "../components/Filtro";
+import TablaControllers from "../components/TablaControllers";
 
 function Controllers() {
   const { user, logout } = useApiLogin();
@@ -77,7 +78,9 @@ function Controllers() {
         <div></div>
 
         {/* Contenido */}
-        <div className="bg-white rounded-xl shadow-sm p-4 lg:p-6 mb-4 lg:mb-6"></div>
+        <div className="bg-white rounded-xl shadow-sm p-4 lg:p-6 mb-4 lg:mb-6">
+          <TablaControllers />
+        </div>
       </div>
     </div>
   );
