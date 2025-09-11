@@ -8,7 +8,6 @@ export default function MapaHorasServicio() {
   const [worldData, setWorldData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Cargar datos GeoJSON reales desde un CDN
   useEffect(() => {
     const fetchWorldData = async () => {
       try {

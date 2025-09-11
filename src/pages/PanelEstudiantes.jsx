@@ -1,8 +1,8 @@
 import React from "react";
 import { useApiLogin } from "../hooks/useApiLogin";
-import Logout from "../components/logout";
+import Logout from "../components/Logout";
+import CargarServicio from "../components/CargarServicio";
 import Perfil from "../components/perfil";
-import CargarServicio from "../components/cargarServicio";
 
 export default function PanelEstudiantes() {
   const { user, logout } = useApiLogin();

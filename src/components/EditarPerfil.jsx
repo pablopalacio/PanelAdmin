@@ -41,10 +41,8 @@ const EditarPerfil = ({ open, onClose, user }) => {
 
     try {
       const response = await axios.put(`/users/${user.id}`, formData);
-
       if (response.data) {
         setSuccess(true);
-
         // Actualizar la cookie del usuario con los nuevos datos
         const updatedUser = {
           ...user,
@@ -225,5 +223,4 @@ const EditarPerfil = ({ open, onClose, user }) => {
     </div>
   );
 };
-
 export default EditarPerfil;

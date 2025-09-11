@@ -36,7 +36,7 @@ function Login() {
           navigate("/Estudiantes");
           console.log("Redirigiendo a panel de administrador");
         } else if (isStudent()) {
-          navigate("/Panel-Estudiante"); // ← AQUÍ VA A PanelEstudiante.jsx
+          navigate("/Panel-Estudiante"); //
           console.log("Redirigiendo a panel de estudiante");
         } else if (isController()) {
           navigate("/Estudiantes");
@@ -45,8 +45,8 @@ function Login() {
           navigate("/panel-reclutador");
           console.log("Redirigiendo a panel de reclutador");
         } else {
-          navigate("/PanelEstudiantes"); // Ruta por defecto si no coincide ningún rol
-          console.log("Redirigiendo a página por defecto");
+          navigate("/");
+          console.log("Redirigiendo al home");
         }
       }
     } catch (err) {
@@ -65,13 +65,6 @@ function Login() {
       setLoginError(errorMessage);
     }
   };
-
-  const handleTestCredentials = () => {
-    setEmail("admin@funval.test");
-    setPassword("1234567");
-    setLoginError("");
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
