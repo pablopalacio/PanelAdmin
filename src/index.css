@@ -1,1 +1,30 @@
 @import "tailwindcss";
+
+/* Estilos para el mapa */
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+}
+
+/* Ajustes de responsividad */
+@media (max-width: 768px) {
+  .leaflet-container {
+    height: 300px;
+  }
+}
+
+/* Mejora la visualización de los tooltips */
+.leaflet-tooltip {
+  background: rgba(255, 255, 255, 0.9);
+
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  font-size: 12px;
+  padding: 5px;
+}
+
+/* Asegurar que Leaflet cargue los iconos correctamente */
+.leaflet-default-icon-path {
+  background-image: url(https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png);
+}

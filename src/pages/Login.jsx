@@ -6,7 +6,15 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
-  const { login, loading, error } = useApiLogin();
+  const {
+    login,
+    isAdmin,
+    isStudent,
+    isController,
+    isRecruiter,
+    error,
+    loading,
+  } = useApiLogin();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -21,19 +29,37 @@ function Login() {
     try {
       const result = await login(email, password);
       if (result && result.user) {
-        console.log("Login exitoso, redirigiendo a estudiantes...");
-        navigate("/Estudiantes");
+        console.log("Login exitoso, redirigiendo según rol...");
+
+        //  REDIRECCIÓN SEGÚN EL ROL DEL USUARIO
+        if (isAdmin()) {
+          navigate("/Estudiantes");
+          console.log("Redirigiendo a panel de administrador");
+        } else if (isStudent()) {
+          navigate("/Panel-Estudiante"); // ← AQUÍ VA A PanelEstudiante.jsx
+          console.log("Redirigiendo a panel de estudiante");
+        } else if (isController()) {
+          navigate("/Estudiantes");
+          console.log("Redirigiendo a panel de controller");
+        } else if (isRecruiter()) {
+          navigate("/panel-reclutador");
+          console.log("Redirigiendo a panel de reclutador");
+        } else {
+          navigate("/PanelEstudiantes"); // Ruta por defecto si no coincide ningún rol
+          console.log("Redirigiendo a página por defecto");
+        }
       }
     } catch (err) {
       console.error("Error de login:", err);
 
       let errorMessage = err.message;
-      if (err.message.includes("CORS") || err.message.includes("Network")) {
+      if (
+        err.message.includes("CORS") ||
+        err.message.includes("Network") ||
+        err.message.includes("Failed to fetch")
+      ) {
         errorMessage =
           "Error de conexión. Verifique su internet o contacte al administrador.";
-      } else if (err.message.includes("Failed to fetch")) {
-        errorMessage =
-          "No se pudo conectar con el servidor. Intente nuevamente.";
       }
 
       setLoginError(errorMessage);
@@ -146,7 +172,7 @@ function Login() {
         </form>
 
         {(error || loginError) && (
-          <div className=" p-3 text-red-700 rounded-lg text-sm">
+          <div className="mt-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
             {(() => {
               const errorMessage = error || loginError;
 
@@ -168,8 +194,8 @@ function Login() {
           </div>
         )}
 
-        <div className="mt-2 text-center">
-          <button className="text-sm p text-blue-600 hover:text-blue-800">
+        <div className="mt-6 text-center">
+          <button className="text-sm text-blue-600 hover:text-blue-800">
             Cambiar Clave
           </button>
         </div>
