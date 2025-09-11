@@ -20,7 +20,7 @@ export default function PanelEstudiantes() {
         </div>
       </header>
 
-      <main className="w-[70%]  mx-auto px-4 pb-10">
+      <main className=" px-4 pb-10">
         <section className="bg-white rounded-xl shadow-md mt-6 p-6 text-center">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
             Bienvenido{" "}
@@ -32,7 +32,7 @@ export default function PanelEstudiantes() {
             <Perfil user={user} />
           </section>
           <section className="w-full md:w-3/5 mt-6 md:mt-0">
-            <CargarServicio />
+            <CargarServicio user={user} />
           </section>
         </div>
       </main>
