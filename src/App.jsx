@@ -91,6 +91,15 @@ function App() {
               </PrivateRoute>
             }
           />
+          {/* Panel de reclutador */}
+          <Route
+            path="/panel-reclutador"
+            element={
+              <PrivateRoute>
+                <Estudiantes />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </div>
     </Router>

@@ -6,7 +6,7 @@ import CambiarContraseña from "../components/CambiarContraseña";
 import EditarPerfil from "../components/EditarPerfil";
 import Logout from "./logout";
 
-export default function Aside() {
+export default function Aside({ usuario }) {
   const { user, logout } = useApiLogin();
   const navigate = useNavigate();
   const location = useLocation();
@@ -65,11 +65,59 @@ export default function Aside() {
   };
 
   const menuItems = [
-    { name: "Estudiantes", icon: "👨‍🎓", path: "/estudiantes" },
-    { name: "Controllers", icon: "🧑‍💻", path: "/controllers" },
-    { name: "Reclutadores", icon: "👔", path: "/reclutadores" },
-    { name: "Horas de servicio", icon: "⏱️", path: "/horas-servicio" },
-    { name: "Escuela", icon: "🏫", path: "/escuela" },
+    { name: "Estudiantes", icon: "👨‍🎓", path: "/estudiantes", class: "flex" },
+    {
+      name: "Controllers",
+      icon: "🧑‍💻",
+      path: "/controllers",
+      class:
+        usuario === 1
+          ? "flex"
+          : usuario === 2
+          ? "hidden"
+          : usuario === 3
+          ? "hidden"
+          : "",
+    },
+    {
+      name: "Reclutadores",
+      icon: "👔",
+      path: "/reclutadores",
+      class:
+        usuario === 1
+          ? "flex"
+          : usuario === 2
+          ? "hidden"
+          : usuario === 3
+          ? "hidden"
+          : "",
+    },
+    {
+      name: "Horas de servicio",
+      icon: "⏱",
+      path: "/horas-servicio",
+      class:
+        usuario === 1
+          ? "flex"
+          : usuario === 2
+          ? "flex"
+          : usuario === 3
+          ? "hidden"
+          : "",
+    },
+    {
+      name: "Escuela",
+      icon: "🏫",
+      path: "/escuela",
+      class:
+        usuario === 1
+          ? "flex"
+          : usuario === 2
+          ? "hidden"
+          : usuario === 3
+          ? "hidden"
+          : "",
+    },
   ];
 
   const handleNavigation = (path) => {
@@ -168,7 +216,9 @@ export default function Aside() {
               <li
                 key={item.name}
                 onClick={() => handleNavigation(item.path)}
-                className={`flex items-center p-1 2xl:py-3 2xl:px-4 rounded-lg cursor-pointer transition-all duration-200 group ${
+                className={` ${
+                  item.class
+                } items-center p-1 2xl:py-3 2xl:px-4 rounded-lg cursor-pointer transition-all duration-200 group ${
                   isActive(item.path)
                     ? "bg-blue-100 text-blue-700 border-l-4 border-blue-600"
                     : "text-gray-700 hover:text-blue-700 hover:bg-blue-50"

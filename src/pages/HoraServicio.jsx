@@ -58,7 +58,7 @@ function HoraServicio() {
         }
       `}
       >
-        <Aside />
+        <Aside usuario={user.role_id} />
       </div>
 
       {/* Contenido Principal */}

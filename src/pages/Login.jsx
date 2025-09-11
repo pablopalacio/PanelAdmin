@@ -42,7 +42,7 @@ function Login() {
           navigate("/Estudiantes");
           console.log("Redirigiendo a panel de controller");
         } else if (isRecruiter()) {
-          navigate("/recruiter/candidates");
+          navigate("/panel-reclutador");
           console.log("Redirigiendo a panel de reclutador");
         } else {
           navigate("/PanelEstudiantes"); // Ruta por defecto si no coincide ningún rol

@@ -32,6 +32,8 @@ function Estudiantes() {
   const [cumplimiento, setCumplimiento] = useState("");
   const [toggleModal, setToggleModal] = useState(false);
   const { user, logout } = useApiLogin();
+  console.log(user.role_id);
+
   const navigate = useNavigate();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -170,7 +172,7 @@ function Estudiantes() {
           isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
-        <Aside />
+        <Aside usuario={user.role_id} />
       </div>
 
       {/* Contenido principal */}
