@@ -23,7 +23,7 @@ export default function PanelEstudiantes() {
           <span className="lg:text-8xl md:text-6xl text-4xl">👤</span>
         </div>
       </footer>
-
+    {/* asd */}
       <main className="w-full">
         <section className="bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl  w-full flex flex-col justify-center items-center text-gray-800">
           <p className="pt-15 font-semibold text-xl md:text-2xl pb-4">
