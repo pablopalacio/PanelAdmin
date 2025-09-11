@@ -4,12 +4,14 @@ import axios from "../config/axiosConfig";
 import { useNavigate, useLocation } from "react-router-dom";
 import CambiarContraseña from "../components/CambiarContraseña";
 import EditarPerfil from "../components/EditarPerfil";
+import Logout from "./logout";
+
 
 export default function Aside() {
   const { user, logout } = useApiLogin();
   const navigate = useNavigate();
   const location = useLocation();
-
+  console.log(user);
   const [openModal, setOpenModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [roles, setRoles] = useState([]);
@@ -147,6 +149,7 @@ export default function Aside() {
                 {getUserEmail()}
               </p>
             </div>
+
             <div className="mt-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-[10px] 2xl:text-xs font-medium">
               {loading
                 ? "Cargando..."
@@ -154,6 +157,15 @@ export default function Aside() {
                 ? "Error al cargar rol"
                 : getRoleName(getUserRoleId())}
             </div>
+
+            <div className="mt-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-[10px] 2xl:text-xs font-medium"></div>
+            <button
+              onClick={() => setOpenModal(true)}
+              className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs 2xl:text-sm font-medium hover:bg-blue-700 transition-colors shadow-md"
+            >
+              Cambiar Contraseña
+            </button>
+
           </div>
         </div>
 
@@ -225,6 +237,10 @@ export default function Aside() {
             >
               Cambiar Clave
             </button>
+
+          <div className="flex justify-center">
+            <Logout logout={logout} />
+
           </div>
         </div>
       </aside>

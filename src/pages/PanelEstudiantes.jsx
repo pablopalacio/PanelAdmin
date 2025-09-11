@@ -1,6 +1,11 @@
 import React from "react";
+import { useApiLogin } from "../hooks/useApiLogin";
+import Logout from "../components/logout";
 
 export default function PanelEstudiantes() {
+  const { user, logout } = useApiLogin();
+  console.log(user);
+
   return (
     <>
       <footer className="w-full relative">
@@ -10,41 +15,67 @@ export default function PanelEstudiantes() {
           src="/Diseño sin título (2).png"
           alt=""
         />
-        <button className=" absolute top-2 right-2 py-2 px-5 bg-red-600 hover:bg-red-700 cursor-pointer text-white rounded-lg font-semibold transition duration-200 shadow-md">
-          Logout
-        </button>
+        <div className="absolute top-2 right-2">
+          <Logout logout={logout} />
+        </div>
         <div className="absolute lg:top-55 md:top-35 top-38 md:left-10 left-4 lg:w-48 lg:h-48 md:w-36 md:h-36 w-24 h-24 8xl:w-24 8xl:h-24 bg-gradient-to-r from-blue-200 to-indigo-200 rounded-full flex items-center justify-center border-4 border-white shadow-md">
           <span className="lg:text-8xl md:text-6xl text-4xl">👤</span>
         </div>
       </footer>
 
       <main className="w-full">
-        <section className="bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl w-full flex flex-col justify-center items-center text-gray-800">
-          <span>Nombre</span>
-          <span>Correo</span>
+        <section className="bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl  w-full flex flex-col justify-center items-center text-gray-800">
+          <p className="pt-15 font-semibold text-xl pb-4">
+            Bienvenido{" "}
+            <span className="font-light text-md">{user?.full_name}</span>{" "}
+          </p>
         </section>
-        <div className=" md:flex">
+        <div className=" md:flex ">
           <section className="w-full px-2 py-6">
             <div className="w-full bg-gradient-to-b from-gray-100 to-gray-200 shadow-xl px-4 rounded-2xl ">
               <h2 className="font-semibold text-xl text-center p-4">Perfil</h2>
-              <div>
+              <div className="pb-4">
+                <p className="font-semibold">
+                  Nombre:{" "}
+                  <span className="font-light text-sm">
+                    {user?.f_name} {user?.s_name}
+                  </span>
+                </p>
+                <p className="font-semibold">
+                  Apellido:{" "}
+                  <span className="font-light text-sm">
+                    {user?.f_lastname} {user?.s_lastname}
+                  </span>
+                </p>
                 <p className="font-semibold">
                   Telefono:{" "}
-                  <span className="font-light text-sm">11 9090-9090</span>
+                  <span className="font-light text-sm">
+                    {user?.phone ? user?.phone : "No providenciado"}
+                  </span>
                 </p>
                 <p className="font-semibold">
-                  Pais: <span className="font-light text-sm">Argentina</span>
+                  Pais:{" "}
+                  <span className="font-light text-sm">
+                    {user?.student.country.name}
+                  </span>
                 </p>
                 <p className="font-semibold">
-                  Escuela: <span className="font-light text-sm">Front-end</span>
+                  Escuela:{" "}
+                  <span className="font-light text-sm">
+                    {user?.schools[0].name}
+                  </span>
                 </p>
                 <p className="font-semibold">
                   Controller:{" "}
-                  <span className="font-light text-sm">Jose Pelico</span>
+                  <span className="font-light text-sm">
+                    {user?.student.controller.full_name}
+                  </span>
                 </p>
-                <p className="font-semibold">
+                <p className="font-semibold ">
                   Reclutador:{" "}
-                  <span className="font-light text-sm">Jose Hernandez</span>
+                  <span className="font-light text-sm">
+                    {user?.student.recruiter.full_name}
+                  </span>
                 </p>
               </div>
             </div>
