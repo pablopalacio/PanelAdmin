@@ -9,7 +9,7 @@ export default function Perfil({ user }) {
   const [haprobadas, setHaprobadas] = useState(0);
   let Pendientes = hreportadas - haprobadas;
 
-  // Función para cargar datos
+  // Función para cargar datossss
   const fetchData = async () => {
     try {
       setLoading(true);
