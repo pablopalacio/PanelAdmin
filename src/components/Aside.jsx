@@ -6,7 +6,7 @@ import CambiarContraseña from "../components/CambiarContraseña";
 import EditarPerfil from "../components/EditarPerfil";
 import Logout from "./Logout";
 
-export default function Aside({ usuario }) {
+export default function Aside({ usuario, setToggleModal }) {
   const { user, logout } = useApiLogin();
   const navigate = useNavigate();
   const location = useLocation();
@@ -235,11 +235,24 @@ export default function Aside({ usuario }) {
               </li>
             ))}
           </ul>
-          <div className="flex flex-col justify-center">
+          <div className="flex flex-col justify-center gap-">
             <div className="flex justify-center">
               <Logout logout={logout} />
             </div>
-
+            <button
+              onClick={() => setToggleModal(true)}
+              className={` ${
+                usuario === 1
+                  ? "flex"
+                  : usuario === 2
+                  ? "hidden"
+                  : usuario === 3
+                  ? "hidden"
+                  : ""
+              } justify-center items-center text-sm text-center text-blue-600 hover:text-blue-800 mt-3 cursor-pointer`}
+            >
+              Nuevo Usuario
+            </button>
             <button
               onClick={handleChangePassword}
               className="text-sm text-center text-blue-600 hover:text-blue-800 mt-3 cursor-pointer"

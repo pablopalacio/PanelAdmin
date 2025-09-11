@@ -172,7 +172,7 @@ function Estudiantes() {
           isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
-        <Aside usuario={user.role_id} />
+        <Aside usuario={user.role_id} setToggleModal={setToggleModal} />
       </div>
 
       {/* Contenido principal */}
@@ -202,7 +202,6 @@ function Estudiantes() {
           setTempPais={setTempPais}
           tempEstado={tempEstado}
           setTempEstado={setTempEstado}
-          setToggleModal={setToggleModal}
         />
 
         {/* Stats Cards */}
