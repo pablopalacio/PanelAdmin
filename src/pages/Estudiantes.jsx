@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import Aside from "../components/Aside";
 import Tablas from "../components/Tablas";
 import Filtro from "../components/Filtro";
-import Statscards from "../components/statscards";
 import NewUser from "../components/NewUser";
 import axiosInstance from "../config/axiosConfig";
+import Statscards from "../components/StatsCards";
 
 function Estudiantes() {
   const [data, setData] = useState([]);
