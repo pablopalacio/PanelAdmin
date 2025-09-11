@@ -20,7 +20,7 @@ function Estudiantes() {
   const [filtradoEstado, setFiltradoEstado] = useState("");
   const [aplicarFiltros, setAplicarFiltros] = useState(false);
 
-  ///filtros temporales
+  ///filtros temporalesssss
   const [tempPais, setTempPais] = useState([]);
   const [tempEscuela, setTempEscuela] = useState([]);
   const [tempEstado, setTempEstado] = useState("");
