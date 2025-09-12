@@ -4,16 +4,19 @@ import { useNavigate } from "react-router-dom";
 import Aside from "../components/Aside";
 import Tablas from "../components/Tablas";
 import Filtro from "../components/Filtro";
+import Statscards from "../components/statscards";
 import NewUser from "../components/NewUser";
 import axiosInstance from "../config/axiosConfig";
-import Statscards from "../components/StatsCards";
+import EditarPerfil from "../components/EditarPerfil";
+import CambiarContraseña from "../components/CambiarContraseña";
 
 function Estudiantes() {
   const [data, setData] = useState([]);
   const [service, setService] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   /// filtros de busqueda
   const [filtradoPais, setFiltradoPais] = useState([]);
   const [filtradoEscuela, setFiltradoEscuela] = useState([]);
@@ -132,7 +135,14 @@ function Estudiantes() {
   }
 
   return (
-    <div className="min-h-screen border bg-gray-100 flex flex-col lg:flex-row">
+    <div className="min-h-screen  bg-gray-100 flex flex-col lg:flex-row">
+      <EditarPerfil
+        open={openEditModal}
+        onClose={setOpenEditModal}
+        user={user}
+      />
+      <CambiarContraseña open={openModal} onClose={setOpenModal} />
+
       <NewUser
         toggleModal={toggleModal}
         setToggleModal={setToggleModal}
@@ -172,7 +182,12 @@ function Estudiantes() {
           isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
-        <Aside usuario={user.role_id} setToggleModal={setToggleModal} />
+        <Aside
+          usuario={user.role_id}
+          setToggleModal={setToggleModal}
+          setOpenEditModal={setOpenEditModal}
+          setOpenModal={setOpenModal}
+        />
       </div>
 
       {/* Contenido principal */}
