@@ -1,5 +1,3 @@
-// src/components/TablaGenerica.jsx
-
 import { useMemo, useState, useEffect } from "react";
 
 export default function TablaGenerica({
@@ -122,12 +120,9 @@ export default function TablaGenerica({
                   >
                     {/* --- MODO EDICIÓN PARA CELDAS DE DATOS --- */}
                     {isEditing && !col.isAction ? (
-                      // 1. Si hay una función de renderizado para editar (ej. Nombre), úsala.
                       col.renderEdit ? (
                         col.renderEdit(editValues, handleInputChange)
-                      ) : // 2. Si es un campo editable simple...
-                      fieldConfig ? (
-                        // 3. Comprueba si es un 'select' o un 'input' normal
+                      ) : fieldConfig ? (
                         fieldConfig.type === "select" ? (
                           <select
                             name={col.accessor}
@@ -154,9 +149,8 @@ export default function TablaGenerica({
                         )
                       ) : (
                         renderCell(item, col)
-                      ) // Si no es editable, solo muestra el dato
-                    ) : // --- MODO VISTA (O COLUMNA DE ACCIONES) ---
-                    col.isAction ? (
+                      )
+                    ) : col.isAction ? (
                       <div className="flex justify-center space-x-2">
                         {isEditing ? (
                           <>

@@ -78,92 +78,104 @@ export default function DetalleFiltro({
   }
 
   return (
-    <div className="flex justify-center">
-      <div className="bg-white rounded-xl shadow-sm p-4 lg:p-6 w-full mb-4 lg:mb-6">
-        <div className="grid grid-cols-2 gap-4">
-          {/* Países */}
-          <div>
-            <h3 className="font-semibold">País</h3>
-            {loadingPaises ? (
-              <div className="text-gray-500">Cargando países...</div>
-            ) : errorPaises ? (
-              <div className="text-red-500 text-sm">{errorPaises}</div>
-            ) : (
-              <div className="flex gap-4 flex-wrap">
-                {paises.map((p) => (
-                  <button
-                    key={p.id}
-                    onClick={() => handlePushPais(p.name)}
-                    className={`px-3 py-1 rounded-lg text-sm md:text-l transition-colors cursor-pointer ${
-                      tempPais.includes(p.name)
-                        ? "bg-blue-900 text-white"
-                        : "bg-blue-600 text-white hover:bg-blue-800"
-                    }`}
-                  >
-                    {p.name}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Escuelas */}
-          <div>
-            <h3 className="font-semibold">Escuela</h3>
-            {loadingEscuelas ? (
-              <div className="text-gray-500">Cargando escuelas...</div>
-            ) : errorEscuelas ? (
-              <div className="text-red-500 text-sm">{errorEscuelas}</div>
-            ) : (
-              <div className="flex flex-wrap gap-4">
-                {escuelas.map((s) => (
-                  <button
-                    key={s.id}
-                    onClick={() => handlePushEscuela(s.name)}
-                    className={`px-3 py-1 rounded-lg text-sm md:text-l transition-colors cursor-pointer ${
-                      tempEscuela.includes(s.name)
-                        ? "bg-violet-900 text-white"
-                        : "bg-violet-500 text-white hover:bg-violet-800"
-                    }`}
-                  >
-                    {s.name}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+    <div className="bg-white rounded-lg shadow-md p-5 w-full mb-4 border border-gray-200 animate-fade-in-down">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* --- Sección Países --- */}
+        <div className="space-y-3">
+          <h3 className="font-bold text-base text-gray-800 border-b pb-1.5">
+            País
+          </h3>
+          {loadingPaises ? (
+            <div className="text-gray-500 text-xs">Cargando países...</div>
+          ) : errorPaises ? (
+            <div className="text-red-500 text-xs">{errorPaises}</div>
+          ) : (
+            <div className="flex gap-1.5 flex-wrap">
+              {paises.map((p) => (
+                <button
+                  key={p.id}
+                  onClick={() => handlePushPais(p.name)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 transform hover:scale-105 ${
+                    //
+                    tempPais.includes(p.name)
+                      ? "bg-blue-600 text-white shadow-sm"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  {p.name}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
-        <div className="grid grid-cols-2 gap-4 items-end mt-4">
-          <div>
-            <h3 className="font-semibold py-2">Estado</h3>
-            <div className="flex gap-2">
-              <button
-                value="Activo"
-                onClick={(e) => setTempEstado(e.target.value)}
-                className="px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors cursor-pointer text-sm md:text-l"
-              >
-                Activo
-              </button>
-              <button
-                value="Inactivo"
-                onClick={(e) => setTempEstado(e.target.value)}
-                className="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors cursor-pointer text-sm md:text-l"
-              >
-                Inactivo
-              </button>
+        {/* --- Sección Escuelas --- */}
+        <div className="space-y-3">
+          <h3 className="font-bold text-base text-gray-800 border-b pb-1.5">
+            Escuela
+          </h3>
+          {loadingEscuelas ? (
+            <div className="text-gray-500 text-xs">Cargando escuelas...</div>
+          ) : errorEscuelas ? (
+            <div className="text-red-500 text-xs">{errorEscuelas}</div>
+          ) : (
+            <div className="flex flex-wrap gap-1.5">
+              {escuelas.map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => handlePushEscuela(s.name)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 transform hover:scale-105 ${
+                    tempEscuela.includes(s.name)
+                      ? "bg-violet-600 text-white shadow-sm"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  {s.name}
+                </button>
+              ))}
             </div>
-          </div>
+          )}
+        </div>
 
-          <div>
+        {/* --- Sección Estado --- */}
+        <div className="space-y-3">
+          <h3 className="font-bold text-base text-gray-800 border-b pb-1.5">
+            Estado
+          </h3>
+          <div className="flex gap-2">
             <button
-              onClick={handleAplicar}
-              className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer text-sm md:text-l w-full"
+              onClick={() => setTempEstado("Activo")}
+              className={`flex-1 px-3 py-1.5 rounded-md font-medium text-xs transition-all duration-200 transform hover:scale-105 ${
+                tempEstado === "Activo"
+                  ? "bg-green-600 text-white shadow-sm"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
             >
-              Aplicar filtros
+              Activo
+            </button>
+            <button
+              onClick={() => setTempEstado("Inactivo")}
+              className={`flex-1 px-3 py-1.5 rounded-md font-medium text-xs transition-all duration-200 transform hover:scale-105 ${
+                //
+                tempEstado === "Inactivo"
+                  ? "bg-red-600 text-white shadow-sm"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              Inactivo
             </button>
           </div>
         </div>
+      </div>
+
+      {/* --- Botón de Aplicar --- */}
+      <div className=" mt-3 pt-3 flex justify-center">
+        <button
+          onClick={handleAplicar}
+          className="px-2 py-2.5 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-all duration-200 cursor-pointer shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-xs"
+        >
+          Aplicar filtros
+        </button>
       </div>
     </div>
   );
