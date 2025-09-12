@@ -45,7 +45,8 @@ export default function Tablas({
       f_lastname: student.f_lastname || "",
       s_lastname: student.s_lastname || "",
       phone: student.phone || "",
-      status: student.status || "",
+      // --- CAMBIO 1: Normaliza el estado para el formulario ---
+      status: student.status === "activo" ? "1" : "0",
     });
   };
 
@@ -79,7 +80,7 @@ export default function Tablas({
           f_lastname: editValues.f_lastname,
           s_lastname: editValues.s_lastname,
           phone: editValues.phone,
-          status: editValues.status,
+          status: editValues.status, // La API recibe "1" o "0"
         },
         {
           headers: tokenValue ? { Authorization: `Bearer ${tokenValue}` } : {},
@@ -98,7 +99,8 @@ export default function Tablas({
                 f_lastname: editValues.f_lastname,
                 s_lastname: editValues.s_lastname,
                 phone: editValues.phone,
-                status: editValues.status,
+                // --- CAMBIO 2: Normaliza el estado para la UI después de guardar ---
+                status: editValues.status === "1" ? "activo" : "inactivo",
                 full_name: `${editValues.f_name} ${editValues.m_name || ""} ${
                   editValues.f_lastname
                 } ${editValues.s_lastname}`.trim(),
@@ -186,27 +188,7 @@ export default function Tablas({
           <tbody className="text-center">
             {filteredData?.length === 0 && (
               <tr>
-                <td colSpan={7} className="py-8 text-gray-500 text-center">
-                  <div className="flex flex-col items-center justify-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-12 w-12 text-gray-400 mb-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    <span className="text-sm font-medium">
-                      No se encontraron estudiantes
-                    </span>
-                  </div>
-                </td>
+                <td colSpan={7} className="py-8 text-gray-500 text-center"></td>
               </tr>
             )}
             {filteredData?.map((e, index) => (

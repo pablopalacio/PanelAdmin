@@ -103,7 +103,6 @@ export default function TablaHorasDeServicio() {
     return (
       <div className="h-full w-full flex flex-col justify-center items-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-        <p className="text-gray-600 mt-3">Cargando servicios...</p>
       </div>
     );
   }
@@ -607,7 +606,7 @@ export default function TablaHorasDeServicio() {
                   title="Ver evidencia en nueva pestaña"
                 >
                   <svg
-                    className="w-4 h-4 mr-2"
+                    className="w-4 h-4"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -624,7 +623,6 @@ export default function TablaHorasDeServicio() {
                       d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                     />
                   </svg>
-                  Ver evidencia
                 </button>
               </div>
             </div>
@@ -691,26 +689,28 @@ export default function TablaHorasDeServicio() {
                   </button>
                 </>
               ) : (
-                <button
-                  onClick={() => handleApproveClick(service)}
-                  className="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                <div className="w-full flex justify-center items-center">
+                  <button
+                    onClick={() => handleApproveClick(service)}
+                    className="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                    />
-                  </svg>
-                  <span>Revisar</span>
-                </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
+                    </svg>
+                    <span>Revisar</span>
+                  </button>
+                </div>
               )}
             </div>
           </div>
