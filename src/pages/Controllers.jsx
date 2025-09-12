@@ -4,12 +4,23 @@ import { useNavigate } from "react-router-dom";
 import Aside from "../components/Aside";
 import Filtro from "../components/Filtro";
 import TablaControllers from "../components/TablaControllers";
+import NewUser from "../components/NewUser";
+import CambiarContraseña from "../components/CambiarContraseña";
+import EditarPerfil from "../components/EditarPerfil";
 
 function Controllers() {
   const { user, logout } = useApiLogin();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [toggleModal, setToggleModal] = useState(false);
+  /// solo para hacer refresh
+  const [filtradoPais, setFiltradoPais] = useState([]);
+  const [filtradoEscuela, setFiltradoEscuela] = useState([]);
+  const [filtradoEstado, setFiltradoEstado] = useState("");
+  const [aplicarFiltros, setAplicarFiltros] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -19,10 +30,27 @@ function Controllers() {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+  const handleAplicarFiltros = (pais, escuela, estado) => {
+    setFiltradoPais(pais);
+    setFiltradoEscuela(escuela);
+    setFiltradoEstado(estado);
+    setAplicarFiltros((prev) => !prev); // forzar re-render en Tablas
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
       {/* Boton menu celular */}
+      <EditarPerfil
+        open={openEditModal}
+        onClose={setOpenEditModal}
+        user={user}
+      />
+      <CambiarContraseña open={openModal} onClose={setOpenModal} />
+      <NewUser
+        toggleModal={toggleModal}
+        setToggleModal={setToggleModal}
+        onSave={handleAplicarFiltros}
+      />
       <button
         onClick={toggleSidebar}
         className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-blue-600 text-white rounded-lg shadow-md"
@@ -59,7 +87,12 @@ function Controllers() {
         }
       `}
       >
-        <Aside usuario={user.role_id} />
+        <Aside
+          usuario={user.role_id}
+          setToggleModal={setToggleModal}
+          setOpenEditModal={setOpenEditModal}
+          setOpenModal={setOpenModal}
+        />
       </div>
 
       {/* Contenido Principal */}

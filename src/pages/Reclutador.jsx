@@ -3,12 +3,29 @@ import { useApiLogin } from "../hooks/useApiLogin";
 import { useNavigate } from "react-router-dom";
 import Aside from "../components/Aside";
 import TablaReclutador from "../components/TablaReclutador";
+import NewUser from "../components/NewUser";
+import CambiarContraseña from "../components/CambiarContraseña";
+import EditarPerfil from "../components/EditarPerfil";
 
 function Reclutador() {
   const { user, logout } = useApiLogin();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [toggleModal, setToggleModal] = useState(false);
+  /// solo para hacer refresh
+  const [filtradoPais, setFiltradoPais] = useState([]);
+  const [filtradoEscuela, setFiltradoEscuela] = useState([]);
+  const [filtradoEstado, setFiltradoEstado] = useState("");
+  const [aplicarFiltros, setAplicarFiltros] = useState(false);
+  const handleAplicarFiltros = (pais, escuela, estado) => {
+    setFiltradoPais(pais);
+    setFiltradoEscuela(escuela);
+    setFiltradoEstado(estado);
+    setAplicarFiltros((prev) => !prev); // forzar re-render en Tablas
+  };
 
   const handleLogout = () => {
     logout();
@@ -21,6 +38,17 @@ function Reclutador() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
+      <EditarPerfil
+        open={openEditModal}
+        onClose={setOpenEditModal}
+        user={user}
+      />
+      <CambiarContraseña open={openModal} onClose={setOpenModal} />
+      <NewUser
+        toggleModal={toggleModal}
+        setToggleModal={setToggleModal}
+        onSave={handleAplicarFiltros}
+      />
       {/* Boton menu celular */}
       <button
         onClick={toggleSidebar}
@@ -58,7 +86,12 @@ function Reclutador() {
         }
       `}
       >
-        <Aside />
+        <Aside
+          usuario={user.role_id}
+          setToggleModal={setToggleModal}
+          setOpenEditModal={setOpenEditModal}
+          setOpenModal={setOpenModal}
+        />
       </div>
       {/* Contenido Principal */}
       <div className="flex flex-col p-4 ml-0 lg:p-6 w-full lg:ml-80">
