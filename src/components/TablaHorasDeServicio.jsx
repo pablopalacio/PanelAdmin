@@ -51,8 +51,8 @@ export default function TablaHorasDeServicio() {
         service.status === "Approved"
           ? "1"
           : service.status === "Rejected"
-          ? "0"
-          : "2",
+          ? "2"
+          : "0",
     });
   };
 
@@ -83,9 +83,7 @@ export default function TablaHorasDeServicio() {
           errorMessage =
             "El servicio ya ha sido revisado y no se puede modificar.";
         } else {
-          errorMessage = `Error del servidor: ${
-            err.response.data?.message || err.message
-          }`;
+          errorMessage = `❌ No se pueden aprobar mas horas que las reportadas `;
         }
       }
       alert(errorMessage);
@@ -187,7 +185,11 @@ export default function TablaHorasDeServicio() {
                   {editingRow === service.id ? (
                     <input
                       type="number"
-                      value={approvalValues.amount_approved || 0}
+                      value={
+                        approvalValues.amount_approved < 0
+                          ? 0
+                          : approvalValues.amount_approved
+                      }
                       onChange={(e) =>
                         setApprovalValues({
                           ...approvalValues,
@@ -214,9 +216,9 @@ export default function TablaHorasDeServicio() {
                       }
                       className="p-2 border border-gray-300 rounded-lg text-center text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
-                      <option value="2">Pendiente</option>
+                      <option value="0">Pendiente</option>
                       <option value="1">Aprobado</option>
-                      <option value="0">Rechazado</option>
+                      <option value="2">Rechazado</option>
                     </select>
                   ) : (
                     <span
