@@ -1,4 +1,3 @@
-// components/Notification.jsx (actualizado con estilos del aside)
 import React from "react";
 
 export default function Notification({ show, message, type = "info" }) {
