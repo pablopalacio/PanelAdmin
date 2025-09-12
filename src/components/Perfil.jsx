@@ -83,7 +83,7 @@ export default function Perfil({ user }) {
           <div className="flex justify-between border-b border-gray-100 pb-2">
             <span className="font-semibold text-gray-700">Nombre:</span>
             <span className="text-gray-600">
-              {user?.f_name} {user?.s_name}
+              {user?.f_name} {user?.m_name}
             </span>
           </div>
 
