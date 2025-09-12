@@ -17,6 +17,8 @@ function Estudiantes() {
   const [error, setError] = useState(null);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [toggleModal, setToggleModal] = useState(false);
+
   /// filtros de busquedasssssss
   const [filtradoPais, setFiltradoPais] = useState([]);
   const [filtradoEscuela, setFiltradoEscuela] = useState([]);
@@ -33,7 +35,6 @@ function Estudiantes() {
   const [active, setActive] = useState([]);
   const [inactive, setInactive] = useState([]);
   const [cumplimiento, setCumplimiento] = useState("");
-  const [toggleModal, setToggleModal] = useState(false);
   const { user, logout } = useApiLogin();
   console.log(user.role_id);
 
