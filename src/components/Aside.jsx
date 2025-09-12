@@ -2,16 +2,17 @@ import React, { useState, useEffect } from "react";
 import { useApiLogin } from "../hooks/useApiLogin";
 import axios from "../config/axiosConfig";
 import { useNavigate, useLocation } from "react-router-dom";
-import CambiarContraseña from "../components/CambiarContraseña";
-import EditarPerfil from "../components/EditarPerfil";
 import Logout from "./Logout";
 
-export default function Aside({ usuario, setToggleModal }) {
+export default function Aside({
+  usuario,
+  setToggleModal,
+  setOpenEditModal,
+  setOpenModal,
+}) {
   const { user, logout } = useApiLogin();
   const navigate = useNavigate();
   const location = useLocation();
-  const [openModal, setOpenModal] = useState(false);
-  const [openEditModal, setOpenEditModal] = useState(false);
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -262,12 +263,6 @@ export default function Aside({ usuario, setToggleModal }) {
           </div>
         </div>
       </aside>
-      <CambiarContraseña open={openModal} onClose={() => setOpenModal(false)} />
-      <EditarPerfil
-        open={openEditModal}
-        onClose={() => setOpenEditModal(false)}
-        user={user}
-      />
     </>
   );
 }
