@@ -316,7 +316,7 @@ export default function TablaHorasDeServicio() {
                 <td className="px-6 py-4">
                   <button
                     onClick={() => handleViewEvidence(service.id)}
-                    className="text-blue-500 bg-blue-50 hover:bg-blue-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200"
+                    className="text-blue-500 bg-blue-50 hover:bg-blue-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200 cursor-pointer "
                     title="Ver evidencia en nueva pestaña"
                   >
                     <svg
@@ -346,7 +346,7 @@ export default function TablaHorasDeServicio() {
                         <button
                           onClick={() => handleApproveSave(service)}
                           disabled={saving}
-                          className="text-white bg-green-500 hover:bg-green-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200"
+                          className="text-white bg-green-500 hover:bg-green-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer "
                           title="Guardar"
                         >
                           {saving ? (
@@ -383,7 +383,7 @@ export default function TablaHorasDeServicio() {
                         </button>
                         <button
                           onClick={handleCancelEdit}
-                          className="text-white bg-red-500 hover:bg-red-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200"
+                          className="text-white bg-red-500 hover:bg-red-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer "
                           title="Cancelar"
                         >
                           <svg
@@ -405,7 +405,7 @@ export default function TablaHorasDeServicio() {
                     ) : (
                       <button
                         onClick={() => handleApproveClick(service)}
-                        className="text-indigo-500 bg-indigo-50 hover:bg-indigo-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200"
+                        className="text-indigo-500 bg-indigo-50 hover:bg-indigo-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200 cursor-pointer "
                         title="Revisar"
                       >
                         <svg
@@ -604,7 +604,7 @@ export default function TablaHorasDeServicio() {
                 </span>
                 <button
                   onClick={() => handleViewEvidence(service.id)}
-                  className="text-blue-500 bg-blue-50 hover:bg-blue-100 px-3 py-2 rounded-lg shadow transition-all duration-200 flex items-center"
+                  className="text-blue-500 bg-blue-50 hover:bg-blue-100 px-3 py-2 rounded-lg shadow transition-all duration-200 flex items-center cursor-pointer "
                   title="Ver evidencia en nueva pestaña"
                 >
                   <svg
@@ -634,7 +634,7 @@ export default function TablaHorasDeServicio() {
                   <button
                     onClick={() => handleApproveSave(service)}
                     disabled={saving}
-                    className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md"
+                    className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md cursor-pointer "
                   >
                     {saving ? (
                       <svg
@@ -671,7 +671,7 @@ export default function TablaHorasDeServicio() {
                   </button>
                   <button
                     onClick={handleCancelEdit}
-                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md"
+                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md cursor-pointer "
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -694,7 +694,7 @@ export default function TablaHorasDeServicio() {
                 <div className="w-full flex justify-center items-center">
                   <button
                     onClick={() => handleApproveClick(service)}
-                    className="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md"
+                    className="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md cursor-pointer "
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

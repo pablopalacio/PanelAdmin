@@ -64,6 +64,7 @@ export default function Filtro({
             <button
               onClick={handleToggle}
               className="flex-1 sm:flex-none px-4 py-2 border border-gray-200 rounded-lg hover:bg-blue-50 transition-all duration-200 flex items-center justify-center text-xs lg:text-sm font-medium text-gray-700 cursor-pointer shadow-sm hover:shadow-md"
+              cursor-pointer
             >
               <svg
                 className="w-4 h-4 mr-1.5 text-blue-600"

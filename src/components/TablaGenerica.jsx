@@ -157,7 +157,7 @@ export default function TablaGenerica({
                             <button
                               onClick={() => handleSave(item.id)}
                               disabled={loading}
-                              className="text-green-500 hover:text-green-700"
+                              className="text-green-500 hover:text-green-700 cursor-pointer "
                               title="Guardar"
                             >
                               <svg
@@ -176,7 +176,7 @@ export default function TablaGenerica({
                             </button>
                             <button
                               onClick={handleCancel}
-                              className="text-red-500 hover:text-red-700"
+                              className="text-red-500 hover:text-red-700 cursor-pointer "
                               title="Cancelar"
                             >
                               <svg

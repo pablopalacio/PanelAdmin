@@ -37,7 +37,7 @@ export default function TablaControllers({ searchTerm }) {
     setEditingId(controller.id);
     setEditValues({
       f_name: controller.f_name || "",
-      s_name: controller.s_name || "",
+      m_name: controller.m_name || "",
       f_lastname: controller.f_lastname || "",
       s_lastname: controller.s_lastname || "",
       phone: controller.phone || "",
@@ -69,7 +69,7 @@ export default function TablaControllers({ searchTerm }) {
 
       const payload = {
         f_name: editValues.f_name,
-        s_name: editValues.s_name,
+        m_name: editValues.m_name,
         f_lastname: editValues.f_lastname,
         s_lastname: editValues.s_lastname,
         phone: editValues.phone,
@@ -86,7 +86,7 @@ export default function TablaControllers({ searchTerm }) {
                 ...item,
                 ...payload,
                 status: statusValue,
-                full_name: `${editValues.f_name} ${editValues.s_name || ""} ${
+                full_name: `${editValues.f_name} ${editValues.m_name || ""} ${
                   editValues.f_lastname
                 } ${editValues.s_lastname || ""}`
                   .replace(/\s+/g, " ")
@@ -173,7 +173,7 @@ export default function TablaControllers({ searchTerm }) {
                     ? (
                         controller.full_name ||
                         `${controller.f_name || ""} ${
-                          controller.s_name || ""
+                          controller.m_name || ""
                         } ${controller.f_lastname || ""} ${
                           controller.s_lastname || ""
                         }`
@@ -206,8 +206,8 @@ export default function TablaControllers({ searchTerm }) {
                             placeholder="1º Nombre"
                           />
                           <input
-                            name="s_name"
-                            value={editValues.s_name}
+                            name="m_name"
+                            value={editValues.m_name}
                             onChange={handleInputChange}
                             className="border px-3 py-2 rounded-lg border-gray-300 text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             placeholder="2º Nombre"
@@ -231,7 +231,7 @@ export default function TablaControllers({ searchTerm }) {
                         <span className="font-semibold">
                           {controller.full_name ||
                             `${controller.f_name || ""} ${
-                              controller.s_name || ""
+                              controller.m_name || ""
                             } ${controller.f_lastname || ""} ${
                               controller.s_lastname || ""
                             }`
@@ -327,7 +327,7 @@ export default function TablaControllers({ searchTerm }) {
                             <button
                               onClick={() => handleSave(controller.id)}
                               disabled={saving}
-                              className="text-white bg-green-500 hover:bg-green-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200"
+                              className="text-white bg-green-500 hover:bg-green-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer "
                               title="Guardar"
                             >
                               {saving ? (
@@ -364,7 +364,7 @@ export default function TablaControllers({ searchTerm }) {
                             </button>
                             <button
                               onClick={handleCancel}
-                              className="text-white bg-red-500 hover:bg-red-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200"
+                              className="text-white bg-red-500 hover:bg-red-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer "
                               title="Cancelar"
                             >
                               <svg
@@ -386,7 +386,7 @@ export default function TablaControllers({ searchTerm }) {
                         ) : (
                           <button
                             onClick={() => handleEditClick(controller)}
-                            className="text-indigo-500 bg-indigo-50 hover:bg-indigo-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200"
+                            className="text-indigo-500 bg-indigo-50 hover:bg-indigo-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200 cursor-pointer "
                             title="Editar controlador"
                           >
                             <svg
@@ -440,7 +440,7 @@ export default function TablaControllers({ searchTerm }) {
               searchTerm
                 ? (
                     controller.full_name ||
-                    `${controller.f_name || ""} ${controller.s_name || ""} ${
+                    `${controller.f_name || ""} ${controller.m_name || ""} ${
                       controller.f_lastname || ""
                     } ${controller.s_lastname || ""}`
                   )
@@ -474,8 +474,8 @@ export default function TablaControllers({ searchTerm }) {
                           placeholder="1º Nombre"
                         />
                         <input
-                          name="s_name"
-                          value={editValues.s_name}
+                          name="m_name"
+                          value={editValues.m_name}
                           onChange={handleInputChange}
                           className="border px-3 py-2 rounded-lg border-gray-300 text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           placeholder="2º Nombre"
@@ -499,7 +499,7 @@ export default function TablaControllers({ searchTerm }) {
                       <span className="font-semibold">
                         {controller.full_name ||
                           `${controller.f_name || ""} ${
-                            controller.s_name || ""
+                            controller.m_name || ""
                           } ${controller.f_lastname || ""} ${
                             controller.s_lastname || ""
                           }`
@@ -604,7 +604,7 @@ export default function TablaControllers({ searchTerm }) {
                       <button
                         onClick={() => handleSave(controller.id)}
                         disabled={saving}
-                        className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md"
+                        className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md cursor-pointer "
                       >
                         {saving ? (
                           <svg
@@ -641,7 +641,7 @@ export default function TablaControllers({ searchTerm }) {
                       </button>
                       <button
                         onClick={handleCancel}
-                        className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md"
+                        className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md cursor-pointer "
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -664,7 +664,7 @@ export default function TablaControllers({ searchTerm }) {
                     <div className="w-full flex justify-center items-center">
                       <button
                         onClick={() => handleEditClick(controller)}
-                        className="px-4 py-2 bg-indigo-500 text-white rounded-lg text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md"
+                        className="px-4 py-2 bg-indigo-500 text-white rounded-lg text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md cursor-pointer "
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

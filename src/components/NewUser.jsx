@@ -171,7 +171,7 @@ export default function NewUser({ onSave, toggleModal, setToggleModal }) {
           <button
             type="button"
             onClick={() => setToggleModal(false)}
-            className="text-gray-500 hover:text-gray-700 text-2xl"
+            className="text-gray-500 hover:text-gray-700 text-2xl cursor-pointer "
             disabled={loading}
           >
             ×
@@ -392,7 +392,7 @@ export default function NewUser({ onSave, toggleModal, setToggleModal }) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-2.5 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-blue-600 text-white py-2.5 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer "
             >
               {loading ? "Creando usuario..." : "Crear Usuario"}
             </button>

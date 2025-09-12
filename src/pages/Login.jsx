@@ -128,7 +128,7 @@ function Login() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3  cursor-pointer px-4 rounded-lg font-semibold transition-colors duration-200 ${
+            className={`w-full py-3  cursor-pointer px-4 rounded-lg font-semibold transition-colors duration-200  cursor-pointer ${
               loading
                 ? "bg-blue-400 cursor-not-allowed"
                 : "bg-blue-600 hover:bg-blue-700 text-white"
@@ -188,7 +188,7 @@ function Login() {
         )}
 
         <div className="mt-6 text-center">
-          <button className="text-sm text-blue-600 hover:text-blue-800">
+          <button className="text-sm text-blue-600 hover:text-blue-800 cursor-pointer ">
             Cambiar Clave
           </button>
         </div>

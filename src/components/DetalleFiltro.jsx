@@ -95,7 +95,7 @@ export default function DetalleFiltro({
                 <button
                   key={p.id}
                   onClick={() => handlePushPais(p.name)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 transform hover:scale-105 ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 transform hover:scale-105  cursor-pointer  ${
                     //
                     tempPais.includes(p.name)
                       ? "bg-blue-600 text-white shadow-sm"
@@ -124,7 +124,7 @@ export default function DetalleFiltro({
                 <button
                   key={s.id}
                   onClick={() => handlePushEscuela(s.name)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 transform hover:scale-105 ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 transform hover:scale-105 cursor-pointer  ${
                     tempEscuela.includes(s.name)
                       ? "bg-violet-600 text-white shadow-sm"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -145,7 +145,7 @@ export default function DetalleFiltro({
           <div className="flex gap-2">
             <button
               onClick={() => setTempEstado("Activo")}
-              className={`flex-1 px-3 py-1.5 rounded-md font-medium text-xs transition-all duration-200 transform hover:scale-105 ${
+              className={`flex-1 px-3 py-1.5 rounded-md font-medium text-xs transition-all duration-200  cursor-pointer  transform hover:scale-105 ${
                 tempEstado === "Activo"
                   ? "bg-green-600 text-white shadow-sm"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -155,7 +155,7 @@ export default function DetalleFiltro({
             </button>
             <button
               onClick={() => setTempEstado("Inactivo")}
-              className={`flex-1 px-3 py-1.5 rounded-md font-medium text-xs transition-all duration-200 transform hover:scale-105 ${
+              className={`flex-1 px-3 py-1.5 rounded-md font-medium text-xs transition-all duration-200  cursor-pointer  transform hover:scale-105 ${
                 //
                 tempEstado === "Inactivo"
                   ? "bg-red-600 text-white shadow-sm"

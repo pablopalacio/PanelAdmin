@@ -120,7 +120,7 @@ export default function CargarServicio() {
                 ? ""
                 : setAmount_reported(amount_reported - 1)
             }
-            className="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:bg-red-600 transition"
+            className="bg-red-500 text-white rounded-full cursor-pointer  w-8 h-8 flex items-center justify-center shadow-md hover:bg-red-600 transition"
           >
             -
           </button>
@@ -129,7 +129,7 @@ export default function CargarServicio() {
           </span>
           <button
             onClick={() => setAmount_reported(amount_reported + 1)}
-            className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:bg-blue-600 transition"
+            className="bg-blue-500 text-white rounded-full w-8 h-8 cursor-pointer  flex items-center justify-center shadow-md hover:bg-blue-600 transition"
           >
             +
           </button>
