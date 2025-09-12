@@ -21,10 +21,17 @@ export default function PanelEstudiantes() {
       </header>
 
       <main className=" px-4 pb-10">
-        <section className="bg-white rounded-xl shadow-md mt-6 p-6 text-center">
+        <section className="bg-white flex items-center justify-center rounded-xl shadow-md mt-6 p-6 ">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
             Bienvenido{" "}
-            <span className="font-normal text-blue-600">{user?.full_name}</span>
+            <span className="font-normal text-blue-600">{user?.f_name}</span>
+            <span className="font-normal text-blue-600">{user?.m_name}</span>
+            <span className="font-normal text-blue-600">
+              {user?.f_lastname}
+            </span>
+            <span className="font-normal text-blue-600">
+              {user?.s_lastname}
+            </span>
           </h1>
         </section>
         <div className="md:flex gap-6 mt-6">
