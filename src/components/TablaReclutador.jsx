@@ -38,7 +38,7 @@ export default function TablaReclutador({ searchTerm }) {
     setEditingId(recruiter.id);
     setEditValues({
       f_name: recruiter.f_name || "",
-      s_name: recruiter.s_name || "",
+      m_name: recruiter.m_name || "",
       f_lastname: recruiter.f_lastname || "",
       s_lastname: recruiter.s_lastname || "",
       phone: recruiter.phone || "",
@@ -70,7 +70,7 @@ export default function TablaReclutador({ searchTerm }) {
 
       const payload = {
         f_name: editValues.f_name,
-        s_name: editValues.s_name,
+        m_name: editValues.m_name,
         f_lastname: editValues.f_lastname,
         s_lastname: editValues.s_lastname,
         phone: editValues.phone,
@@ -89,7 +89,7 @@ export default function TablaReclutador({ searchTerm }) {
                 // Asegurar que el estado se guarda como número
                 status: statusValue,
                 // Actualizar el nombre completo
-                full_name: `${editValues.f_name} ${editValues.s_name || ""} ${
+                full_name: `${editValues.f_name} ${editValues.m_name || ""} ${
                   editValues.f_lastname
                 } ${editValues.s_lastname || ""}`
                   .replace(/\s+/g, " ")
@@ -173,7 +173,7 @@ export default function TablaReclutador({ searchTerm }) {
                   searchTerm
                     ? (
                         recruiter.full_name ||
-                        `${recruiter.f_name || ""} ${recruiter.s_name || ""} ${
+                        `${recruiter.f_name || ""} ${recruiter.m_name || ""} ${
                           recruiter.f_lastname || ""
                         } ${recruiter.s_lastname || ""}`
                       )
@@ -205,8 +205,8 @@ export default function TablaReclutador({ searchTerm }) {
                             placeholder="1º Nombre"
                           />
                           <input
-                            name="s_name"
-                            value={editValues.s_name}
+                            name="m_name"
+                            value={editValues.m_name}
                             onChange={handleInputChange}
                             className="border px-3 py-2 rounded-lg border-gray-300 text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             placeholder="2º Nombre"
@@ -230,7 +230,7 @@ export default function TablaReclutador({ searchTerm }) {
                         <span className="font-semibold">
                           {recruiter.full_name ||
                             `${recruiter.f_name || ""} ${
-                              recruiter.s_name || ""
+                              recruiter.m_name || ""
                             } ${recruiter.f_lastname || ""} ${
                               recruiter.s_lastname || ""
                             }`
@@ -324,7 +324,7 @@ export default function TablaReclutador({ searchTerm }) {
                             <button
                               onClick={() => handleSave(recruiter.id)}
                               disabled={saving}
-                              className="text-white bg-green-500 hover:bg-green-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200"
+                              className="text-white bg-green-500 hover:bg-green-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer "
                               title="Guardar"
                             >
                               {saving ? (
@@ -361,7 +361,7 @@ export default function TablaReclutador({ searchTerm }) {
                             </button>
                             <button
                               onClick={handleCancel}
-                              className="text-white bg-red-500 hover:bg-red-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200"
+                              className="text-white bg-red-500 hover:bg-red-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer "
                               title="Cancelar"
                             >
                               <svg
@@ -383,7 +383,7 @@ export default function TablaReclutador({ searchTerm }) {
                         ) : (
                           <button
                             onClick={() => handleEditClick(recruiter)}
-                            className="text-indigo-500 bg-indigo-50 hover:bg-indigo-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200"
+                            className="text-indigo-500 bg-indigo-50 hover:bg-indigo-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200 cursor-pointer "
                             title="Editar reclutador"
                           >
                             <svg
@@ -437,7 +437,7 @@ export default function TablaReclutador({ searchTerm }) {
               searchTerm
                 ? (
                     recruiter.full_name ||
-                    `${recruiter.f_name || ""} ${recruiter.s_name || ""} ${
+                    `${recruiter.f_name || ""} ${recruiter.m_name || ""} ${
                       recruiter.f_lastname || ""
                     } ${recruiter.s_lastname || ""}`
                   )
@@ -471,8 +471,8 @@ export default function TablaReclutador({ searchTerm }) {
                           placeholder="1º Nombre"
                         />
                         <input
-                          name="s_name"
-                          value={editValues.s_name}
+                          name="m_name"
+                          value={editValues.m_name}
                           onChange={handleInputChange}
                           className="border px-3 py-2 rounded-lg border-gray-300 text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           placeholder="2º Nombre"
@@ -496,7 +496,7 @@ export default function TablaReclutador({ searchTerm }) {
                       <span className="font-semibold">
                         {recruiter.full_name ||
                           `${recruiter.f_name || ""} ${
-                            recruiter.s_name || ""
+                            recruiter.m_name || ""
                           } ${recruiter.f_lastname || ""} ${
                             recruiter.s_lastname || ""
                           }`
@@ -601,7 +601,7 @@ export default function TablaReclutador({ searchTerm }) {
                       <button
                         onClick={() => handleSave(recruiter.id)}
                         disabled={saving}
-                        className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md"
+                        className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md cursor-pointer "
                       >
                         {saving ? (
                           <svg
@@ -638,7 +638,7 @@ export default function TablaReclutador({ searchTerm }) {
                       </button>
                       <button
                         onClick={handleCancel}
-                        className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md"
+                        className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md cursor-pointer "
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -661,7 +661,7 @@ export default function TablaReclutador({ searchTerm }) {
                     <div className="w-full flex justify-center items-center">
                       <button
                         onClick={() => handleEditClick(recruiter)}
-                        className="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md"
+                        className="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md cursor-pointer "
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

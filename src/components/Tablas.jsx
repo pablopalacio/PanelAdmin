@@ -328,7 +328,7 @@ export default function Tablas({
                         <button
                           onClick={() => handleSave(e.id)}
                           disabled={loading}
-                          className="text-white bg-green-500 hover:bg-green-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200"
+                          className="text-white bg-green-500 hover:bg-green-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer "
                           title="Guardar"
                         >
                           {loading ? (
@@ -365,7 +365,7 @@ export default function Tablas({
                         </button>
                         <button
                           onClick={handleCancel}
-                          className="text-white bg-red-500 hover:bg-red-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200"
+                          className="text-white bg-red-500 hover:bg-red-600 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer "
                           title="Cancelar"
                         >
                           <svg
@@ -388,7 +388,7 @@ export default function Tablas({
                       <>
                         <button
                           onClick={() => goToProfile(e.id)}
-                          className="text-blue-500 bg-blue-50 hover:bg-blue-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200"
+                          className="text-blue-500 bg-blue-50 hover:bg-blue-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200 cursor-pointer "
                           title="Ver perfil"
                         >
                           <svg
@@ -408,7 +408,7 @@ export default function Tablas({
                         </button>
                         <button
                           onClick={() => handleEditClick(e)}
-                          className="text-indigo-500 bg-indigo-50 hover:bg-indigo-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200"
+                          className="text-indigo-500 bg-indigo-50 hover:bg-indigo-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200 cursor-pointer "
                           title="Editar estudiante"
                         >
                           <svg
@@ -426,7 +426,7 @@ export default function Tablas({
                             />
                           </svg>
                         </button>
-                        <button className="text-red-500 bg-red-50 hover:bg-red-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200">
+                        <button className="text-red-500 bg-red-50 hover:bg-red-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200 cursor-pointer ">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="h-3 w-3"
@@ -609,7 +609,7 @@ export default function Tablas({
                   <button
                     onClick={() => handleSave(e.id)}
                     disabled={loading}
-                    className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 disabled:opacity-50 shadow-md"
+                    className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 disabled:opacity-50 shadow-md cursor-pointer "
                   >
                     {loading ? (
                       <>
@@ -651,7 +651,7 @@ export default function Tablas({
                   </button>
                   <button
                     onClick={handleCancel}
-                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md"
+                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm transition-colors duration-200 flex items-center justify-center space-x-1 shadow-md cursor-pointer "
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -674,7 +674,7 @@ export default function Tablas({
                 <>
                   <button
                     onClick={() => goToProfile(e.id)}
-                    className="text-blue-500 bg-blue-50 hover:bg-blue-100 p-2 rounded-lg shadow transition-all duration-200 flex items-center justify-center"
+                    className="text-blue-500 bg-blue-50 hover:bg-blue-100 p-2 rounded-lg shadow transition-all duration-200 flex items-center justify-center cursor-pointer "
                     title="Ver perfil"
                   >
                     <svg
@@ -694,7 +694,7 @@ export default function Tablas({
                   </button>
                   <button
                     onClick={() => handleEditClick(e)}
-                    className="text-indigo-500 bg-indigo-50 hover:bg-indigo-100 p-2 rounded-lg shadow transition-all duration-200 flex items-center justify-center"
+                    className="text-indigo-500 bg-indigo-50 hover:bg-indigo-100 p-2 rounded-lg shadow transition-all duration-200 flex items-center justify-center cursor-pointer "
                     title="Editar estudiante"
                   >
                     <svg
@@ -712,7 +712,7 @@ export default function Tablas({
                       />
                     </svg>
                   </button>
-                  <button className="text-red-500 bg-red-50 hover:bg-red-100 p-2 rounded-lg shadow transition-all duration-200 flex items-center justify-center">
+                  <button className="text-red-500 bg-red-50 hover:bg-red-100 p-2 rounded-lg shadow transition-all duration-200 flex items-center justify-center cursor-pointer ">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5"

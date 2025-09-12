@@ -27,7 +27,7 @@ export default function TablasServicios({ service }) {
 
               <button
                 onClick={() => handleViewEvidence(e.evidence)}
-                className="text-blue-500  bg-blue-50 hover:bg-blue-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200"
+                className="text-blue-500  bg-blue-50 hover:bg-blue-100 p-2 rounded-full shadow hover:shadow-md transition-all  cursor-pointer duration-200"
                 title="Ver evidencia en nueva pestaña"
               >
                 <svg
@@ -52,7 +52,7 @@ export default function TablasServicios({ service }) {
               <div className="px-4 hidden">
                 <button
                   onClick={() => setOpen(true)}
-                  className="text-blue-500  bg-blue-50 hover:bg-blue-100 p-2 rounded-full shadow hover:shadow-md transition-all duration-200"
+                  className="text-blue-500  bg-blue-50 hover:bg-blue-100 p-2  cursor-pointer rounded-full shadow hover:shadow-md transition-all duration-200"
                   title="Editar perfil"
                 >
                   <svg
