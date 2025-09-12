@@ -17,7 +17,7 @@ function Estudiantes() {
   const [error, setError] = useState(null);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  /// filtros de busqueda
+  /// filtros de busquedasssssss
   const [filtradoPais, setFiltradoPais] = useState([]);
   const [filtradoEscuela, setFiltradoEscuela] = useState([]);
   const [filtradoEstado, setFiltradoEstado] = useState("");
